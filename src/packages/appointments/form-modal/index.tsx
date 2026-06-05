@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { Appointment, AppointmentStatus } from '@/model/appointment';
 import {
   fromDatetimeLocalValue,
@@ -18,6 +18,23 @@ type Props = {
 };
 
 export const AppointmentFormModal = ({ isOpen, onClose, appointment }: Props) => {
+  if (!isOpen) return null;
+
+  return (
+    <AppointmentFormModalBody
+      key={appointment?.id ?? 'new'}
+      onClose={onClose}
+      appointment={appointment}
+    />
+  );
+};
+
+type BodyProps = {
+  onClose: () => void;
+  appointment?: Appointment | null;
+};
+
+const AppointmentFormModalBody = ({ onClose, appointment }: BodyProps) => {
   const dispatch = useAppDispatch();
   const doctorsDump = useAppSelector((state) => state.doctors);
   const hospitals = useAppSelector((state) => state.hospitals);
@@ -25,12 +42,16 @@ export const AppointmentFormModal = ({ isOpen, onClose, appointment }: Props) =>
 
   const doctors = useMemo(() => Object.values(doctorsDump), [doctorsDump]);
   const isEdit = appointment != null;
-  const [doctorId, setDoctorId] = useState('');
-  const [scheduledAtLocal, setScheduledAtLocal] = useState('');
-  const [status, setStatus] = useState<AppointmentStatus>('scheduled');
-  const [appointmentType, setAppointmentType] = useState('');
-  const [reason, setReason] = useState('');
-  const [notes, setNotes] = useState('');
+  const [doctorId, setDoctorId] = useState(appointment?.doctor_id ?? '');
+  const [scheduledAtLocal, setScheduledAtLocal] = useState(
+    appointment ? toDatetimeLocalValue(appointment.scheduled_at) : '',
+  );
+  const [status, setStatus] = useState<AppointmentStatus>(
+    appointment?.status ?? 'scheduled',
+  );
+  const [appointmentType, setAppointmentType] = useState(appointment?.appointment_type ?? '');
+  const [reason, setReason] = useState(appointment?.reason ?? '');
+  const [notes, setNotes] = useState(appointment?.notes ?? '');
   const [error, setError] = useState('');
   const [isSaving, setIsSaving] = useState(false);
 
@@ -51,28 +72,6 @@ export const AppointmentFormModal = ({ isOpen, onClose, appointment }: Props) =>
   const facilityAddress = selectedDoctor
     ? hospitals[selectedDoctor.hospital_id]?.address
     : null;
-
-  useEffect(() => {
-    if (!isOpen) return;
-    if (appointment) {
-      setDoctorId(appointment.doctor_id);
-      setScheduledAtLocal(toDatetimeLocalValue(appointment.scheduled_at));
-      setStatus(appointment.status);
-      setAppointmentType(appointment.appointment_type ?? '');
-      setReason(appointment.reason ?? '');
-      setNotes(appointment.notes ?? '');
-    } else {
-      setDoctorId('');
-      setScheduledAtLocal('');
-      setStatus('scheduled');
-      setAppointmentType('');
-      setReason('');
-      setNotes('');
-    }
-    setError('');
-  }, [isOpen, appointment]);
-
-  if (!isOpen) return null;
 
   const handleSubmit = async () => {
     setError('');

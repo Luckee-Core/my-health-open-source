@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { DailyEntry } from '@/model/daily-entry';
 import { getTodayEntryDate } from '../format-entry-date';
 import { createDailyEntryThunk } from '@/store/thunks/daily-entries/create-daily-entry-thunk';
@@ -20,36 +20,49 @@ export const DailyEntryFormModal = ({
   dailyEntry,
   defaultEntryDate,
 }: Props) => {
+  if (!isOpen) return null;
+
+  const formKey = dailyEntry?.id ?? `${defaultEntryDate ?? 'new'}`;
+
+  return (
+    <DailyEntryFormModalBody
+      key={formKey}
+      onClose={onClose}
+      dailyEntry={dailyEntry}
+      defaultEntryDate={defaultEntryDate}
+    />
+  );
+};
+
+type BodyProps = {
+  onClose: () => void;
+  dailyEntry?: DailyEntry | null;
+  defaultEntryDate?: string;
+};
+
+const DailyEntryFormModalBody = ({
+  onClose,
+  dailyEntry,
+  defaultEntryDate,
+}: BodyProps) => {
   const dispatch = useAppDispatch();
   const focusAreasDump = useAppSelector((state) => state.focusAreas);
 
   const focusAreas = useMemo(() => Object.values(focusAreasDump), [focusAreasDump]);
-  const isEdit = dailyEntry != null;
-  const [entryDate, setEntryDate] = useState('');
-  const [focusAreaId, setFocusAreaId] = useState('');
-  const [notes, setNotes] = useState('');
-  const [error, setError] = useState('');
-  const [isSaving, setIsSaving] = useState(false);
-
   const focusAreaOptions = useMemo(() => {
     return [...focusAreas].sort((a, b) => a.name.localeCompare(b.name));
   }, [focusAreas]);
 
-  useEffect(() => {
-    if (!isOpen) return;
-    if (dailyEntry) {
-      setEntryDate(dailyEntry.entry_date);
-      setFocusAreaId(dailyEntry.focus_area_id);
-      setNotes(dailyEntry.notes ?? '');
-    } else {
-      setEntryDate(defaultEntryDate ?? getTodayEntryDate());
-      setFocusAreaId(focusAreaOptions[0]?.id ?? '');
-      setNotes('');
-    }
-    setError('');
-  }, [isOpen, dailyEntry, defaultEntryDate, focusAreaOptions]);
-
-  if (!isOpen) return null;
+  const isEdit = dailyEntry != null;
+  const [entryDate, setEntryDate] = useState(
+    dailyEntry?.entry_date ?? defaultEntryDate ?? getTodayEntryDate(),
+  );
+  const [focusAreaId, setFocusAreaId] = useState(
+    dailyEntry?.focus_area_id ?? focusAreaOptions[0]?.id ?? '',
+  );
+  const [notes, setNotes] = useState(dailyEntry?.notes ?? '');
+  const [error, setError] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
 
   const handleSubmit = async () => {
     setError('');

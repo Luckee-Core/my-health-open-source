@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { Hospital } from '@/model/hospital';
 import { createHospitalThunk } from '@/store/thunks/hospitals/create-hospital-thunk';
 import { updateHospitalThunk } from '@/store/thunks/hospitals/update-hospital-thunk';
@@ -13,27 +13,32 @@ type Props = {
 };
 
 export const HospitalFormModal = ({ isOpen, onClose, hospital }: Props) => {
+  if (!isOpen) return null;
+
+  return (
+    <HospitalFormModalBody
+      key={hospital?.id ?? 'new'}
+      onClose={onClose}
+      hospital={hospital}
+    />
+  );
+};
+
+type BodyProps = {
+  onClose: () => void;
+  hospital?: Hospital | null;
+};
+
+const HospitalFormModalBody = ({ onClose, hospital }: BodyProps) => {
   const dispatch = useAppDispatch();
   const isEdit = hospital != null;
-  const [name, setName] = useState('');
-  const [address, setAddress] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [notes, setNotes] = useState('');
+  const [name, setName] = useState(hospital?.name ?? '');
+  const [address, setAddress] = useState(hospital?.address ?? '');
+  const [email, setEmail] = useState(hospital?.email ?? '');
+  const [phone, setPhone] = useState(hospital?.phone ?? '');
+  const [notes, setNotes] = useState(hospital?.notes ?? '');
   const [error, setError] = useState('');
   const [isSaving, setIsSaving] = useState(false);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    setName(hospital?.name ?? '');
-    setAddress(hospital?.address ?? '');
-    setEmail(hospital?.email ?? '');
-    setPhone(hospital?.phone ?? '');
-    setNotes(hospital?.notes ?? '');
-    setError('');
-  }, [isOpen, hospital]);
-
-  if (!isOpen) return null;
 
   const handleSubmit = async () => {
     setError('');

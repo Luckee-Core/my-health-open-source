@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { Specialty } from '@/model/specialty';
 import { createSpecialtyThunk } from '@/store/thunks/specialties/create-specialty-thunk';
 import { updateSpecialtyThunk } from '@/store/thunks/specialties/update-specialty-thunk';
@@ -13,19 +13,28 @@ type Props = {
 };
 
 export const SpecialtyFormModal = ({ isOpen, onClose, specialty }: Props) => {
+  if (!isOpen) return null;
+
+  return (
+    <SpecialtyFormModalBody
+      key={specialty?.id ?? 'new'}
+      onClose={onClose}
+      specialty={specialty}
+    />
+  );
+};
+
+type BodyProps = {
+  onClose: () => void;
+  specialty?: Specialty | null;
+};
+
+const SpecialtyFormModalBody = ({ onClose, specialty }: BodyProps) => {
   const dispatch = useAppDispatch();
   const isEdit = specialty != null;
-  const [name, setName] = useState('');
+  const [name, setName] = useState(specialty?.name ?? '');
   const [error, setError] = useState('');
   const [isSaving, setIsSaving] = useState(false);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    setName(specialty?.name ?? '');
-    setError('');
-  }, [isOpen, specialty]);
-
-  if (!isOpen) return null;
 
   const handleSubmit = async () => {
     setError('');

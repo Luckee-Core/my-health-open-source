@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { Doctor } from '@/model/doctor';
 import { resolveDoctorRelationsForSave } from '../resolve-doctor-relations-for-save';
 import { createDoctorThunk } from '@/store/thunks/doctors/create-doctor-thunk';
@@ -15,6 +15,19 @@ type Props = {
 };
 
 export const DoctorFormModal = ({ isOpen, onClose, doctor }: Props) => {
+  if (!isOpen) return null;
+
+  return (
+    <DoctorFormModalBody key={doctor?.id ?? 'new'} onClose={onClose} doctor={doctor} />
+  );
+};
+
+type BodyProps = {
+  onClose: () => void;
+  doctor?: Doctor | null;
+};
+
+const DoctorFormModalBody = ({ onClose, doctor }: BodyProps) => {
   const dispatch = useAppDispatch();
   const hospitalsDump = useAppSelector((state) => state.hospitals);
   const specialtiesDump = useAppSelector((state) => state.specialties);
@@ -22,12 +35,12 @@ export const DoctorFormModal = ({ isOpen, onClose, doctor }: Props) => {
   const hospitals = useMemo(() => Object.values(hospitalsDump), [hospitalsDump]);
   const specialties = useMemo(() => Object.values(specialtiesDump), [specialtiesDump]);
   const isEdit = doctor != null;
-  const [name, setName] = useState('');
-  const [hospitalId, setHospitalId] = useState('');
+  const [name, setName] = useState(doctor?.name ?? '');
+  const [hospitalId, setHospitalId] = useState(doctor?.hospital_id ?? '');
   const [newHospitalName, setNewHospitalName] = useState('');
-  const [specialtyId, setSpecialtyId] = useState('');
+  const [specialtyId, setSpecialtyId] = useState(doctor?.specialty_id ?? '');
   const [newSpecialtyName, setNewSpecialtyName] = useState('');
-  const [notes, setNotes] = useState('');
+  const [notes, setNotes] = useState(doctor?.notes ?? '');
   const [error, setError] = useState('');
   const [isSaving, setIsSaving] = useState(false);
 
@@ -39,28 +52,6 @@ export const DoctorFormModal = ({ isOpen, onClose, doctor }: Props) => {
     () => [...specialties].sort((a, b) => a.name.localeCompare(b.name)),
     [specialties],
   );
-
-  useEffect(() => {
-    if (!isOpen) return;
-    if (doctor) {
-      setName(doctor.name);
-      setHospitalId(doctor.hospital_id);
-      setNewHospitalName('');
-      setSpecialtyId(doctor.specialty_id);
-      setNewSpecialtyName('');
-      setNotes(doctor.notes ?? '');
-    } else {
-      setName('');
-      setHospitalId('');
-      setNewHospitalName('');
-      setSpecialtyId('');
-      setNewSpecialtyName('');
-      setNotes('');
-    }
-    setError('');
-  }, [isOpen, doctor]);
-
-  if (!isOpen) return null;
 
   const handleSubmit = async () => {
     setError('');

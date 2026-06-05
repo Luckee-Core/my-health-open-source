@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { FocusArea } from '@/model/focus-area';
 import { createFocusAreaThunk } from '@/store/thunks/focus-areas/create-focus-area-thunk';
 import { updateFocusAreaThunk } from '@/store/thunks/focus-areas/update-focus-area-thunk';
@@ -13,21 +13,29 @@ type Props = {
 };
 
 export const FocusAreaFormModal = ({ isOpen, onClose, focusArea }: Props) => {
+  if (!isOpen) return null;
+
+  return (
+    <FocusAreaFormModalBody
+      key={focusArea?.id ?? 'new'}
+      onClose={onClose}
+      focusArea={focusArea}
+    />
+  );
+};
+
+type BodyProps = {
+  onClose: () => void;
+  focusArea?: FocusArea | null;
+};
+
+const FocusAreaFormModalBody = ({ onClose, focusArea }: BodyProps) => {
   const dispatch = useAppDispatch();
   const isEdit = focusArea != null;
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
+  const [name, setName] = useState(focusArea?.name ?? '');
+  const [description, setDescription] = useState(focusArea?.description ?? '');
   const [error, setError] = useState('');
   const [isSaving, setIsSaving] = useState(false);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    setName(focusArea?.name ?? '');
-    setDescription(focusArea?.description ?? '');
-    setError('');
-  }, [isOpen, focusArea]);
-
-  if (!isOpen) return null;
 
   const handleSubmit = async () => {
     setError('');
