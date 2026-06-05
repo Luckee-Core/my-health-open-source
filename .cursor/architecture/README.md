@@ -1,6 +1,6 @@
 # Architecture Documentation
 
-Architecture Decision Records (ADRs) for **nextjs-template** and Next.js apps created from it.
+Architecture Decision Records (ADRs) for **My Health** (my-health-open-source) and Next.js apps in this family.
 
 ## Why ADRs?
 
