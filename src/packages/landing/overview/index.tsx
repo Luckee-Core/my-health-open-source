@@ -1,5 +1,10 @@
 import { LandingSectionLabel } from '../section-label';
-import { LANDING_OVERVIEW_BULLETS } from '../content/landing-content';
+import {
+  LANDING_OVERVIEW_BULLETS,
+  LANDING_OVERVIEW_HEADING,
+  LANDING_OVERVIEW_HEADING_ACCENT,
+  LANDING_OVERVIEW_LEAD,
+} from '../content/landing-content';
 import { LandingDashboardMockCard } from './dashboard-mock-card';
 
 /**
@@ -13,12 +18,10 @@ export const LandingOverview = () => {
         <div className={styles.grid}>
           <div className={styles.copy}>
             <h2 className={styles.heading}>
-              One place for visits and your <span className={styles.accent}>care team</span>.
+              {LANDING_OVERVIEW_HEADING}{' '}
+              <span className={styles.accent}>{LANDING_OVERVIEW_HEADING_ACCENT}</span>
             </h2>
-            <p className={styles.lead}>
-              Appointments pull location from the doctor&apos;s facility automatically. No scattered
-              notes, no guessing which hospital that specialist uses.
-            </p>
+            <p className={styles.lead}>{LANDING_OVERVIEW_LEAD}</p>
             <ul className={styles.list}>
               {LANDING_OVERVIEW_BULLETS.map((bullet) => (
                 <li key={bullet} className={styles.listItem}>

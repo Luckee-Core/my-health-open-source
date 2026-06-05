@@ -1,7 +1,13 @@
 import { ArrowRight } from 'lucide-react';
 import { LandingGitHubIcon } from '../github-icon';
 import { LandingSectionLabel } from '../section-label';
-import { DOCS_URL, LANDING_REPOS } from '../content/landing-content';
+import {
+  DOCS_URL,
+  LANDING_OPEN_SOURCE_HEADING,
+  LANDING_OPEN_SOURCE_HEADING_ACCENT,
+  LANDING_OPEN_SOURCE_LEAD,
+  LANDING_REPOS,
+} from '../content/landing-content';
 
 /**
  * Landing open source section with repo cards.
@@ -12,12 +18,10 @@ export const LandingOpenSource = () => {
       <div className={styles.inner}>
         <LandingSectionLabel number="05" label="Open source" />
         <h2 className={styles.heading}>
-          A Next.js app and an <span className={styles.accent}>Express data service</span>.
+          {LANDING_OPEN_SOURCE_HEADING}{' '}
+          <span className={styles.accent}>{LANDING_OPEN_SOURCE_HEADING_ACCENT}</span>
         </h2>
-        <p className={styles.lead}>
-          MIT-friendly open source. Supabase schema for hospitals, specialties, doctors,
-          appointments, focus areas, and daily entries. Clear split between web and API.
-        </p>
+        <p className={styles.lead}>{LANDING_OPEN_SOURCE_LEAD}</p>
         <div className={styles.repos}>
           {LANDING_REPOS.map((repo) => (
             <a

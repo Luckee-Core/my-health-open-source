@@ -1,5 +1,5 @@
 import { LandingBrandMark } from '../brand-mark';
-import { GITHUB_WEB_URL } from '../content/landing-content';
+import { GITHUB_WEB_URL, LANDING_FOOTER_TAGLINE } from '../content/landing-content';
 
 /**
  * Landing page footer with brand, links, and attribution.
@@ -10,9 +10,7 @@ export const LandingFooter = () => {
       <div className={styles.inner}>
         <div>
           <LandingBrandMark />
-          <p className={styles.tagline}>
-            Open-source personal health tracker for appointments and your care team.
-          </p>
+          <p className={styles.tagline}>{LANDING_FOOTER_TAGLINE}</p>
         </div>
         <div className={styles.linksCol}>
           <div className={styles.links}>

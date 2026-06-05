@@ -1,5 +1,12 @@
 import { LandingGitHubIcon } from '../github-icon';
-import { DOCS_URL, GITHUB_API_URL, GITHUB_WEB_URL } from '../content/landing-content';
+import {
+  DOCS_URL,
+  GITHUB_API_URL,
+  GITHUB_WEB_URL,
+  LANDING_FINAL_CTA_HEADING,
+  LANDING_FINAL_CTA_HEADING_ACCENT,
+  LANDING_FINAL_CTA_KICKER,
+} from '../content/landing-content';
 
 /**
  * Landing final CTA band with GitHub links.
@@ -9,9 +16,10 @@ export const LandingFinalCta = () => {
     <section className={styles.section}>
       <div className={styles.gridOverlay} aria-hidden />
       <div className={styles.inner}>
-        <p className={styles.kicker}>MISSION</p>
+        <p className={styles.kicker}>{LANDING_FINAL_CTA_KICKER}</p>
         <h2 className={styles.heading}>
-          Self-host your health records. <span className={styles.accent}>Keep the clarity.</span>
+          {LANDING_FINAL_CTA_HEADING}{' '}
+          <span className={styles.accent}>{LANDING_FINAL_CTA_HEADING_ACCENT}</span>
         </h2>
         <div className={styles.ctaRow}>
           <a

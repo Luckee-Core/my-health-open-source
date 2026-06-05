@@ -1,7 +1,13 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { HOME_PATH } from '@/config/routes';
-import { LANDING_HERO_KICKER, LANDING_HERO_STATS } from '../content/landing-content';
+import {
+  LANDING_HERO_HEADLINE,
+  LANDING_HERO_HEADLINE_ACCENT,
+  LANDING_HERO_KICKER,
+  LANDING_HERO_STATS,
+  LANDING_HERO_SUB,
+} from '../content/landing-content';
 
 /**
  * Landing hero with headline, CTAs, and feature stats strip.
@@ -14,13 +20,10 @@ export const LandingHero = () => {
       <div className={styles.inner}>
         <p className={styles.kicker}>{LANDING_HERO_KICKER}</p>
         <h1 className={styles.heading}>
-          Know <span className={styles.accent}>who&apos;s caring for you</span> — and when
-          you&apos;re seeing them.
+          {LANDING_HERO_HEADLINE}{' '}
+          <span className={styles.accent}>{LANDING_HERO_HEADLINE_ACCENT}</span>
         </h1>
-        <p className={styles.sub}>
-          Track appointments, doctors, facilities, and specialties in one dashboard. Next.js +
-          Express + Supabase — on your stack, your records.
-        </p>
+        <p className={styles.sub}>{LANDING_HERO_SUB}</p>
         <div className={styles.ctaRow}>
           <a href="#open-source" className={styles.ctaPrimary}>
             Clone &amp; self-host <ArrowRight className={styles.ctaIcon} />

@@ -1,6 +1,10 @@
 import { Building2, Layers, Stethoscope } from 'lucide-react';
 import { LandingSectionLabel } from '../section-label';
-import { LANDING_CARE_TEAM_CARDS } from '../content/landing-content';
+import {
+  LANDING_CARE_TEAM_CARDS,
+  LANDING_CARE_TEAM_HEADING,
+  LANDING_CARE_TEAM_HEADING_ACCENT,
+} from '../content/landing-content';
 
 const CARD_ICONS = {
   doctors: Stethoscope,
@@ -17,8 +21,8 @@ export const LandingCareTeam = () => {
       <div className={styles.inner}>
         <LandingSectionLabel number="03" label="Care team" />
         <h2 className={styles.heading}>
-          Doctors, facilities, and specialties —{' '}
-          <span className={styles.accent}>linked, not duplicated</span>.
+          {LANDING_CARE_TEAM_HEADING}{' '}
+          <span className={styles.accent}>{LANDING_CARE_TEAM_HEADING_ACCENT}</span>
         </h2>
         <div className={styles.grid}>
           {LANDING_CARE_TEAM_CARDS.map((card) => {

@@ -1,6 +1,12 @@
 import { ArrowRight, Code2 } from 'lucide-react';
 import { LandingSectionLabel } from '../section-label';
-import { LANDING_CLI_COMMANDS } from '../content/landing-content';
+import {
+  LANDING_ARCHITECTURE_CARD_TITLE,
+  LANDING_ARCHITECTURE_HEADING,
+  LANDING_ARCHITECTURE_HEADING_ACCENT,
+  LANDING_ARCHITECTURE_LEAD,
+  LANDING_CLI_COMMANDS,
+} from '../content/landing-content';
 
 /**
  * Landing architecture section with dark CLI card.
@@ -13,12 +19,10 @@ export const LandingArchitecture = () => {
         <div className={styles.grid}>
           <div className={styles.copy}>
             <h2 className={styles.heading}>
-              Same patterns as <span className={styles.accent}>Luckee</span> open-source studios.
+              {LANDING_ARCHITECTURE_HEADING}{' '}
+              <span className={styles.accent}>{LANDING_ARCHITECTURE_HEADING_ACCENT}</span>
             </h2>
-            <p className={styles.lead}>
-              Typed API boundaries, Supabase migrations, Redux dashboard, thin Express handlers.
-              Clone both repos and wire your own instance.
-            </p>
+            <p className={styles.lead}>{LANDING_ARCHITECTURE_LEAD}</p>
           </div>
           <div className={styles.cardWrap}>
             <div className={styles.card}>
@@ -30,7 +34,7 @@ export const LandingArchitecture = () => {
                   </span>
                   <span className={styles.badge}>Stack</span>
                 </div>
-                <h3 className={styles.cardTitle}>Self-host in an afternoon</h3>
+                <h3 className={styles.cardTitle}>{LANDING_ARCHITECTURE_CARD_TITLE}</h3>
                 <div className={styles.cli}>
                   {LANDING_CLI_COMMANDS.map((command) => (
                     <p key={command}>

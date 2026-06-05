@@ -1,6 +1,11 @@
 import { Calendar } from 'lucide-react';
 import { LandingSectionLabel } from '../section-label';
-import { LANDING_APPOINTMENT_MOCKS } from '../content/landing-content';
+import {
+  LANDING_APPOINTMENT_MOCKS,
+  LANDING_APPOINTMENTS_HEADING,
+  LANDING_APPOINTMENTS_HEADING_ACCENT,
+  LANDING_APPOINTMENTS_LEAD,
+} from '../content/landing-content';
 
 const badgeClass = (badge: 'scheduled' | 'completed' | 'cancelled'): string => {
   if (badge === 'scheduled') return styles.badgeScheduled;
@@ -46,12 +51,10 @@ export const LandingAppointments = () => {
           </div>
           <div className={styles.copy}>
             <h2 className={styles.heading}>
-              Every visit, <span className={styles.accent}>scheduled and searchable</span>.
+              {LANDING_APPOINTMENTS_HEADING}{' '}
+              <span className={styles.accent}>{LANDING_APPOINTMENTS_HEADING_ACCENT}</span>
             </h2>
-            <p className={styles.lead}>
-              Create appointments tied to a doctor. Location comes from their facility — you
-              don&apos;t re-enter it.
-            </p>
+            <p className={styles.lead}>{LANDING_APPOINTMENTS_LEAD}</p>
           </div>
         </div>
       </div>
