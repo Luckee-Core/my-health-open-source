@@ -9,8 +9,7 @@ export const GITHUB_API_URL =
   `https://github.com/${githubOrg}/my-health-open-source-express-server`;
 
 export const DOCS_URL =
-  process.env.NEXT_PUBLIC_DOCS_URL ??
-  `${GITHUB_API_URL}/blob/main/docs/README.md`;
+  process.env.NEXT_PUBLIC_DOCS_URL ?? '/docs';
 
 export const THT_URL =
   process.env.NEXT_PUBLIC_THT_URL ?? 'https://www.trouthousetech.com';
@@ -38,7 +37,7 @@ export const LANDING_NAV_LINKS = [
   { label: 'Care team', href: '#care-team' },
   { label: 'Architecture', href: '#architecture' },
   { label: 'Open source', href: '#open-source' },
-  { label: 'Docs', href: '#open-source' },
+  { label: 'Docs', href: DOCS_URL },
 ] as const;
 
 export const LANDING_OVERVIEW_HEADING = 'Visits and care team in';

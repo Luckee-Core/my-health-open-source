@@ -1,6 +1,10 @@
 export const LANDING_PATH = '/';
 export const HOME_PATH = '/appointments';
 
+export const DOCS_PATH = '/docs';
+export const DOCS_GETTING_STARTED_PATH = '/docs/getting-started';
+export const DOCS_API_PATH = '/docs/api';
+
 export const APPOINTMENTS_PATH = '/appointments';
 export const DOCTORS_PATH = '/doctors';
 export const HOSPITALS_PATH = '/hospitals';
