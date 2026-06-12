@@ -38,7 +38,7 @@ This project is a **self-hosted health data dashboard** intended for local or tr
 
 ## Threat model (web)
 
-- Only `NEXT_PUBLIC_*` variables are embedded in the browser bundle. Never put Supabase service-role keys or other server secrets in `NEXT_PUBLIC_*`.
+- Only `NEXT_PUBLIC_*` variables are embedded in the browser bundle. Never put `DATABASE_URL` or other server secrets in `NEXT_PUBLIC_*`.
 - The web app calls your self-hosted Express API; health data does not leave your stack unless you deploy the API to an untrusted network without additional hardening.
 - Deploying this app to the public internet without authentication on the API is **not recommended**.
 
@@ -46,4 +46,4 @@ This project is a **self-hosted health data dashboard** intended for local or tr
 
 1. Run Express on localhost or a private network until you add auth.
 2. Use HTTPS and restrict CORS when exposing the API beyond localhost.
-3. Rotate Supabase service-role keys if they may have been exposed.
+3. Rotate Postgres credentials if `DATABASE_URL` may have been exposed.

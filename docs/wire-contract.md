@@ -9,7 +9,7 @@ Express canonical contract: [my-health-open-source-express-server/docs/oss/wire-
 | Layer | Default port | Primary env |
 | --- | --- | --- |
 | Web | 3000 | — |
-| Express | 3009 | `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` |
+| Express | 3009 | `DATABASE_URL` |
 | Web → Express | — | `NEXT_PUBLIC_API_URL` (default `http://localhost:3009`) |
 
 ## Web fetch paths

@@ -16,7 +16,7 @@ export const THT_URL =
 
 export const LANDING_BRAND_NAME = 'My Health';
 
-export const LANDING_HERO_KICKER = 'OPEN SOURCE · SELF-HOSTED · YOUR SUPABASE';
+export const LANDING_HERO_KICKER = 'OPEN SOURCE · SELF-HOSTED · YOUR POSTGRES';
 
 export const LANDING_HERO_HEADLINE =
   "Stop re-typing which hospital your specialist uses.";
@@ -24,7 +24,7 @@ export const LANDING_HERO_HEADLINE =
 export const LANDING_HERO_HEADLINE_ACCENT = 'One dashboard for visits and your care team.';
 
 export const LANDING_HERO_SUB =
-  'I built this for myself — appointments, doctors, facilities, focus areas, and daily notes — on a stack I already run for client work: Next.js, Express, Supabase. Your records stay on your project, not a vendor portal.';
+  'I built this for myself — appointments, doctors, facilities, focus areas, and daily notes — on a stack I already run for client work: Next.js, Express, Postgres on your Mac. Your records stay on your machine, not a vendor portal.';
 
 export const LANDING_HERO_STATS = [
   { h: 'Appointments', s: 'Scheduled, completed, cancelled — one table' },
@@ -115,15 +115,15 @@ export const LANDING_ARCHITECTURE_HEADING = 'Two repos, one wire contract —';
 export const LANDING_ARCHITECTURE_HEADING_ACCENT = 'the split I use on OSS dashboards.';
 
 export const LANDING_ARCHITECTURE_LEAD =
-  'Browser app in Next.js. CRUD in a thin Express service. Supabase holds the rows. Redux manual thunks on the web side; handlers stay thin on the API. Clone both, point at your project, run locally.';
+  'Browser app in Next.js. CRUD in a thin Express service. Postgres holds the rows on your machine. Redux manual thunks on the web side; handlers stay thin on the API. Clone both, create my_health, run locally.';
 
-export const LANDING_ARCHITECTURE_CARD_TITLE = 'Clone both repos, wire your Supabase';
+export const LANDING_ARCHITECTURE_CARD_TITLE = 'Clone both repos, wire local Postgres';
 
 export const LANDING_OPEN_SOURCE_HEADING = 'Next.js front end,';
 export const LANDING_OPEN_SOURCE_HEADING_ACCENT = 'Express data service.';
 
 export const LANDING_OPEN_SOURCE_LEAD =
-  'MIT license. SQL migrations in the API repo. No service-role key in the browser — only NEXT_PUBLIC_API_URL. Fork it, self-host it, or strip pieces for your own health stack.';
+  'MIT license. SQL migrations in the API repo. No database credentials in the browser — only NEXT_PUBLIC_API_URL. Fork it, self-host it, or strip pieces for your own health stack.';
 
 export const LANDING_REPOS = [
   {
@@ -135,7 +135,7 @@ export const LANDING_REPOS = [
   {
     tag: 'api',
     name: 'my-health-open-source-express-server',
-    body: 'Express /api/data CRUD backed by Supabase. Managed client at startup; one handler file per route.',
+    body: 'Express /api/data CRUD backed by on-device Postgres. Managed pool at startup; one handler file per route.',
     href: GITHUB_API_URL,
   },
 ] as const;

@@ -4,7 +4,7 @@ import { MarketingLanding } from '@/packages/landing';
 export const metadata: Metadata = {
   title: 'My Health — Open-source personal health tracker',
   description:
-    'Track appointments, doctors, facilities, and specialties in one self-hostable dashboard. Next.js + Express + Supabase.',
+    'Track appointments, doctors, facilities, and specialties in one self-hostable dashboard. Next.js + Express + Postgres.',
   openGraph: {
     title: 'My Health — Open-source personal health tracker',
     description:

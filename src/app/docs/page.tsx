@@ -15,7 +15,7 @@ export default function DocsOverviewPage() {
       <h1 className={styles.h1}>Documentation</h1>
       <p className={styles.lead}>
         My Health is a <strong>self-hosted care dashboard</strong> — appointments, doctors, hospitals,
-        specialties, focus areas, and daily notes on <strong>your</strong> Supabase project. These docs
+        specialties, focus areas, and daily notes on <strong>your</strong> on-device Postgres database. These docs
         cover running the web + Express pair locally and browsing the HTTP API.
       </p>
 

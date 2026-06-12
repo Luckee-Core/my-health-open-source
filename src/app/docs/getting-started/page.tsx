@@ -22,7 +22,7 @@ export default function GettingStartedPage() {
       <h1 className={styles.h1}>Getting started</h1>
       <p className={styles.lead}>
         My Health is a <strong>self-hosted care dashboard</strong> for tracking appointments, your care team,
-        focus areas, and daily notes on <strong>your</strong> Supabase project. This page walks through running
+        focus areas, and daily notes on <strong>your</strong> on-device Postgres database. This page walks through running
         the <strong>web + Express pair</strong> locally.
       </p>
 
@@ -32,7 +32,7 @@ export default function GettingStartedPage() {
           Self-hosted My Health is <strong>two repositories</strong>: a <strong>Next.js</strong> dashboard
           (TypeScript, Redux) and an <strong>Express</strong> API for{" "}
           <code className={styles.code}>/api/data</code> REST CRUD. Clone both, configure environment
-          variables, apply Supabase SQL migrations, and keep both processes running while you develop.
+          variables, apply Postgres SQL migrations with <code className={styles.code}>psql</code>, and keep both processes running while you develop.
         </p>
       </section>
 
@@ -101,7 +101,8 @@ export default function GettingStartedPage() {
         <pre className={styles.codeBlock}>
           {`cd my-health-open-source-express-server
 cp .env.example .env
-# Fill SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
+# Set DATABASE_URL (see Express docs/how-to/local-postgres-mac.md)
+# Apply migrations/*.sql with psql
 
 npm install
 npm run dev`}
