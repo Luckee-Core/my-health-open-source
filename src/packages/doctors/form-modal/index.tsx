@@ -1,11 +1,10 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import type { Doctor } from '@/model/doctor';
+import type { Doctor } from '@/model';
 import { resolveDoctorRelationsForSave } from '../resolve-doctor-relations-for-save';
-import { createDoctorThunk } from '@/store/thunks/doctors/create-doctor-thunk';
-import { updateDoctorThunk } from '@/store/thunks/doctors/update-doctor-thunk';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { createDoctorThunk, updateDoctorThunk } from '@/store/thunks';
+import { useAppDispatch, useAppSelector } from '@/store';
 import { store } from '@/store/store';
 
 type Props = {
@@ -82,13 +81,13 @@ const DoctorFormModalBody = ({ onClose, doctor }: BodyProps) => {
       specialty_id: resolved.specialtyId,
       notes: notes.trim() || null,
     };
-    const result = isEdit
+    const httpStatus = isEdit
       ? await dispatch(updateDoctorThunk(doctor.id, payload))
       : await dispatch(createDoctorThunk(payload));
     setIsSaving(false);
 
-    if (result.status !== 200) {
-      setError(result.message ?? 'Failed to save');
+    if (httpStatus !== 200) {
+      setError('Failed to save');
       return;
     }
     onClose();

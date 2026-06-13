@@ -1,13 +1,24 @@
 'use client';
 
-import { useState } from 'react';
-import type { Hospital } from '@/model/hospital';
+import { HospitalsBuilderActions } from '@/store/builders';
+import { CurrentHospitalActions } from '@/store/current';
+import { useAppDispatch, useAppSelector } from '@/store';
 import { HospitalFormModal } from './form-modal';
 import { HospitalsTable } from './table';
 
 export const HospitalsPage = () => {
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [editingHospital, setEditingHospital] = useState<Hospital | null>(null);
+  const dispatch = useAppDispatch();
+  const hospitalsBuilder = useAppSelector((state) => state.hospitalsBuilder);
+  const currentHospital = useAppSelector((state) => state.currentHospital);
+
+  const isEditing = currentHospital.id !== '';
+  const isOpen = hospitalsBuilder.isCreateOpen || isEditing;
+  const editingHospital = isEditing ? currentHospital : null;
+
+  const closeModal = () => {
+    dispatch(HospitalsBuilderActions.closeModal());
+    dispatch(CurrentHospitalActions.resetCurrentHospital());
+  };
 
   return (
     <div className={styles.page}>
@@ -18,18 +29,19 @@ export const HospitalsPage = () => {
             Hospitals and medical practices where your doctors work.
           </p>
         </div>
-        <button type="button" onClick={() => setIsCreateOpen(true)} className={styles.primaryButton}>
+        <button
+          type="button"
+          onClick={() => dispatch(HospitalsBuilderActions.setIsCreateOpen(true))}
+          className={styles.primaryButton}
+        >
           Add facility
         </button>
       </div>
-      <HospitalsTable onEdit={setEditingHospital} />
+      <HospitalsTable />
       <HospitalFormModal
-        isOpen={isCreateOpen || editingHospital !== null}
+        isOpen={isOpen}
         hospital={editingHospital}
-        onClose={() => {
-          setIsCreateOpen(false);
-          setEditingHospital(null);
-        }}
+        onClose={closeModal}
       />
     </div>
   );

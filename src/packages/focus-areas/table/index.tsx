@@ -1,20 +1,17 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import type { FocusArea } from '@/model/focus-area';
-import { deleteFocusAreaThunk } from '@/store/thunks/focus-areas/delete-focus-area-thunk';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-
-type Props = {
-  onEdit: (focusArea: FocusArea) => void;
-};
+import type { FocusArea } from '@/model';
+import { deleteFocusAreaThunk } from '@/store/thunks';
+import { CurrentFocusAreaActions } from '@/store/current';
+import { useAppDispatch, useAppSelector } from '@/store';
 
 const truncate = (value: string | null, max = 80): string => {
   if (!value) return '—';
   return value.length > max ? `${value.slice(0, max)}…` : value;
 };
 
-export const FocusAreasTable = ({ onEdit }: Props) => {
+export const FocusAreasTable = () => {
   const dispatch = useAppDispatch();
   const focusAreasDump = useAppSelector((state) => state.focusAreas);
   const dailyEntriesDump = useAppSelector((state) => state.dailyEntries);
@@ -47,10 +44,10 @@ export const FocusAreasTable = ({ onEdit }: Props) => {
 
     setActionError(null);
     setBusyId(focusArea.id);
-    const result = await dispatch(deleteFocusAreaThunk(focusArea.id));
+    const status = await dispatch(deleteFocusAreaThunk(focusArea.id));
     setBusyId(null);
-    if (result.status !== 200) {
-      setActionError(result.message ?? 'Failed to delete');
+    if (status !== 200) {
+      setActionError('Failed to delete');
     }
   };
 
@@ -77,7 +74,7 @@ export const FocusAreasTable = ({ onEdit }: Props) => {
                   <button
                     type="button"
                     className={styles.linkButton}
-                    onClick={() => onEdit(row)}
+                    onClick={() => dispatch(CurrentFocusAreaActions.setCurrentFocusArea(row))}
                     disabled={busyId === row.id}
                   >
                     Edit

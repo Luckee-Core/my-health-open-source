@@ -44,6 +44,8 @@ Cross-feature docs chrome lives in `src/packages/docs/`; API-specific rendering 
 - Styles object pattern (ADR 003); one primary component per file (ADR 005).
 - `/docs` is outside `(dashboard)/` — no detail-page routing concerns (ADR 008).
 
+**ADR 003 exception:** Shared prose article chrome may use `docsArticleStyles` from `src/packages/docs/article-styles.ts` (a single styles object reused across docs package components). This is allowed for docs prose pages; feature UI elsewhere must still use per-component styles objects.
+
 ### 7) Landing link
 - `DOCS_URL` in `landing-content.ts` defaults to `/docs`.
 

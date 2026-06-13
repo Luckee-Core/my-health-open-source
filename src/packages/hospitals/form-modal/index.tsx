@@ -1,10 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import type { Hospital } from '@/model/hospital';
-import { createHospitalThunk } from '@/store/thunks/hospitals/create-hospital-thunk';
-import { updateHospitalThunk } from '@/store/thunks/hospitals/update-hospital-thunk';
-import { useAppDispatch } from '@/store/hooks';
+import type { Hospital } from '@/model';
+import { createHospitalThunk, updateHospitalThunk } from '@/store/thunks';
+import { useAppDispatch } from '@/store';
 
 type Props = {
   isOpen: boolean;
@@ -56,13 +55,13 @@ const HospitalFormModalBody = ({ onClose, hospital }: BodyProps) => {
       phone: phone.trim() || null,
       notes: notes.trim() || null,
     };
-    const result = isEdit
+    const httpStatus = isEdit
       ? await dispatch(updateHospitalThunk(hospital.id, payload))
       : await dispatch(createHospitalThunk(payload));
     setIsSaving(false);
 
-    if (result.status !== 200) {
-      setError(result.message ?? 'Failed to save');
+    if (httpStatus !== 200) {
+      setError('Failed to save');
       return;
     }
     onClose();

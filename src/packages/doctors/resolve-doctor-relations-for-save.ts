@@ -1,12 +1,9 @@
-import type { Hospital } from '@/model/hospital';
-import type { Specialty } from '@/model/specialty';
-import { createHospitalThunk } from '@/store/thunks/hospitals/create-hospital-thunk';
-import { createSpecialtyThunk } from '@/store/thunks/specialties/create-specialty-thunk';
-import type { ThunkResult } from '@/store/thunks/thunk-result';
+import type { Hospital, Specialty } from '@/model';
+import { createHospitalThunk, createSpecialtyThunk } from '@/store/thunks';
 import type { AppThunk } from '@/store/types';
 import type { RootState } from '@/store/store';
 
-type Dispatch = (thunk: AppThunk<Promise<ThunkResult>>) => Promise<ThunkResult>;
+type Dispatch = (thunk: AppThunk<Promise<200 | 400 | 500>>) => Promise<200 | 400 | 500>;
 
 type ResolveResult =
   | { ok: true; hospitalId: string; specialtyId: string }
@@ -28,9 +25,9 @@ const resolveHospitalId = async (
   if (trimmedNew) {
     const existing = findByName<Hospital>(getState().hospitals, trimmedNew);
     if (existing) return { ok: true, id: existing.id };
-    const result = await dispatch(createHospitalThunk({ name: trimmedNew }));
-    if (result.status !== 200) {
-      return { ok: false, message: result.message ?? 'Failed to create facility' };
+    const status = await dispatch(createHospitalThunk({ name: trimmedNew }));
+    if (status !== 200) {
+      return { ok: false, message: 'Failed to create facility' };
     }
     const created = findByName<Hospital>(getState().hospitals, trimmedNew);
     if (!created) return { ok: false, message: 'Failed to resolve new facility' };
@@ -50,9 +47,9 @@ const resolveSpecialtyId = async (
   if (trimmedNew) {
     const existing = findByName<Specialty>(getState().specialties, trimmedNew);
     if (existing) return { ok: true, id: existing.id };
-    const result = await dispatch(createSpecialtyThunk({ name: trimmedNew }));
-    if (result.status !== 200) {
-      return { ok: false, message: result.message ?? 'Failed to create specialty' };
+    const status = await dispatch(createSpecialtyThunk({ name: trimmedNew }));
+    if (status !== 200) {
+      return { ok: false, message: 'Failed to create specialty' };
     }
     const created = findByName<Specialty>(getState().specialties, trimmedNew);
     if (!created) return { ok: false, message: 'Failed to resolve new specialty' };

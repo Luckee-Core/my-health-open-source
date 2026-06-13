@@ -1,11 +1,10 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import type { DailyEntry } from '@/model/daily-entry';
+import type { DailyEntry } from '@/model';
 import { getTodayEntryDate } from '../format-entry-date';
-import { createDailyEntryThunk } from '@/store/thunks/daily-entries/create-daily-entry-thunk';
-import { updateDailyEntryThunk } from '@/store/thunks/daily-entries/update-daily-entry-thunk';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { createDailyEntryThunk, updateDailyEntryThunk } from '@/store/thunks';
+import { useAppDispatch, useAppSelector } from '@/store';
 
 type Props = {
   isOpen: boolean;
@@ -81,13 +80,13 @@ const DailyEntryFormModalBody = ({
       focus_area_id: focusAreaId,
       notes: notes.trim() || null,
     };
-    const result = isEdit
+    const httpStatus = isEdit
       ? await dispatch(updateDailyEntryThunk(dailyEntry.id, payload))
       : await dispatch(createDailyEntryThunk(payload));
     setIsSaving(false);
 
-    if (result.status !== 200) {
-      setError(result.message ?? 'Failed to save');
+    if (httpStatus !== 200) {
+      setError('Failed to save');
       return;
     }
     onClose();

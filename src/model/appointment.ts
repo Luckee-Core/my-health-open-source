@@ -12,3 +12,17 @@ export type Appointment = {
   created_at: string;
   updated_at: string;
 };
+
+/** Sentinel: `id === ""` means no appointment selected for editing. */
+export const EMPTY_APPOINTMENT: Appointment = {
+  id: '',
+  doctor_id: '',
+  scheduled_at: '',
+  status: 'scheduled',
+  appointment_type: null,
+  reason: null,
+  notes: null,
+  completed_at: null,
+  created_at: '',
+  updated_at: '',
+};

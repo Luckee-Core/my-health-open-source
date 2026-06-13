@@ -2,22 +2,19 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import type { DailyEntry } from '@/model/daily-entry';
+import type { DailyEntry } from '@/model';
 import { FOCUS_AREAS_PATH } from '@/config/routes';
 import { formatEntryDate } from '../format-entry-date';
-import { deleteDailyEntryThunk } from '@/store/thunks/daily-entries/delete-daily-entry-thunk';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-
-type Props = {
-  onEdit: (dailyEntry: DailyEntry) => void;
-};
+import { deleteDailyEntryThunk } from '@/store/thunks';
+import { CurrentDailyEntryActions } from '@/store/current';
+import { useAppDispatch, useAppSelector } from '@/store';
 
 const truncate = (value: string | null, max = 60): string => {
   if (!value) return '—';
   return value.length > max ? `${value.slice(0, max)}…` : value;
 };
 
-export const DailyEntriesTable = ({ onEdit }: Props) => {
+export const DailyEntriesTable = () => {
   const dispatch = useAppDispatch();
   const dailyEntriesDump = useAppSelector((state) => state.dailyEntries);
   const focusAreasDump = useAppSelector((state) => state.focusAreas);
@@ -44,10 +41,10 @@ export const DailyEntriesTable = ({ onEdit }: Props) => {
 
     setActionError(null);
     setBusyId(entry.id);
-    const result = await dispatch(deleteDailyEntryThunk(entry.id));
+    const status = await dispatch(deleteDailyEntryThunk(entry.id));
     setBusyId(null);
-    if (result.status !== 200) {
-      setActionError(result.message ?? 'Failed to delete');
+    if (status !== 200) {
+      setActionError('Failed to delete');
     }
   };
 
@@ -84,7 +81,7 @@ export const DailyEntriesTable = ({ onEdit }: Props) => {
                   <button
                     type="button"
                     className={styles.linkButton}
-                    onClick={() => onEdit(row)}
+                    onClick={() => dispatch(CurrentDailyEntryActions.setCurrentDailyEntry(row))}
                     disabled={busyId === row.id}
                   >
                     Edit

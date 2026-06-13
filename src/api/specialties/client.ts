@@ -6,7 +6,7 @@ import {
   fromExpressVoidBody,
 } from '@/api/_shared/express-response';
 import type { ApiResponse } from '@/api/types';
-import type { Specialty } from '@/model/specialty';
+import type { Specialty } from '@/model';
 
 type ListBody = { success: boolean; data?: Specialty[]; error?: string };
 type EntityBody = { success: boolean; data?: Specialty; error?: string };

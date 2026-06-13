@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
-import { loadBootstrapDataThunk } from '@/store/thunks/bootstrap/load-bootstrap-data-thunk';
-import { useAppDispatch } from '@/store/hooks';
+import { loadBootstrapDataThunk } from '@/store/thunks';
+import { useAppDispatch } from '@/store';
 
 export const BootstrapDataLoader = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useAppDispatch();

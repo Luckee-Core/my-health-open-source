@@ -1,13 +1,24 @@
 'use client';
 
-import { useState } from 'react';
-import type { FocusArea } from '@/model/focus-area';
+import { FocusAreasBuilderActions } from '@/store/builders';
+import { CurrentFocusAreaActions } from '@/store/current';
+import { useAppDispatch, useAppSelector } from '@/store';
 import { FocusAreaFormModal } from './form-modal';
 import { FocusAreasTable } from './table';
 
 export const FocusAreasPage = () => {
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [editingFocusArea, setEditingFocusArea] = useState<FocusArea | null>(null);
+  const dispatch = useAppDispatch();
+  const focusAreasBuilder = useAppSelector((state) => state.focusAreasBuilder);
+  const currentFocusArea = useAppSelector((state) => state.currentFocusArea);
+
+  const isEditing = currentFocusArea.id !== '';
+  const isOpen = focusAreasBuilder.isCreateOpen || isEditing;
+  const editingFocusArea = isEditing ? currentFocusArea : null;
+
+  const closeModal = () => {
+    dispatch(FocusAreasBuilderActions.closeModal());
+    dispatch(CurrentFocusAreaActions.resetCurrentFocusArea());
+  };
 
   return (
     <div className={styles.page}>
@@ -19,18 +30,19 @@ export const FocusAreasPage = () => {
             more.
           </p>
         </div>
-        <button type="button" onClick={() => setIsCreateOpen(true)} className={styles.primaryButton}>
+        <button
+          type="button"
+          onClick={() => dispatch(FocusAreasBuilderActions.setIsCreateOpen(true))}
+          className={styles.primaryButton}
+        >
           Add focus area
         </button>
       </div>
-      <FocusAreasTable onEdit={setEditingFocusArea} />
+      <FocusAreasTable />
       <FocusAreaFormModal
-        isOpen={isCreateOpen || editingFocusArea !== null}
+        isOpen={isOpen}
         focusArea={editingFocusArea}
-        onClose={() => {
-          setIsCreateOpen(false);
-          setEditingFocusArea(null);
-        }}
+        onClose={closeModal}
       />
     </div>
   );

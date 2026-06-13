@@ -1,15 +1,12 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import type { Specialty } from '@/model/specialty';
-import { deleteSpecialtyThunk } from '@/store/thunks/specialties/delete-specialty-thunk';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import type { Specialty } from '@/model';
+import { deleteSpecialtyThunk } from '@/store/thunks';
+import { CurrentSpecialtyActions } from '@/store/current';
+import { useAppDispatch, useAppSelector } from '@/store';
 
-type Props = {
-  onEdit: (specialty: Specialty) => void;
-};
-
-export const SpecialtiesTable = ({ onEdit }: Props) => {
+export const SpecialtiesTable = () => {
   const dispatch = useAppDispatch();
   const specialtiesDump = useAppSelector((state) => state.specialties);
   const doctorsDump = useAppSelector((state) => state.doctors);
@@ -42,10 +39,10 @@ export const SpecialtiesTable = ({ onEdit }: Props) => {
 
     setActionError(null);
     setBusyId(specialty.id);
-    const result = await dispatch(deleteSpecialtyThunk(specialty.id));
+    const status = await dispatch(deleteSpecialtyThunk(specialty.id));
     setBusyId(null);
-    if (result.status !== 200) {
-      setActionError(result.message ?? 'Failed to delete');
+    if (status !== 200) {
+      setActionError('Failed to delete');
     }
   };
 
@@ -70,7 +67,7 @@ export const SpecialtiesTable = ({ onEdit }: Props) => {
                   <button
                     type="button"
                     className={styles.linkButton}
-                    onClick={() => onEdit(row)}
+                    onClick={() => dispatch(CurrentSpecialtyActions.setCurrentSpecialty(row))}
                     disabled={busyId === row.id}
                   >
                     Edit

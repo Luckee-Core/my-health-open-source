@@ -1,10 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import type { FocusArea } from '@/model/focus-area';
-import { createFocusAreaThunk } from '@/store/thunks/focus-areas/create-focus-area-thunk';
-import { updateFocusAreaThunk } from '@/store/thunks/focus-areas/update-focus-area-thunk';
-import { useAppDispatch } from '@/store/hooks';
+import type { FocusArea } from '@/model';
+import { createFocusAreaThunk, updateFocusAreaThunk } from '@/store/thunks';
+import { useAppDispatch } from '@/store';
 
 type Props = {
   isOpen: boolean;
@@ -50,13 +49,13 @@ const FocusAreaFormModalBody = ({ onClose, focusArea }: BodyProps) => {
       name: trimmedName,
       description: description.trim() || null,
     };
-    const result = isEdit
+    const httpStatus = isEdit
       ? await dispatch(updateFocusAreaThunk(focusArea.id, payload))
       : await dispatch(createFocusAreaThunk(payload));
     setIsSaving(false);
 
-    if (result.status !== 200) {
-      setError(result.message ?? 'Failed to save');
+    if (httpStatus !== 200) {
+      setError('Failed to save');
       return;
     }
     onClose();

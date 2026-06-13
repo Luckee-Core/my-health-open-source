@@ -1,14 +1,11 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import type { Appointment, AppointmentStatus } from '@/model/appointment';
+import type { Appointment, AppointmentStatus } from '@/model';
 import { STATUS_LABELS } from '../format-datetime-local';
-import { deleteAppointmentThunk } from '@/store/thunks/appointments/delete-appointment-thunk';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-
-type Props = {
-  onEdit: (appointment: Appointment) => void;
-};
+import { deleteAppointmentThunk } from '@/store/thunks';
+import { CurrentAppointmentActions } from '@/store/current';
+import { useAppDispatch, useAppSelector } from '@/store';
 
 const formatScheduledAt = (iso: string): string => {
   return new Date(iso).toLocaleString(undefined, {
@@ -23,7 +20,7 @@ const statusBadgeClass = (status: AppointmentStatus): string => {
   return styles.badgeScheduled;
 };
 
-export const AppointmentsTable = ({ onEdit }: Props) => {
+export const AppointmentsTable = () => {
   const dispatch = useAppDispatch();
   const appointmentsDump = useAppSelector((state) => state.appointments);
   const doctors = useAppSelector((state) => state.doctors);
@@ -47,10 +44,10 @@ export const AppointmentsTable = ({ onEdit }: Props) => {
 
     setActionError(null);
     setBusyId(appointment.id);
-    const result = await dispatch(deleteAppointmentThunk(appointment.id));
+    const status = await dispatch(deleteAppointmentThunk(appointment.id));
     setBusyId(null);
-    if (result.status !== 200) {
-      setActionError(result.message ?? 'Failed to delete');
+    if (status !== 200) {
+      setActionError('Failed to delete');
     }
   };
 
@@ -90,7 +87,7 @@ export const AppointmentsTable = ({ onEdit }: Props) => {
                     <button
                       type="button"
                       className={styles.linkButton}
-                      onClick={() => onEdit(row)}
+                      onClick={() => dispatch(CurrentAppointmentActions.setCurrentAppointment(row))}
                       disabled={busyId === row.id}
                     >
                       Edit

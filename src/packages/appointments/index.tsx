@@ -1,13 +1,24 @@
 'use client';
 
-import { useState } from 'react';
-import type { Appointment } from '@/model/appointment';
+import { AppointmentsBuilderActions } from '@/store/builders';
+import { CurrentAppointmentActions } from '@/store/current';
+import { useAppDispatch, useAppSelector } from '@/store';
 import { AppointmentFormModal } from './form-modal';
 import { AppointmentsTable } from './table';
 
 export const AppointmentsPage = () => {
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [editingAppointment, setEditingAppointment] = useState<Appointment | null>(null);
+  const dispatch = useAppDispatch();
+  const appointmentsBuilder = useAppSelector((state) => state.appointmentsBuilder);
+  const currentAppointment = useAppSelector((state) => state.currentAppointment);
+
+  const isEditing = currentAppointment.id !== '';
+  const isOpen = appointmentsBuilder.isCreateOpen || isEditing;
+  const editingAppointment = isEditing ? currentAppointment : null;
+
+  const closeModal = () => {
+    dispatch(AppointmentsBuilderActions.closeModal());
+    dispatch(CurrentAppointmentActions.resetCurrentAppointment());
+  };
 
   return (
     <div className={styles.page}>
@@ -18,18 +29,19 @@ export const AppointmentsPage = () => {
             Scheduled visits with your doctors. Location comes from the doctor&apos;s facility.
           </p>
         </div>
-        <button type="button" onClick={() => setIsCreateOpen(true)} className={styles.primaryButton}>
+        <button
+          type="button"
+          onClick={() => dispatch(AppointmentsBuilderActions.setIsCreateOpen(true))}
+          className={styles.primaryButton}
+        >
           Add appointment
         </button>
       </div>
-      <AppointmentsTable onEdit={setEditingAppointment} />
+      <AppointmentsTable />
       <AppointmentFormModal
-        isOpen={isCreateOpen || editingAppointment !== null}
+        isOpen={isOpen}
         appointment={editingAppointment}
-        onClose={() => {
-          setIsCreateOpen(false);
-          setEditingAppointment(null);
-        }}
+        onClose={closeModal}
       />
     </div>
   );

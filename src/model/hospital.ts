@@ -8,3 +8,15 @@ export type Hospital = {
   created_at: string;
   updated_at: string;
 };
+
+/** Sentinel: `id === ""` means no hospital selected for editing. */
+export const EMPTY_HOSPITAL: Hospital = {
+  id: '',
+  name: '',
+  address: null,
+  email: null,
+  phone: null,
+  notes: null,
+  created_at: '',
+  updated_at: '',
+};

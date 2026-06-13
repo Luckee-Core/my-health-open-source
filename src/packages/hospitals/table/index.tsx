@@ -1,15 +1,12 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import type { Hospital } from '@/model/hospital';
-import { deleteHospitalThunk } from '@/store/thunks/hospitals/delete-hospital-thunk';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import type { Hospital } from '@/model';
+import { deleteHospitalThunk } from '@/store/thunks';
+import { CurrentHospitalActions } from '@/store/current';
+import { useAppDispatch, useAppSelector } from '@/store';
 
-type Props = {
-  onEdit: (hospital: Hospital) => void;
-};
-
-export const HospitalsTable = ({ onEdit }: Props) => {
+export const HospitalsTable = () => {
   const dispatch = useAppDispatch();
   const hospitalsDump = useAppSelector((state) => state.hospitals);
   const doctorsDump = useAppSelector((state) => state.doctors);
@@ -42,10 +39,10 @@ export const HospitalsTable = ({ onEdit }: Props) => {
 
     setActionError(null);
     setBusyId(hospital.id);
-    const result = await dispatch(deleteHospitalThunk(hospital.id));
+    const status = await dispatch(deleteHospitalThunk(hospital.id));
     setBusyId(null);
-    if (result.status !== 200) {
-      setActionError(result.message ?? 'Failed to delete');
+    if (status !== 200) {
+      setActionError('Failed to delete');
     }
   };
 
@@ -76,7 +73,7 @@ export const HospitalsTable = ({ onEdit }: Props) => {
                   <button
                     type="button"
                     className={styles.linkButton}
-                    onClick={() => onEdit(row)}
+                    onClick={() => dispatch(CurrentHospitalActions.setCurrentHospital(row))}
                     disabled={busyId === row.id}
                   >
                     Edit

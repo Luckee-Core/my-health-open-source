@@ -1,10 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import type { Specialty } from '@/model/specialty';
-import { createSpecialtyThunk } from '@/store/thunks/specialties/create-specialty-thunk';
-import { updateSpecialtyThunk } from '@/store/thunks/specialties/update-specialty-thunk';
-import { useAppDispatch } from '@/store/hooks';
+import type { Specialty } from '@/model';
+import { createSpecialtyThunk, updateSpecialtyThunk } from '@/store/thunks';
+import { useAppDispatch } from '@/store';
 
 type Props = {
   isOpen: boolean;
@@ -45,13 +44,14 @@ const SpecialtyFormModalBody = ({ onClose, specialty }: BodyProps) => {
     }
 
     setIsSaving(true);
-    const result = isEdit
-      ? await dispatch(updateSpecialtyThunk(specialty.id, { name: trimmed }))
-      : await dispatch(createSpecialtyThunk({ name: trimmed }));
+    const payload = { name: trimmed };
+    const httpStatus = isEdit
+      ? await dispatch(updateSpecialtyThunk(specialty.id, payload))
+      : await dispatch(createSpecialtyThunk(payload));
     setIsSaving(false);
 
-    if (result.status !== 200) {
-      setError(result.message ?? 'Failed to save');
+    if (httpStatus !== 200) {
+      setError('Failed to save');
       return;
     }
     onClose();

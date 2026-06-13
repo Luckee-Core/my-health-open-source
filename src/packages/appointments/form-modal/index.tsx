@@ -1,15 +1,14 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import type { Appointment, AppointmentStatus } from '@/model/appointment';
+import type { Appointment, AppointmentStatus } from '@/model';
 import {
   fromDatetimeLocalValue,
   STATUS_LABELS,
   toDatetimeLocalValue,
 } from '../format-datetime-local';
-import { createAppointmentThunk } from '@/store/thunks/appointments/create-appointment-thunk';
-import { updateAppointmentThunk } from '@/store/thunks/appointments/update-appointment-thunk';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { createAppointmentThunk, updateAppointmentThunk } from '@/store/thunks';
+import { useAppDispatch, useAppSelector } from '@/store';
 
 type Props = {
   isOpen: boolean;
@@ -93,13 +92,13 @@ const AppointmentFormModalBody = ({ onClose, appointment }: BodyProps) => {
       reason: reason.trim() || null,
       notes: notes.trim() || null,
     };
-    const result = isEdit
+    const httpStatus = isEdit
       ? await dispatch(updateAppointmentThunk(appointment.id, payload))
       : await dispatch(createAppointmentThunk(payload));
     setIsSaving(false);
 
-    if (result.status !== 200) {
-      setError(result.message ?? 'Failed to save');
+    if (httpStatus !== 200) {
+      setError('Failed to save');
       return;
     }
     onClose();

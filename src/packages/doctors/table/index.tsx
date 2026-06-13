@@ -1,15 +1,12 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import type { Doctor } from '@/model/doctor';
-import { deleteDoctorThunk } from '@/store/thunks/doctors/delete-doctor-thunk';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import type { Doctor } from '@/model';
+import { deleteDoctorThunk } from '@/store/thunks';
+import { CurrentDoctorActions } from '@/store/current';
+import { useAppDispatch, useAppSelector } from '@/store';
 
-type Props = {
-  onEdit: (doctor: Doctor) => void;
-};
-
-export const DoctorsTable = ({ onEdit }: Props) => {
+export const DoctorsTable = () => {
   const dispatch = useAppDispatch();
   const doctorsDump = useAppSelector((state) => state.doctors);
   const hospitals = useAppSelector((state) => state.hospitals);
@@ -44,10 +41,10 @@ export const DoctorsTable = ({ onEdit }: Props) => {
 
     setActionError(null);
     setBusyId(doctor.id);
-    const result = await dispatch(deleteDoctorThunk(doctor.id));
+    const status = await dispatch(deleteDoctorThunk(doctor.id));
     setBusyId(null);
-    if (result.status !== 200) {
-      setActionError(result.message ?? 'Failed to delete');
+    if (status !== 200) {
+      setActionError('Failed to delete');
     }
   };
 
@@ -76,7 +73,7 @@ export const DoctorsTable = ({ onEdit }: Props) => {
                   <button
                     type="button"
                     className={styles.linkButton}
-                    onClick={() => onEdit(row)}
+                    onClick={() => dispatch(CurrentDoctorActions.setCurrentDoctor(row))}
                     disabled={busyId === row.id}
                   >
                     Edit

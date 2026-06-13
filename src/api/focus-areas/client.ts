@@ -6,7 +6,7 @@ import {
   fromExpressVoidBody,
 } from '@/api/_shared/express-response';
 import type { ApiResponse } from '@/api/types';
-import type { FocusArea } from '@/model/focus-area';
+import type { FocusArea } from '@/model';
 
 type ListBody = { success: boolean; data?: FocusArea[]; error?: string };
 type EntityBody = { success: boolean; data?: FocusArea; error?: string };

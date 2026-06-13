@@ -1,4 +1,4 @@
-import type { AppointmentStatus } from '@/model/appointment';
+import type { AppointmentStatus } from '@/model';
 
 /**
  * Formats an ISO timestamp for datetime-local input value.

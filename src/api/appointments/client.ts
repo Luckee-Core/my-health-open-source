@@ -6,7 +6,7 @@ import {
   fromExpressVoidBody,
 } from '@/api/_shared/express-response';
 import type { ApiResponse } from '@/api/types';
-import type { Appointment, AppointmentStatus } from '@/model/appointment';
+import type { Appointment, AppointmentStatus } from '@/model';
 
 type ListBody = { success: boolean; data?: Appointment[]; error?: string };
 type EntityBody = { success: boolean; data?: Appointment; error?: string };

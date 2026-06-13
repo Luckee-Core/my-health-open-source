@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { Specialty } from '@/model/specialty';
+import type { Specialty } from '@/model';
 
 const initialState: Record<string, Specialty> = {};
 

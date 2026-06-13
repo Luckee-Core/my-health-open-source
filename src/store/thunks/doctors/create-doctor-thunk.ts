@@ -1,21 +1,17 @@
 import { createDoctor, type CreateDoctorPayload } from '@/api/doctors';
 import { DoctorsActions } from '@/store/dumps';
 import type { AppThunk } from '@/store/types';
-import type { ThunkResult } from '@/store/thunks/thunk-result';
 
 /**
  * Creates a doctor and upserts it into the dump.
  */
 export const createDoctorThunk =
-  (payload: CreateDoctorPayload): AppThunk<Promise<ThunkResult>> =>
+  (payload: CreateDoctorPayload): AppThunk<Promise<200 | 400 | 500>> =>
   async (dispatch) => {
     const result = await createDoctor(payload);
     if (!result.ok) {
-      return {
-        status: result.status >= 500 ? 500 : 400,
-        message: result.error.message,
-      };
+      return result.status >= 500 ? 500 : 400;
     }
     dispatch(DoctorsActions.upsertDoctor(result.data));
-    return { status: 200 };
+    return 200;
   };

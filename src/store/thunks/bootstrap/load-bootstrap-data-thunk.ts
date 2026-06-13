@@ -4,7 +4,6 @@ import { getAllDoctors } from '@/api/doctors';
 import { getAllFocusAreas } from '@/api/focus-areas';
 import { getAllHospitals } from '@/api/hospitals';
 import { getAllSpecialties } from '@/api/specialties';
-import type { ThunkStatus } from '@/api/types';
 import {
   AppointmentsActions,
   DailyEntriesActions,
@@ -19,7 +18,7 @@ import type { AppThunk } from '@/store/types';
  * Loads all bootstrap entity dumps from the API.
  */
 export const loadBootstrapDataThunk =
-  (): AppThunk<Promise<ThunkStatus>> =>
+  (): AppThunk<Promise<200 | 400 | 500>> =>
   async (dispatch) => {
     const [hospitals, specialties, doctors, appointments, focusAreas, dailyEntries] =
       await Promise.all([
@@ -31,7 +30,7 @@ export const loadBootstrapDataThunk =
         getAllDailyEntries(),
       ]);
 
-    let status: ThunkStatus = 200;
+    let status: 200 | 400 | 500 = 200;
 
     if (hospitals.ok) {
       dispatch(

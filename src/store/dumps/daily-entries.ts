@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { DailyEntry } from '@/model/daily-entry';
+import type { DailyEntry } from '@/model';
 
 const initialState: Record<string, DailyEntry> = {};
 

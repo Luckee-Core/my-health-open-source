@@ -1,13 +1,24 @@
 'use client';
 
-import { useState } from 'react';
-import type { Specialty } from '@/model/specialty';
+import { SpecialtiesBuilderActions } from '@/store/builders';
+import { CurrentSpecialtyActions } from '@/store/current';
+import { useAppDispatch, useAppSelector } from '@/store';
 import { SpecialtyFormModal } from './form-modal';
 import { SpecialtiesTable } from './table';
 
 export const SpecialtiesPage = () => {
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [editingSpecialty, setEditingSpecialty] = useState<Specialty | null>(null);
+  const dispatch = useAppDispatch();
+  const specialtiesBuilder = useAppSelector((state) => state.specialtiesBuilder);
+  const currentSpecialty = useAppSelector((state) => state.currentSpecialty);
+
+  const isEditing = currentSpecialty.id !== '';
+  const isOpen = specialtiesBuilder.isCreateOpen || isEditing;
+  const editingSpecialty = isEditing ? currentSpecialty : null;
+
+  const closeModal = () => {
+    dispatch(SpecialtiesBuilderActions.closeModal());
+    dispatch(CurrentSpecialtyActions.resetCurrentSpecialty());
+  };
 
   return (
     <div className={styles.page}>
@@ -16,18 +27,19 @@ export const SpecialtiesPage = () => {
           <h1 className={styles.title}>Specialties</h1>
           <p className={styles.subtitle}>Medical specialties for your care team.</p>
         </div>
-        <button type="button" onClick={() => setIsCreateOpen(true)} className={styles.primaryButton}>
+        <button
+          type="button"
+          onClick={() => dispatch(SpecialtiesBuilderActions.setIsCreateOpen(true))}
+          className={styles.primaryButton}
+        >
           Add specialty
         </button>
       </div>
-      <SpecialtiesTable onEdit={setEditingSpecialty} />
+      <SpecialtiesTable />
       <SpecialtyFormModal
-        isOpen={isCreateOpen || editingSpecialty !== null}
+        isOpen={isOpen}
         specialty={editingSpecialty}
-        onClose={() => {
-          setIsCreateOpen(false);
-          setEditingSpecialty(null);
-        }}
+        onClose={closeModal}
       />
     </div>
   );

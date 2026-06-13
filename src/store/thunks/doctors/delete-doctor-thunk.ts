@@ -1,21 +1,17 @@
 import { deleteDoctor } from '@/api/doctors';
 import { DoctorsActions } from '@/store/dumps';
 import type { AppThunk } from '@/store/types';
-import type { ThunkResult } from '@/store/thunks/thunk-result';
 
 /**
  * Deletes a doctor and removes it from the dump.
  */
 export const deleteDoctorThunk =
-  (id: string): AppThunk<Promise<ThunkResult>> =>
+  (id: string): AppThunk<Promise<200 | 400 | 500>> =>
   async (dispatch) => {
     const result = await deleteDoctor(id);
     if (!result.ok) {
-      return {
-        status: result.status >= 500 ? 500 : 400,
-        message: result.error.message,
-      };
+      return result.status >= 500 ? 500 : 400;
     }
     dispatch(DoctorsActions.removeDoctor(id));
-    return { status: 200 };
+    return 200;
   };

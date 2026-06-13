@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { FocusArea } from '@/model/focus-area';
+import type { FocusArea } from '@/model';
 
 const initialState: Record<string, FocusArea> = {};
 

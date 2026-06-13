@@ -6,7 +6,7 @@ import {
   fromExpressVoidBody,
 } from '@/api/_shared/express-response';
 import type { ApiResponse } from '@/api/types';
-import type { DailyEntry } from '@/model/daily-entry';
+import type { DailyEntry } from '@/model';
 
 type ListBody = { success: boolean; data?: DailyEntry[]; error?: string };
 type EntityBody = { success: boolean; data?: DailyEntry; error?: string };
