@@ -3,14 +3,20 @@ import { getAllDailyEntries } from '@/api/daily-entries';
 import { getAllDoctors } from '@/api/doctors';
 import { getAllFocusAreas } from '@/api/focus-areas';
 import { getAllHospitals } from '@/api/hospitals';
+import { getAllMedicalHistoryEvents } from '@/api/medical-history-events';
+import { getAllResearchNotes } from '@/api/research-notes';
 import { getAllSpecialties } from '@/api/specialties';
+import { getAllSymptomLogs } from '@/api/symptom-logs';
 import {
   AppointmentsActions,
   DailyEntriesActions,
   DoctorsActions,
   FocusAreasActions,
   HospitalsActions,
+  MedicalHistoryEventsActions,
+  ResearchNotesActions,
   SpecialtiesActions,
+  SymptomLogsActions,
 } from '@/store/dumps';
 import type { AppThunk } from '@/store/types';
 
@@ -20,15 +26,27 @@ import type { AppThunk } from '@/store/types';
 export const loadBootstrapDataThunk =
   (): AppThunk<Promise<200 | 400 | 500>> =>
   async (dispatch) => {
-    const [hospitals, specialties, doctors, appointments, focusAreas, dailyEntries] =
-      await Promise.all([
-        getAllHospitals(),
-        getAllSpecialties(),
-        getAllDoctors(),
-        getAllAppointments(),
-        getAllFocusAreas(),
-        getAllDailyEntries(),
-      ]);
+    const [
+      hospitals,
+      specialties,
+      doctors,
+      appointments,
+      focusAreas,
+      dailyEntries,
+      medicalHistoryEvents,
+      symptomLogs,
+      researchNotes,
+    ] = await Promise.all([
+      getAllHospitals(),
+      getAllSpecialties(),
+      getAllDoctors(),
+      getAllAppointments(),
+      getAllFocusAreas(),
+      getAllDailyEntries(),
+      getAllMedicalHistoryEvents(),
+      getAllSymptomLogs(),
+      getAllResearchNotes(),
+    ]);
 
     let status: 200 | 400 | 500 = 200;
 
@@ -86,6 +104,36 @@ export const loadBootstrapDataThunk =
       dispatch(
         DailyEntriesActions.setDailyEntries(
           Object.fromEntries(dailyEntries.data.map((row) => [row.id, row])),
+        ),
+      );
+    } else {
+      status = 400;
+    }
+
+    if (medicalHistoryEvents.ok) {
+      dispatch(
+        MedicalHistoryEventsActions.setMedicalHistoryEvents(
+          Object.fromEntries(medicalHistoryEvents.data.map((row) => [row.id, row])),
+        ),
+      );
+    } else {
+      status = 400;
+    }
+
+    if (symptomLogs.ok) {
+      dispatch(
+        SymptomLogsActions.setSymptomLogs(
+          Object.fromEntries(symptomLogs.data.map((row) => [row.id, row])),
+        ),
+      );
+    } else {
+      status = 400;
+    }
+
+    if (researchNotes.ok) {
+      dispatch(
+        ResearchNotesActions.setResearchNotes(
+          Object.fromEntries(researchNotes.data.map((row) => [row.id, row])),
         ),
       );
     } else {

@@ -4,7 +4,10 @@ import {
   DOCTORS_PATH,
   FOCUS_AREAS_PATH,
   HOSPITALS_PATH,
+  MEDICAL_HISTORY_EVENTS_PATH,
+  RESEARCH_NOTES_PATH,
   SPECIALTIES_PATH,
+  SYMPTOM_LOGS_PATH,
 } from '@/config/routes';
 
 export type SidebarLink = {
@@ -18,6 +21,14 @@ export type SidebarSection = {
 };
 
 export const getSidebarSections = (): SidebarSection[] => [
+  {
+    title: 'Health record',
+    links: [
+      { name: 'Medical history', href: MEDICAL_HISTORY_EVENTS_PATH },
+      { name: 'Symptoms', href: SYMPTOM_LOGS_PATH },
+      { name: 'Research notes', href: RESEARCH_NOTES_PATH },
+    ],
+  },
   {
     title: 'Journal',
     links: [

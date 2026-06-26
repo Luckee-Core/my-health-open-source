@@ -3,4 +3,13 @@ export { DailyEntriesBuilderActions, dailyEntriesBuilderReducer } from './daily-
 export { DoctorsBuilderActions, doctorsBuilderReducer } from './doctors-builder';
 export { FocusAreasBuilderActions, focusAreasBuilderReducer } from './focus-areas-builder';
 export { HospitalsBuilderActions, hospitalsBuilderReducer } from './hospitals-builder';
+export {
+  MedicalHistoryEventsBuilderActions,
+  medicalHistoryEventsBuilderReducer,
+} from './medical-history-events-builder';
+export {
+  ResearchNotesBuilderActions,
+  researchNotesBuilderReducer,
+} from './research-notes-builder';
 export { SpecialtiesBuilderActions, specialtiesBuilderReducer } from './specialties-builder';
+export { SymptomLogsBuilderActions, symptomLogsBuilderReducer } from './symptom-logs-builder';

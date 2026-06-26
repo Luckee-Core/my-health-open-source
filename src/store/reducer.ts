@@ -5,7 +5,10 @@ import {
   doctorsBuilderReducer,
   focusAreasBuilderReducer,
   hospitalsBuilderReducer,
+  medicalHistoryEventsBuilderReducer,
+  researchNotesBuilderReducer,
   specialtiesBuilderReducer,
+  symptomLogsBuilderReducer,
 } from './builders';
 import {
   currentAppointmentReducer,
@@ -13,7 +16,10 @@ import {
   currentDoctorReducer,
   currentFocusAreaReducer,
   currentHospitalReducer,
+  currentMedicalHistoryEventReducer,
+  currentResearchNoteReducer,
   currentSpecialtyReducer,
+  currentSymptomLogReducer,
 } from './current';
 import {
   appointmentsReducer,
@@ -21,7 +27,10 @@ import {
   doctorsReducer,
   focusAreasReducer,
   hospitalsReducer,
+  medicalHistoryEventsReducer,
+  researchNotesReducer,
   specialtiesReducer,
+  symptomLogsReducer,
 } from './dumps';
 
 export const rootReducer = combineReducers({
@@ -31,16 +40,25 @@ export const rootReducer = combineReducers({
   appointments: appointmentsReducer,
   focusAreas: focusAreasReducer,
   dailyEntries: dailyEntriesReducer,
+  medicalHistoryEvents: medicalHistoryEventsReducer,
+  symptomLogs: symptomLogsReducer,
+  researchNotes: researchNotesReducer,
   hospitalsBuilder: hospitalsBuilderReducer,
   doctorsBuilder: doctorsBuilderReducer,
   appointmentsBuilder: appointmentsBuilderReducer,
   specialtiesBuilder: specialtiesBuilderReducer,
   focusAreasBuilder: focusAreasBuilderReducer,
   dailyEntriesBuilder: dailyEntriesBuilderReducer,
+  medicalHistoryEventsBuilder: medicalHistoryEventsBuilderReducer,
+  symptomLogsBuilder: symptomLogsBuilderReducer,
+  researchNotesBuilder: researchNotesBuilderReducer,
   currentHospital: currentHospitalReducer,
   currentDoctor: currentDoctorReducer,
   currentAppointment: currentAppointmentReducer,
   currentSpecialty: currentSpecialtyReducer,
   currentFocusArea: currentFocusAreaReducer,
   currentDailyEntry: currentDailyEntryReducer,
+  currentMedicalHistoryEvent: currentMedicalHistoryEventReducer,
+  currentSymptomLog: currentSymptomLogReducer,
+  currentResearchNote: currentResearchNoteReducer,
 });

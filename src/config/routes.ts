@@ -11,3 +11,8 @@ export const HOSPITALS_PATH = '/hospitals';
 export const SPECIALTIES_PATH = '/specialties';
 export const FOCUS_AREAS_PATH = '/focus-areas';
 export const DAILY_ENTRIES_PATH = '/daily-entries';
+
+export const MEDICAL_HISTORY_EVENTS_PATH = '/medical-history-events';
+export const SYMPTOM_LOGS_PATH = '/symptom-logs';
+export const RESEARCH_NOTES_PATH = '/research-notes';
+export const RESEARCH_NOTE_DETAIL_PAGE_PATH = '/research-note-detail-page';

@@ -4,4 +4,7 @@ export * from './daily-entries';
 export * from './doctors';
 export * from './focus-areas';
 export * from './hospitals';
+export * from './medical-history-events';
+export * from './research-notes';
 export * from './specialties';
+export * from './symptom-logs';
