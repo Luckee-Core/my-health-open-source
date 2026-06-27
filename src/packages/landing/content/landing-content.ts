@@ -1,4 +1,4 @@
-const githubOrg = process.env.NEXT_PUBLIC_GITHUB_ORG ?? 'matthewruiz';
+const githubOrg = process.env.NEXT_PUBLIC_GITHUB_ORG ?? 'Luckee-Core';
 
 export const GITHUB_WEB_URL =
   process.env.NEXT_PUBLIC_GITHUB_WEB_URL ??
@@ -24,17 +24,18 @@ export const LANDING_HERO_HEADLINE =
 export const LANDING_HERO_HEADLINE_ACCENT = 'One dashboard for visits and your care team.';
 
 export const LANDING_HERO_SUB =
-  'I built this for myself — appointments, doctors, facilities, focus areas, and daily notes — on a stack I already run for client work: Next.js, Express, Postgres on your Mac. Your records stay on your machine, not a vendor portal.';
+  'I built this for myself — appointments, doctors, facilities, focus areas, daily notes, and a health record timeline — on Next.js, Express, and Postgres on your Mac. Your records stay on your machine, not a vendor portal.';
 
 export const LANDING_HERO_STATS = [
   { h: 'Appointments', s: 'Scheduled, completed, cancelled — one table' },
   { h: 'Care team', s: 'Doctor → facility → specialty, linked once' },
-  { h: 'Daily notes', s: 'Focus areas you are actually tracking' },
+  { h: 'Health record', s: 'Timeline events, symptom logs, research notes' },
 ] as const;
 
 export const LANDING_NAV_LINKS = [
   { label: 'Features', href: '#features' },
   { label: 'Care team', href: '#care-team' },
+  { label: 'Health record', href: '#health-record' },
   { label: 'Architecture', href: '#architecture' },
   { label: 'Open source', href: '#open-source' },
   { label: 'Docs', href: DOCS_URL },
@@ -50,6 +51,7 @@ export const LANDING_OVERVIEW_BULLETS = [
   'Upcoming and past appointments in one table',
   'Doctor linked to facility + specialty — no duplicate typing',
   'Focus areas and daily entries for what you are tracking between visits',
+  'Medical history timeline, symptom logs, and research notes with a detail page',
   'Notes, reason, and appointment type on each visit row',
 ] as const;
 
@@ -88,6 +90,18 @@ export const LANDING_APPOINTMENT_MOCKS = [
     st: 'Cancelled',
     badge: 'cancelled' as const,
   },
+] as const;
+
+export const LANDING_HEALTH_RECORD_HEADING = 'Between visits,';
+export const LANDING_HEALTH_RECORD_HEADING_ACCENT = 'the story should not live in Notes.app.';
+
+export const LANDING_HEALTH_RECORD_LEAD =
+  'Medical history events on a timeline, symptom logs when something flares, and research notes you can open on a detail page — same Postgres database as appointments, not another silo.';
+
+export const LANDING_HEALTH_RECORD_TIMELINE = [
+  { date: 'Mar 2026', title: 'MRI lumbar — radiology report filed', tag: 'Imaging' },
+  { date: 'Feb 2026', title: 'Increased stiffness mornings (3/10 → 6/10)', tag: 'Symptom log' },
+  { date: 'Jan 2026', title: 'Research: biologics vs. NSAIDs for axial spondylitis', tag: 'Research note' },
 ] as const;
 
 export const LANDING_CARE_TEAM_HEADING = 'Doctors, facilities, specialties —';

@@ -1,5 +1,5 @@
 import { LandingBrandMark } from '../brand-mark';
-import { GITHUB_WEB_URL, LANDING_FOOTER_TAGLINE } from '../content/landing-content';
+import { GITHUB_WEB_URL, LANDING_FOOTER_TAGLINE, THT_URL } from '../content/landing-content';
 
 /**
  * Landing page footer with brand, links, and attribution.
@@ -32,7 +32,13 @@ export const LandingFooter = () => {
               GitHub
             </a>
           </div>
-          <p className={styles.copyright}>Built by TroutHouseTech · © 2026</p>
+          <p className={styles.copyright}>
+            Built by{' '}
+            <a href={THT_URL} target="_blank" rel="noopener noreferrer" className={styles.link}>
+              TroutHouseTech
+            </a>{' '}
+            · © 2026
+          </p>
         </div>
       </div>
     </footer>

@@ -4,16 +4,21 @@
 
 I kept doctor names, facilities, and visit dates in too many places — portal PDFs, Notes, calendar invites. I wanted one table for visits, doctors linked to hospitals and specialties, and a simple place for focus areas I track between appointments. This repo is the browser side of that.
 
-**Companion API:** [my-health-open-source-express-server](https://github.com/matthewruiz/my-health-open-source-express-server)
+**Companion API:** [my-health-open-source-express-server](https://github.com/Luckee-Core/my-health-open-source-express-server)
 
-**Wire contract:** [Express docs/oss/wire-contract.md](https://github.com/matthewruiz/my-health-open-source-express-server/blob/main/docs/oss/wire-contract.md)
+**Wire contract:** [Express docs/oss/wire-contract.md](https://github.com/Luckee-Core/my-health-open-source-express-server/blob/main/docs/oss/wire-contract.md)
+
+**Pair quickstart:** [Express docs/oss-quickstart.md](https://github.com/Luckee-Core/my-health-open-source-express-server/blob/main/docs/oss-quickstart.md)
 
 ---
 
 ## What you get
 
 - Landing page with clone/setup pointers (same repo you are reading)
-- Dashboard routes: hospitals, specialties, doctors, appointments, focus areas, daily entries
+- Dashboard routes: care team, appointments, journal, health record, and docs
+- **Care team:** hospitals, specialties, doctors
+- **Journal:** focus areas, daily entries
+- **Health record:** medical history events, symptom logs, research notes (+ detail page)
 - Redux with **manual thunks** — async work stays in `src/store/thunks/`, not components
 - Typed clients in `src/api/` that call Express `/api/data/*`
 - Env-driven GitHub and docs links on the landing page
@@ -23,7 +28,7 @@ I kept doctor names, facilities, and visit dates in too many places — portal P
 ## Prerequisites
 
 - Node.js 20+ (see `.nvmrc`)
-- [Express API](https://github.com/matthewruiz/my-health-open-source-express-server) running with local Postgres configured
+- [Express API](https://github.com/Luckee-Core/my-health-open-source-express-server) running with local Postgres configured
 
 Start the API first. The web app has nothing useful to talk to until that is up.
 
@@ -33,9 +38,9 @@ Start the API first. The web app has nothing useful to talk to until that is up.
 
 ### 1. API + database
 
-Follow the [Express README](https://github.com/matthewruiz/my-health-open-source-express-server#quick-start):
+Follow the [Express oss-quickstart](https://github.com/Luckee-Core/my-health-open-source-express-server/blob/main/docs/oss-quickstart.md):
 
-1. Create `my_health` and apply SQL in order (`migrations/001_…` then `002_…`) with `psql`
+1. Create `my_health` and apply SQL in order (`migrations/001_…` through `003_…`) with `psql`, or use Luckee Hub **Setup database**
 2. Copy `.env.example` → `.env` with your `DATABASE_URL`
 3. `npm run dev` — listens on **port 3009** by default
 
@@ -48,7 +53,7 @@ curl http://localhost:3009/api/health
 ### 2. Web app
 
 ```bash
-git clone https://github.com/matthewruiz/my-health-open-source.git
+git clone https://github.com/Luckee-Core/my-health-open-source.git
 cd my-health-open-source
 npm install
 cp .env.example .env.local
@@ -64,7 +69,7 @@ NEXT_PUBLIC_API_URL=http://localhost:3009
 npm run dev
 ```
 
-Open **http://localhost:3000** — landing at `/`, dashboard under `/appointments`, `/doctors`, `/hospitals`, `/specialties`, `/focus-areas`, `/daily-entries`.
+Open **http://localhost:3000** — landing at `/`, dashboard at `/appointments`. Routes also include `/doctors`, `/hospitals`, `/specialties`, `/focus-areas`, `/daily-entries`, `/medical-history-events`, `/symptom-logs`, `/research-notes`, `/research-note-detail-page`, and `/docs/api`.
 
 ---
 

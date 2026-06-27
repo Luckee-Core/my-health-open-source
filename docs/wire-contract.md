@@ -2,7 +2,7 @@
 
 Cross-repo contract for **my-health-open-source** (Next.js) and **my-health-open-source-express-server** (Express).
 
-Express canonical contract: [my-health-open-source-express-server/docs/oss/wire-contract.md](https://github.com/matthewruiz/my-health-open-source-express-server/blob/main/docs/oss/wire-contract.md)
+Express canonical contract: [my-health-open-source-express-server/docs/oss/wire-contract.md](https://github.com/Luckee-Core/my-health-open-source-express-server/blob/main/docs/oss/wire-contract.md)
 
 ## Ports and env
 
@@ -30,7 +30,7 @@ Express canonical contract: [my-health-open-source-express-server/docs/oss/wire-
 ```bash
 # Express
 curl http://localhost:3009/api/health
-curl -s http://localhost:3009/api-docs.json | jq '.data.groups | length'  # expect 8
+curl -s http://localhost:3009/api-docs.json | jq '.data.groups | length'  # expect 10+ (Overview, Health, 9 entities)
 
 # Web (Express must be running for API page)
 open http://localhost:3000/docs/api

@@ -15,7 +15,7 @@ export const LandingArchitecture = () => {
   return (
     <section id="architecture" className={styles.section}>
       <div className={styles.inner}>
-        <LandingSectionLabel number="04" label="Architecture" />
+        <LandingSectionLabel number="05" label="Architecture" />
         <div className={styles.grid}>
           <div className={styles.copy}>
             <h2 className={styles.heading}>

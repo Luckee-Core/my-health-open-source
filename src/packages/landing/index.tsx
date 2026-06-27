@@ -3,6 +3,7 @@ import { LandingHero } from './hero';
 import { LandingOverview } from './overview';
 import { LandingAppointments } from './appointments';
 import { LandingCareTeam } from './care-team';
+import { LandingHealthRecord } from './health-record';
 import { LandingArchitecture } from './architecture';
 import { LandingOpenSource } from './open-source';
 import { LandingFinalCta } from './final-cta';
@@ -20,6 +21,7 @@ export const MarketingLanding = () => {
         <LandingOverview />
         <LandingAppointments />
         <LandingCareTeam />
+        <LandingHealthRecord />
         <LandingArchitecture />
         <LandingOpenSource />
         <LandingFinalCta />

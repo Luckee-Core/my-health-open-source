@@ -16,7 +16,7 @@ export const LandingOpenSource = () => {
   return (
     <section id="open-source" className={styles.section}>
       <div className={styles.inner}>
-        <LandingSectionLabel number="05" label="Open source" />
+        <LandingSectionLabel number="06" label="Open source" />
         <h2 className={styles.heading}>
           {LANDING_OPEN_SOURCE_HEADING}{' '}
           <span className={styles.accent}>{LANDING_OPEN_SOURCE_HEADING_ACCENT}</span>
