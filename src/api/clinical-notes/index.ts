@@ -1,0 +1,1 @@
+export { getAllClinicalNotes } from './client';

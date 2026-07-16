@@ -13,3 +13,7 @@ export {
 } from './research-notes-builder';
 export { SpecialtiesBuilderActions, specialtiesBuilderReducer } from './specialties-builder';
 export { SymptomLogsBuilderActions, symptomLogsBuilderReducer } from './symptom-logs-builder';
+export {
+  HealthImportBuilderActions,
+  healthImportBuilderReducer,
+} from './health-import-builder';

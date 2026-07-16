@@ -40,6 +40,9 @@ const DoctorFormModalBody = ({ onClose, doctor }: BodyProps) => {
   const [specialtyId, setSpecialtyId] = useState(doctor?.specialty_id ?? '');
   const [newSpecialtyName, setNewSpecialtyName] = useState('');
   const [notes, setNotes] = useState(doctor?.notes ?? '');
+  const [npi, setNpi] = useState(doctor?.npi ?? '');
+  const [phone, setPhone] = useState(doctor?.phone ?? '');
+  const [fax, setFax] = useState(doctor?.fax ?? '');
   const [error, setError] = useState('');
   const [isSaving, setIsSaving] = useState(false);
 
@@ -80,6 +83,9 @@ const DoctorFormModalBody = ({ onClose, doctor }: BodyProps) => {
       hospital_id: resolved.hospitalId,
       specialty_id: resolved.specialtyId,
       notes: notes.trim() || null,
+      npi: npi.trim() || null,
+      phone: phone.trim() || null,
+      fax: fax.trim() || null,
     };
     const httpStatus = isEdit
       ? await dispatch(updateDoctorThunk(doctor.id, payload))
@@ -150,6 +156,27 @@ const DoctorFormModalBody = ({ onClose, doctor }: BodyProps) => {
             className={styles.input}
             value={newSpecialtyName}
             onChange={(e) => setNewSpecialtyName(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="NPI"
+            className={styles.input}
+            value={npi}
+            onChange={(e) => setNpi(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Phone"
+            className={styles.input}
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Fax"
+            className={styles.input}
+            value={fax}
+            onChange={(e) => setFax(e.target.value)}
           />
           <textarea
             placeholder="Notes"

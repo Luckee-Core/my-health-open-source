@@ -17,6 +17,9 @@ export type CreateDoctorPayload = {
   hospital_id: string;
   specialty_id: string;
   notes?: string | null;
+  npi?: string | null;
+  phone?: string | null;
+  fax?: string | null;
 };
 
 export type UpdateDoctorPayload = Partial<CreateDoctorPayload>;

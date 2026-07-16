@@ -1,19 +1,31 @@
+import { getAllAllergies } from '@/api/allergies';
 import { getAllAppointments } from '@/api/appointments';
+import { getAllConditions } from '@/api/conditions';
 import { getAllDailyEntries } from '@/api/daily-entries';
 import { getAllDoctors } from '@/api/doctors';
 import { getAllFocusAreas } from '@/api/focus-areas';
+import { getAllHealthImports } from '@/api/health-import';
 import { getAllHospitals } from '@/api/hospitals';
+import { getAllInsuranceCoverages } from '@/api/insurance-coverages';
 import { getAllMedicalHistoryEvents } from '@/api/medical-history-events';
+import { getAllMedications } from '@/api/medications';
+import { getAllReferrals } from '@/api/referrals';
 import { getAllResearchNotes } from '@/api/research-notes';
 import { getAllSpecialties } from '@/api/specialties';
 import { getAllSymptomLogs } from '@/api/symptom-logs';
 import {
+  AllergiesActions,
   AppointmentsActions,
+  ConditionsActions,
   DailyEntriesActions,
   DoctorsActions,
   FocusAreasActions,
+  HealthImportsActions,
   HospitalsActions,
+  InsuranceCoveragesActions,
   MedicalHistoryEventsActions,
+  MedicationsActions,
+  ReferralsActions,
   ResearchNotesActions,
   SpecialtiesActions,
   SymptomLogsActions,
@@ -36,6 +48,12 @@ export const loadBootstrapDataThunk =
       medicalHistoryEvents,
       symptomLogs,
       researchNotes,
+      allergies,
+      medications,
+      conditions,
+      referrals,
+      insuranceCoverages,
+      healthImports,
     ] = await Promise.all([
       getAllHospitals(),
       getAllSpecialties(),
@@ -46,6 +64,12 @@ export const loadBootstrapDataThunk =
       getAllMedicalHistoryEvents(),
       getAllSymptomLogs(),
       getAllResearchNotes(),
+      getAllAllergies(),
+      getAllMedications(),
+      getAllConditions(),
+      getAllReferrals(),
+      getAllInsuranceCoverages(),
+      getAllHealthImports(),
     ]);
 
     let status: 200 | 400 | 500 = 200;
@@ -134,6 +158,66 @@ export const loadBootstrapDataThunk =
       dispatch(
         ResearchNotesActions.setResearchNotes(
           Object.fromEntries(researchNotes.data.map((row) => [row.id, row])),
+        ),
+      );
+    } else {
+      status = 400;
+    }
+
+    if (allergies.ok) {
+      dispatch(
+        AllergiesActions.setAllergies(
+          Object.fromEntries(allergies.data.map((row) => [row.id, row])),
+        ),
+      );
+    } else {
+      status = 400;
+    }
+
+    if (medications.ok) {
+      dispatch(
+        MedicationsActions.setMedications(
+          Object.fromEntries(medications.data.map((row) => [row.id, row])),
+        ),
+      );
+    } else {
+      status = 400;
+    }
+
+    if (conditions.ok) {
+      dispatch(
+        ConditionsActions.setConditions(
+          Object.fromEntries(conditions.data.map((row) => [row.id, row])),
+        ),
+      );
+    } else {
+      status = 400;
+    }
+
+    if (referrals.ok) {
+      dispatch(
+        ReferralsActions.setReferrals(
+          Object.fromEntries(referrals.data.map((row) => [row.id, row])),
+        ),
+      );
+    } else {
+      status = 400;
+    }
+
+    if (insuranceCoverages.ok) {
+      dispatch(
+        InsuranceCoveragesActions.setInsuranceCoverages(
+          Object.fromEntries(insuranceCoverages.data.map((row) => [row.id, row])),
+        ),
+      );
+    } else {
+      status = 400;
+    }
+
+    if (healthImports.ok) {
+      dispatch(
+        HealthImportsActions.setHealthImports(
+          Object.fromEntries(healthImports.data.map((row) => [row.id, row])),
         ),
       );
     } else {

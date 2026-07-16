@@ -1,0 +1,1 @@
+export { getAllClinicalResults } from './client';

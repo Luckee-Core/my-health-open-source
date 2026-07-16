@@ -1,0 +1,1 @@
+export { getAllAllergies } from './client';

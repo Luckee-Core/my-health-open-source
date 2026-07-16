@@ -1,0 +1,1 @@
+export { getAllVitalSigns } from './client';

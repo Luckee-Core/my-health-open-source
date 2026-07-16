@@ -10,3 +10,7 @@ export {
 export { CurrentResearchNoteActions, currentResearchNoteReducer } from './current-research-note';
 export { CurrentSpecialtyActions, currentSpecialtyReducer } from './current-specialty';
 export { CurrentSymptomLogActions, currentSymptomLogReducer } from './current-symptom-log';
+export {
+  CurrentHealthImportDraftActions,
+  currentHealthImportDraftReducer,
+} from './current-health-import-draft';

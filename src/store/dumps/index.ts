@@ -10,3 +10,15 @@ export {
 export { ResearchNotesActions, researchNotesReducer } from './research-notes';
 export { SpecialtiesActions, specialtiesReducer } from './specialties';
 export { SymptomLogsActions, symptomLogsReducer } from './symptom-logs';
+export { AllergiesActions, allergiesReducer } from './allergies';
+export { MedicationsActions, medicationsReducer } from './medications';
+export { ConditionsActions, conditionsReducer } from './conditions';
+export { VitalSignsActions, vitalSignsReducer } from './vital-signs';
+export { ClinicalResultsActions, clinicalResultsReducer } from './clinical-results';
+export { ClinicalNotesActions, clinicalNotesReducer } from './clinical-notes';
+export { ReferralsActions, referralsReducer } from './referrals';
+export {
+  InsuranceCoveragesActions,
+  insuranceCoveragesReducer,
+} from './insurance-coverages';
+export { HealthImportsActions, healthImportsReducer } from './health-imports';

@@ -1,0 +1,1 @@
+export { getAllInsuranceCoverages } from './client';

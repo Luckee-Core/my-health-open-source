@@ -19,6 +19,7 @@ I kept doctor names, facilities, and visit dates in too many places — portal P
 - **Care team:** hospitals, specialties, doctors
 - **Journal:** focus areas, daily entries
 - **Health record:** medical history events, symptom logs, research notes (+ detail page)
+- **Clinical import:** C-CDA Health Summary zip/XML wizard (`/health-import`) plus allergies, medications, conditions, vitals, results, clinical notes, referrals, insurance
 - Redux with **manual thunks** — async work stays in `src/store/thunks/`, not components
 - Typed clients in `src/api/` that call Express `/api/data/*`
 - Env-driven GitHub and docs links on the landing page
@@ -40,7 +41,7 @@ Start the API first. The web app has nothing useful to talk to until that is up.
 
 Follow the [Express oss-quickstart](https://github.com/Luckee-Core/my-health-open-source-express-server/blob/main/docs/oss-quickstart.md):
 
-1. Create `my_health` and apply SQL in order (`migrations/001_…` through `003_…`) with `psql`, or use Luckee Hub **Setup database**
+1. Create `my_health` and apply SQL in order (`migrations/001_…` through `004_…`) with `psql`, or use Luckee Hub **Setup database** / `setup.sql`
 2. Copy `.env.example` → `.env` with your `DATABASE_URL`
 3. `npm run dev` — listens on **port 3009** by default
 
@@ -69,7 +70,7 @@ NEXT_PUBLIC_API_URL=http://localhost:3009
 npm run dev
 ```
 
-Open **http://localhost:3000** — landing at `/`, dashboard at `/appointments`. Routes also include `/doctors`, `/hospitals`, `/specialties`, `/focus-areas`, `/daily-entries`, `/medical-history-events`, `/symptom-logs`, `/research-notes`, `/research-note-detail-page`, and `/docs/api`.
+Open **http://localhost:3000** — landing at `/`, dashboard at `/appointments`. Routes also include `/health-import`, `/allergies`, `/medications`, `/conditions`, `/vital-signs`, `/clinical-results`, `/clinical-notes`, `/referrals`, `/insurance-coverages`, `/doctors`, `/hospitals`, `/specialties`, `/focus-areas`, `/daily-entries`, `/medical-history-events`, `/symptom-logs`, `/research-notes`, `/research-note-detail-page`, and `/docs/api`.
 
 ---
 

@@ -4,6 +4,9 @@ export type Doctor = {
   hospital_id: string;
   specialty_id: string;
   notes: string | null;
+  npi: string | null;
+  phone: string | null;
+  fax: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -15,6 +18,9 @@ export const EMPTY_DOCTOR: Doctor = {
   hospital_id: '',
   specialty_id: '',
   notes: null,
+  npi: null,
+  phone: null,
+  fax: null,
   created_at: '',
   updated_at: '',
 };

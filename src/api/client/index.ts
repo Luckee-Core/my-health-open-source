@@ -3,6 +3,7 @@ import { API_CONFIG } from '@/config/api';
 type ApiClient = {
   get: <T = unknown>(url: string) => Promise<{ data: T }>;
   post: <T = unknown>(url: string, data?: unknown) => Promise<{ data: T }>;
+  postFormData: <T = unknown>(url: string, formData: FormData) => Promise<{ data: T }>;
   patch: <T = unknown>(url: string, data?: unknown) => Promise<{ data: T }>;
   delete: <T = unknown>(url: string) => Promise<{ data: T }>;
 };
@@ -45,6 +46,11 @@ const createApiClient = (): ApiClient => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: data ? JSON.stringify(data) : undefined,
+      }),
+    postFormData: async <T>(url: string, formData: FormData) =>
+      request<T>(url, {
+        method: 'POST',
+        body: formData,
       }),
     patch: async <T>(url: string, data?: unknown) =>
       request<T>(url, {

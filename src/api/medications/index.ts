@@ -1,0 +1,1 @@
+export { getAllMedications } from './client';

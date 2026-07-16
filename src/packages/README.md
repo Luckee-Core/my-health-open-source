@@ -19,6 +19,16 @@
 | `/symptom-logs` | `symptom-logs/` |
 | `/research-notes` | `research-notes/` |
 | `/research-note-detail-page` | `research-note-detail-page/` |
+| `/health-import` | `health-import/` |
+| `/health-imports` | `health-imports/` |
+| `/allergies` | `allergies/` |
+| `/medications` | `medications/` |
+| `/conditions` | `conditions/` |
+| `/vital-signs` | `vital-signs/` |
+| `/clinical-results` | `clinical-results/` |
+| `/clinical-notes` | `clinical-notes/` |
+| `/referrals` | `referrals/` |
+| `/insurance-coverages` | `insurance-coverages/` |
 
 Path constants: `src/config/routes.ts`.
 

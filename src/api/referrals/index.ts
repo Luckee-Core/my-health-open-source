@@ -1,0 +1,1 @@
+export { getAllReferrals } from './client';

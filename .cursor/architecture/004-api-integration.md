@@ -305,3 +305,25 @@ When this app talks to a companion **Express** API (e.g. from `express-server-te
 3. Add **`src/app/api/**` route handlers** only when you need same-origin proxying (cookies, multipart, hiding upstream URL).
 
 Wire contract from Express should stay `{ success, data?, error? }` unless you amend this ADR.
+
+---
+
+## 9) Multipart uploads (`postFormData`) and health import wizard
+
+### `postFormData` on the shared API client
+
+For file uploads (C-CDA Health Summary ZIP/XML), use `getApiClient().postFormData(url, formData)`:
+
+- Append the file under the Express field name (`file`).
+- **Do not** set `Content-Type` — the browser must set the multipart boundary.
+- Keep JSON `post` / `patch` for non-file bodies.
+
+### Health import Redux shape
+
+| Slice | Holds |
+|-------|--------|
+| `healthImportBuilder` | **Primitives only**: `step` (`upload` \| `preview` \| `committing` \| `done`), `previewId`, `contentSha256`, `filename`, `errorMessage`, `previewStatus`, `commitStatus`, `documentCount`, and commit **count numbers** |
+| `currentHealthImportDraft` | Preview **summary DTO only** (`HealthImportSummary`: counts + samples) — never the full draft |
+| `healthImports` dump | Import history rows after list/commit |
+
+Wizard steps (`UploadStep` / `PreviewStep` / `DoneStep`) render with **zero props**: each reads Redux and dispatches thunks from `src/store/thunks/health-import/`.
