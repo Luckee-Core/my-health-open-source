@@ -7,6 +7,7 @@
 | Route | Package |
 |-------|---------|
 | `/` | `landing/` |
+| `/dashboard` | `dashboard/` |
 | `/docs/*` | `docs/` |
 | `/docs/api` | `api-docs/` |
 | `/appointments` | `appointments/` |

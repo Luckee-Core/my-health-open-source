@@ -1,5 +1,6 @@
 export const LANDING_PATH = '/';
-export const HOME_PATH = '/appointments';
+export const HOME_PATH = '/dashboard';
+export const DASHBOARD_PATH = '/dashboard';
 
 export const DOCS_PATH = '/docs';
 export const DOCS_GETTING_STARTED_PATH = '/docs/getting-started';

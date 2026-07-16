@@ -5,6 +5,7 @@ import {
   CLINICAL_RESULTS_PATH,
   CONDITIONS_PATH,
   DAILY_ENTRIES_PATH,
+  DASHBOARD_PATH,
   DOCTORS_PATH,
   FOCUS_AREAS_PATH,
   HEALTH_IMPORT_PATH,
@@ -32,26 +33,23 @@ export type SidebarSection = {
 
 export const getSidebarSections = (): SidebarSection[] => [
   {
-    title: 'Data',
-    links: [
-      { name: 'Import health summary', href: HEALTH_IMPORT_PATH },
-      { name: 'Import history', href: HEALTH_IMPORTS_PATH },
-    ],
+    title: 'Overview',
+    links: [{ name: 'Dashboard', href: DASHBOARD_PATH }],
   },
   {
     title: 'Health record',
     links: [
       { name: 'Allergies', href: ALLERGIES_PATH },
-      { name: 'Medications', href: MEDICATIONS_PATH },
-      { name: 'Conditions', href: CONDITIONS_PATH },
-      { name: 'Vitals', href: VITAL_SIGNS_PATH },
-      { name: 'Results', href: CLINICAL_RESULTS_PATH },
       { name: 'Clinical notes', href: CLINICAL_NOTES_PATH },
-      { name: 'Referrals', href: REFERRALS_PATH },
+      { name: 'Conditions', href: CONDITIONS_PATH },
       { name: 'Insurance', href: INSURANCE_COVERAGES_PATH },
       { name: 'Medical history', href: MEDICAL_HISTORY_EVENTS_PATH },
-      { name: 'Symptoms', href: SYMPTOM_LOGS_PATH },
+      { name: 'Medications', href: MEDICATIONS_PATH },
+      { name: 'Referrals', href: REFERRALS_PATH },
       { name: 'Research notes', href: RESEARCH_NOTES_PATH },
+      { name: 'Results', href: CLINICAL_RESULTS_PATH },
+      { name: 'Symptoms', href: SYMPTOM_LOGS_PATH },
+      { name: 'Vitals', href: VITAL_SIGNS_PATH },
     ],
   },
   {
@@ -71,6 +69,13 @@ export const getSidebarSections = (): SidebarSection[] => [
       { name: 'Doctors', href: DOCTORS_PATH },
       { name: 'Facilities', href: HOSPITALS_PATH },
       { name: 'Specialties', href: SPECIALTIES_PATH },
+    ],
+  },
+  {
+    title: 'Data',
+    links: [
+      { name: 'Import health summary', href: HEALTH_IMPORT_PATH },
+      { name: 'Import history', href: HEALTH_IMPORTS_PATH },
     ],
   },
 ];

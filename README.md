@@ -70,7 +70,7 @@ NEXT_PUBLIC_API_URL=http://localhost:3009
 npm run dev
 ```
 
-Open **http://localhost:3000** — landing at `/`, dashboard at `/appointments`. Routes also include `/health-import`, `/allergies`, `/medications`, `/conditions`, `/vital-signs`, `/clinical-results`, `/clinical-notes`, `/referrals`, `/insurance-coverages`, `/doctors`, `/hospitals`, `/specialties`, `/focus-areas`, `/daily-entries`, `/medical-history-events`, `/symptom-logs`, `/research-notes`, `/research-note-detail-page`, and `/docs/api`.
+Open **http://localhost:3000** — landing at `/`, dashboard at `/dashboard`. Routes also include `/appointments`, `/health-import`, `/allergies`, `/medications`, `/conditions`, `/vital-signs`, `/clinical-results`, `/clinical-notes`, `/referrals`, `/insurance-coverages`, `/doctors`, `/hospitals`, `/specialties`, `/focus-areas`, `/daily-entries`, `/medical-history-events`, `/symptom-logs`, `/research-notes`, `/research-note-detail-page`, and `/docs/api`.
 
 ---
 
