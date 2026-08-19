@@ -2,6 +2,7 @@
 
 import { CareTeamOverview } from './care-team-overview';
 import { ConditionsOverview } from './conditions-overview';
+import { MorningCheckInOverview } from './morning-check-in-overview';
 import { RecentJournal } from './recent-journal';
 import { UpcomingVisits } from './upcoming-visits';
 
@@ -18,6 +19,7 @@ export const DashboardPage = () => {
       </div>
       <div className={styles.grid}>
         <UpcomingVisits />
+        <MorningCheckInOverview />
         <RecentJournal />
         <ConditionsOverview />
         <CareTeamOverview />

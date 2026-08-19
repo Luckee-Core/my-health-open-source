@@ -1,1 +1,8 @@
-export { getAllAllergies } from './client';
+export {
+  createAllergy,
+  deleteAllergy,
+  getAllAllergies,
+  updateAllergy,
+  type CreateAllergyPayload,
+  type UpdateAllergyPayload,
+} from './client';

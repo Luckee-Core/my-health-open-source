@@ -7,6 +7,17 @@ export type { ResearchNote, ResearchNoteCategory } from './research-note';
 export { EMPTY_RESEARCH_NOTE, RESEARCH_NOTE_CATEGORY_LABELS } from './research-note';
 export type { SymptomLog } from './symptom-log';
 export { EMPTY_SYMPTOM_LOG } from './symptom-log';
+export type { SymptomLogTimePeriod } from './symptom-log-time-period';
+export {
+  EMPTY_SYMPTOM_DEFINITION,
+  type SymptomDefinition,
+} from './symptom-definition';
+export {
+  MORNING_CHECK_IN_TIME_PERIODS,
+  SYMPTOM_LOG_TIME_PERIOD_LABELS,
+} from './symptom-log-time-period';
+export type { SourceInstance } from './source-instance';
+export type { MedicationProposal, ConditionProposal } from './ai-extract';
 export type { Appointment, AppointmentStatus } from './appointment';
 export { EMPTY_APPOINTMENT } from './appointment';
 export type { DailyEntry } from './daily-entry';

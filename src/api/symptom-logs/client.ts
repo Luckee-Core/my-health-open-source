@@ -7,6 +7,7 @@ import {
 } from '@/api/_shared/express-response';
 import type { ApiResponse } from '@/api/types';
 import type { SymptomLog } from '@/model';
+import type { SymptomLogTimePeriod } from '@/model';
 
 type ListBody = { success: boolean; data?: SymptomLog[]; error?: string };
 type EntityBody = { success: boolean; data?: SymptomLog; error?: string };
@@ -20,6 +21,19 @@ export type CreateSymptomLogPayload = {
   duration_minutes?: number | null;
   notes?: string | null;
   focus_area_id?: string | null;
+  symptom_definition_id?: string | null;
+  time_period?: SymptomLogTimePeriod | null;
+};
+
+export type BatchCheckInEntry = {
+  symptom_definition_id: string;
+  time_period: SymptomLogTimePeriod;
+  severity: number;
+  notes?: string | null;
+};
+
+export type BatchCheckInPayload = {
+  entries: BatchCheckInEntry[];
 };
 
 export type UpdateSymptomLogPayload = Partial<CreateSymptomLogPayload>;
@@ -74,5 +88,22 @@ export const deleteSymptomLog = async (id: string): Promise<ApiResponse<null>> =
     return fromExpressVoidBody(data, 'Failed to delete symptom log');
   } catch (error: unknown) {
     return fromCaughtError(error, 'Failed to delete symptom log');
+  }
+};
+
+/**
+ * Batch morning check-in via POST `/api/data/symptom-logs/batch-check-in`.
+ */
+export const batchCheckInSymptomLogs = async (
+  payload: BatchCheckInPayload,
+): Promise<ApiResponse<SymptomLog[]>> => {
+  try {
+    const { data } = await getApiClient().post<ListBody>(
+      '/api/data/symptom-logs/batch-check-in',
+      payload,
+    );
+    return fromExpressListBody(data, 'Failed to submit morning check-in');
+  } catch (error: unknown) {
+    return fromCaughtError(error, 'Failed to submit morning check-in');
   }
 };
