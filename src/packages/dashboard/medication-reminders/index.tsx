@@ -99,8 +99,8 @@ export const MedicationRemindersOverview = () => {
 
       {sorted.length === 0 && !loadError && (
         <p className={styles.body}>
-          No interval reminders yet. Edit a medication and set &quot;Remind every X hours&quot; (e.g.
-          oxycodone every 3 hours).
+          No interval medications yet. Add instructions like &quot;Take 1 pill every 3 hours&quot; on
+          an active medication — the dashboard will alert when the next dose is due.
         </p>
       )}
 

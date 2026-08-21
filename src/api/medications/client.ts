@@ -14,6 +14,7 @@ import type { MedicationDoseLog, MedicationDoseSchedule } from '@/model/medicati
 type ListBody = { success: boolean; data?: Medication[]; error?: string };
 type EntityBody = { success: boolean; data?: Medication; error?: string };
 type ScheduleBody = { success: boolean; data?: MedicationDoseSchedule | null; error?: string };
+type ScheduleEntityBody = { success: boolean; data?: MedicationDoseSchedule; error?: string };
 type DoseLogBody = { success: boolean; data?: MedicationDoseLog; error?: string };
 type VoidBody = { success: boolean; error?: string };
 
@@ -108,7 +109,7 @@ export const putMedicationDoseSchedule = async (
   payload: { interval_minutes: number; reminder_enabled?: boolean },
 ): Promise<ApiResponse<MedicationDoseSchedule>> => {
   try {
-    const { data } = await getApiClient().put<ScheduleBody>(
+    const { data } = await getApiClient().put<ScheduleEntityBody>(
       `/api/data/medications/${id}/dose-schedule`,
       payload,
     );
