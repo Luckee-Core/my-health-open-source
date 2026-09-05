@@ -2,6 +2,7 @@
 
 import { CareTeamOverview } from './care-team-overview';
 import { ConditionsOverview } from './conditions-overview';
+import { MedicationRemindersOverview } from './medication-reminders';
 import { MorningCheckInOverview } from './morning-check-in-overview';
 import { RecentJournal } from './recent-journal';
 import { UpcomingVisits } from './upcoming-visits';
@@ -13,11 +14,12 @@ export const DashboardPage = () => {
         <div>
           <h1 className={styles.title}>Dashboard</h1>
           <p className={styles.subtitle}>
-            Upcoming visits, recent journal notes, conditions, and your care team at a glance.
+            Medication reminders, upcoming visits, journal notes, and your care team at a glance.
           </p>
         </div>
       </div>
       <div className={styles.grid}>
+        <MedicationRemindersOverview />
         <UpcomingVisits />
         <MorningCheckInOverview />
         <RecentJournal />

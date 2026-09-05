@@ -3,6 +3,10 @@
 import { useMemo, useState } from 'react';
 import type { Medication, MedicationStatus } from '@/model';
 import { createMedicationThunk, updateMedicationThunk } from '@/store/thunks';
+import {
+  formatDoseIntervalMinutes,
+  parseDoseIntervalMinutes,
+} from '@/utils/medications/parse-dose-interval-minutes';
 import { useAppDispatch, useAppSelector } from '@/store';
 
 type Props = {
@@ -41,6 +45,11 @@ const MedicationFormModalBody = ({ onClose, medication }: BodyProps) => {
   const [error, setError] = useState('');
   const [isSaving, setIsSaving] = useState(false);
 
+  const parsedIntervalMinutes = useMemo(
+    () => parseDoseIntervalMinutes(instructions),
+    [instructions],
+  );
+
   const doctorOptions = useMemo(() => {
     return [...doctors]
       .map((doctor) => {
@@ -71,6 +80,7 @@ const MedicationFormModalBody = ({ onClose, medication }: BodyProps) => {
       doctor_id: doctorId || null,
       notes: notes.trim() || null,
     };
+
     const httpStatus = isEdit
       ? await dispatch(updateMedicationThunk(medication.id, payload))
       : await dispatch(createMedicationThunk(payload));
@@ -97,11 +107,17 @@ const MedicationFormModalBody = ({ onClose, medication }: BodyProps) => {
           />
           <input
             type="text"
-            placeholder="Instructions"
+            placeholder="e.g. Take 1 pill every 3 hours"
             className={styles.input}
             value={instructions}
             onChange={(e) => setInstructions(e.target.value)}
           />
+          {parsedIntervalMinutes != null && status === 'active' && (
+            <p className={styles.intervalDetected}>
+              Dashboard reminders: {formatDoseIntervalMinutes(parsedIntervalMinutes)} (from
+              instructions)
+            </p>
+          )}
           <input
             type="date"
             className={styles.input}
@@ -154,11 +170,12 @@ const MedicationFormModalBody = ({ onClose, medication }: BodyProps) => {
 
 const styles = {
   overlay: `fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4`,
-  panel: `w-full max-w-md rounded-lg bg-white p-5 shadow-lg`,
+  panel: `w-full max-w-md rounded-lg bg-white p-5 shadow-lg max-h-[90vh] overflow-y-auto`,
   heading: `text-lg font-semibold text-gray-900`,
   fields: `mt-4 space-y-3`,
   input: `w-full rounded-md border border-gray-300 px-3 py-2 text-sm`,
   textarea: `w-full rounded-md border border-gray-300 px-3 py-2 text-sm min-h-[80px]`,
+  intervalDetected: `text-xs text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-md px-3 py-2`,
   error: `text-sm text-red-600`,
   actions: `mt-5 flex justify-end gap-2`,
   cancelButton: `rounded-md px-3 py-1.5 text-sm text-gray-700`,

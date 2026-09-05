@@ -4,6 +4,7 @@ type ApiClient = {
   get: <T = unknown>(url: string) => Promise<{ data: T }>;
   post: <T = unknown>(url: string, data?: unknown) => Promise<{ data: T }>;
   postFormData: <T = unknown>(url: string, formData: FormData) => Promise<{ data: T }>;
+  put: <T = unknown>(url: string, data?: unknown) => Promise<{ data: T }>;
   patch: <T = unknown>(url: string, data?: unknown) => Promise<{ data: T }>;
   delete: <T = unknown>(url: string) => Promise<{ data: T }>;
 };
@@ -51,6 +52,12 @@ const createApiClient = (): ApiClient => {
       request<T>(url, {
         method: 'POST',
         body: formData,
+      }),
+    put: async <T>(url: string, data?: unknown) =>
+      request<T>(url, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: data ? JSON.stringify(data) : undefined,
       }),
     patch: async <T>(url: string, data?: unknown) =>
       request<T>(url, {

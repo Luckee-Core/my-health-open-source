@@ -34,6 +34,12 @@ export type { Allergy, AllergyStatus } from './allergy';
 export { EMPTY_ALLERGY } from './allergy';
 export type { Medication, MedicationStatus } from './medication';
 export { EMPTY_MEDICATION } from './medication';
+export type {
+  MedicationDoseLog,
+  MedicationDoseReminder,
+  MedicationDoseReminderStatus,
+  MedicationDoseSchedule,
+} from './medication-dose-reminder';
 export type { Condition, ConditionStatus } from './condition';
 export { EMPTY_CONDITION } from './condition';
 export type { VitalSign } from './vital-sign';
