@@ -1,8 +1,11 @@
 export { CurrentAppointmentActions, currentAppointmentReducer } from './current-appointment';
+export { CurrentAllergyActions, currentAllergyReducer } from './current-allergy';
+export { CurrentConditionActions, currentConditionReducer } from './current-condition';
 export { CurrentDailyEntryActions, currentDailyEntryReducer } from './current-daily-entry';
 export { CurrentDoctorActions, currentDoctorReducer } from './current-doctor';
 export { CurrentFocusAreaActions, currentFocusAreaReducer } from './current-focus-area';
 export { CurrentHospitalActions, currentHospitalReducer } from './current-hospital';
+export { CurrentMedicationActions, currentMedicationReducer } from './current-medication';
 export {
   CurrentMedicalHistoryEventActions,
   currentMedicalHistoryEventReducer,

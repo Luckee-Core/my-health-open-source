@@ -13,6 +13,7 @@ import {
   HOSPITALS_PATH,
   INSURANCE_COVERAGES_PATH,
   MEDICAL_HISTORY_EVENTS_PATH,
+  MORNING_CHECK_IN_PATH,
   MEDICATIONS_PATH,
   REFERRALS_PATH,
   RESEARCH_NOTES_PATH,
@@ -56,6 +57,7 @@ export const getSidebarSections = (): SidebarSection[] => [
     title: 'Journal',
     links: [
       { name: 'Daily log', href: DAILY_ENTRIES_PATH },
+      { name: 'Morning check-in', href: MORNING_CHECK_IN_PATH },
       { name: 'Focus areas', href: FOCUS_AREAS_PATH },
     ],
   },

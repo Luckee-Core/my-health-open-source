@@ -1,3 +1,5 @@
+import type { SymptomLogTimePeriod } from './symptom-log-time-period';
+
 export type SymptomLog = {
   id: string;
   recorded_at: string;
@@ -7,6 +9,8 @@ export type SymptomLog = {
   duration_minutes: number | null;
   notes: string | null;
   focus_area_id: string | null;
+  symptom_definition_id: string | null;
+  time_period: SymptomLogTimePeriod | null;
   created_at: string;
   updated_at: string;
 };
@@ -21,6 +25,8 @@ export const EMPTY_SYMPTOM_LOG: SymptomLog = {
   duration_minutes: null,
   notes: null,
   focus_area_id: null,
+  symptom_definition_id: null,
+  time_period: null,
   created_at: '',
   updated_at: '',
 };

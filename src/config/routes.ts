@@ -11,6 +11,7 @@ export const DOCTORS_PATH = '/doctors';
 export const HOSPITALS_PATH = '/hospitals';
 export const SPECIALTIES_PATH = '/specialties';
 export const FOCUS_AREAS_PATH = '/focus-areas';
+export const MORNING_CHECK_IN_PATH = '/morning-check-in';
 export const DAILY_ENTRIES_PATH = '/daily-entries';
 
 export const MEDICAL_HISTORY_EVENTS_PATH = '/medical-history-events';
