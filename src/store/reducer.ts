@@ -13,6 +13,8 @@ import {
   researchNotesBuilderReducer,
   specialtiesBuilderReducer,
   symptomLogsBuilderReducer,
+  therapyExerciseImportBuilderReducer,
+  therapyExercisesBuilderReducer,
 } from './builders';
 import {
   currentAppointmentReducer,
@@ -28,6 +30,7 @@ import {
   currentResearchNoteReducer,
   currentSpecialtyReducer,
   currentSymptomLogReducer,
+  currentTherapyExerciseReducer,
 } from './current';
 import {
   allergiesReducer,
@@ -47,6 +50,8 @@ import {
   researchNotesReducer,
   specialtiesReducer,
   symptomLogsReducer,
+  therapyExerciseLogsReducer,
+  therapyExercisesReducer,
   vitalSignsReducer,
 } from './dumps';
 
@@ -69,6 +74,8 @@ export const rootReducer = combineReducers({
   referrals: referralsReducer,
   insuranceCoverages: insuranceCoveragesReducer,
   healthImports: healthImportsReducer,
+  therapyExercises: therapyExercisesReducer,
+  therapyExerciseLogs: therapyExerciseLogsReducer,
   allergiesBuilder: allergiesBuilderReducer,
   medicationsBuilder: medicationsBuilderReducer,
   conditionsBuilder: conditionsBuilderReducer,
@@ -82,6 +89,8 @@ export const rootReducer = combineReducers({
   symptomLogsBuilder: symptomLogsBuilderReducer,
   researchNotesBuilder: researchNotesBuilderReducer,
   healthImportBuilder: healthImportBuilderReducer,
+  therapyExerciseImportBuilder: therapyExerciseImportBuilderReducer,
+  therapyExercisesBuilder: therapyExercisesBuilderReducer,
   currentHospital: currentHospitalReducer,
   currentAllergy: currentAllergyReducer,
   currentMedication: currentMedicationReducer,
@@ -95,4 +104,5 @@ export const rootReducer = combineReducers({
   currentSymptomLog: currentSymptomLogReducer,
   currentResearchNote: currentResearchNoteReducer,
   currentHealthImportDraft: currentHealthImportDraftReducer,
+  currentTherapyExercise: currentTherapyExerciseReducer,
 });

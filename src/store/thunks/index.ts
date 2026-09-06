@@ -18,3 +18,6 @@ export * from './referrals';
 export * from './insurance-coverages';
 export * from './health-imports';
 export * from './health-import';
+export * from './therapy-exercises';
+export * from './therapy-exercise-logs';
+export * from './therapy-exercise-imports';

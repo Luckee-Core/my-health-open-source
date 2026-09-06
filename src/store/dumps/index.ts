@@ -22,3 +22,5 @@ export {
   insuranceCoveragesReducer,
 } from './insurance-coverages';
 export { HealthImportsActions, healthImportsReducer } from './health-imports';
+export { TherapyExercisesActions, therapyExercisesReducer } from './therapy-exercises';
+export { TherapyExerciseLogsActions, therapyExerciseLogsReducer } from './therapy-exercise-logs';

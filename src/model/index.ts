@@ -63,3 +63,16 @@ export {
   EMPTY_HEALTH_IMPORT,
   EMPTY_HEALTH_IMPORT_SUMMARY,
 } from './health-import';
+export type { TherapyExerciseImportDraftExercise } from './therapy-exercise-import';
+export type { TherapyExerciseLog } from './therapy-exercise-log';
+export { EMPTY_THERAPY_EXERCISE_LOG } from './therapy-exercise-log';
+export type {
+  TherapyExercise,
+  TherapyExerciseDiscipline,
+  TherapyExerciseSource,
+  TherapyExerciseTrackingKind,
+} from './therapy-exercise';
+export {
+  EMPTY_THERAPY_EXERCISE,
+  THERAPY_TRACKING_KIND_LABELS,
+} from './therapy-exercise';

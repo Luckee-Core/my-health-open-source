@@ -10,6 +10,7 @@ import {
 } from '@/model';
 import { batchCheckInThunk } from '@/store/thunks';
 import { useAppDispatch } from '@/store';
+import { TodayTracker } from '@/packages/speech-therapy/today-tracker';
 
 type RowState = {
   severity: number | null;
@@ -137,6 +138,14 @@ export const MorningCheckInPage = () => {
       {submitError && <p className={styles.error}>{submitError}</p>}
       {submitSuccess && <p className={styles.success}>Check-in saved.</p>}
 
+      <section className={styles.therapySection}>
+        <h2 className={styles.sectionTitle}>Speech therapy</h2>
+        <p className={styles.sectionSubtitle}>
+          Log homework progress now — updates save immediately.
+        </p>
+        <TodayTracker variant="compact" showTimer incompleteFirst />
+      </section>
+
       {isLoading ? (
         <p className={styles.muted}>Loading symptoms…</p>
       ) : sortedDefinitions.length === 0 ? (
@@ -225,6 +234,11 @@ const styles = {
   primaryButton: `rounded-md bg-gray-900 px-3 py-1.5 text-sm text-white shrink-0 disabled:opacity-50`,
   error: `text-sm text-red-600`,
   success: `text-sm text-green-700`,
+  therapySection: `
+    rounded-lg border border-gray-200 bg-white p-4 space-y-3
+  `,
+  sectionTitle: `text-base font-semibold text-gray-900`,
+  sectionSubtitle: `text-sm text-gray-600`,
   muted: `text-sm text-gray-500`,
   tableWrapper: `overflow-x-auto rounded-lg border border-gray-200 bg-white`,
   table: `min-w-full text-sm`,

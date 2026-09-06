@@ -18,6 +18,7 @@ import {
   REFERRALS_PATH,
   RESEARCH_NOTES_PATH,
   SPECIALTIES_PATH,
+  SPEECH_THERAPY_PATH,
   SYMPTOM_LOGS_PATH,
   VITAL_SIGNS_PATH,
 } from '@/config/routes';
@@ -60,6 +61,10 @@ export const getSidebarSections = (): SidebarSection[] => [
       { name: 'Morning check-in', href: MORNING_CHECK_IN_PATH },
       { name: 'Focus areas', href: FOCUS_AREAS_PATH },
     ],
+  },
+  {
+    title: 'Therapy',
+    links: [{ name: 'Speech therapy', href: SPEECH_THERAPY_PATH }],
   },
   {
     title: 'Visits',

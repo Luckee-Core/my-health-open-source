@@ -30,3 +30,5 @@ export const CLINICAL_RESULTS_PATH = '/clinical-results';
 export const CLINICAL_NOTES_PATH = '/clinical-notes';
 export const REFERRALS_PATH = '/referrals';
 export const INSURANCE_COVERAGES_PATH = '/insurance-coverages';
+export const SPEECH_THERAPY_PATH = '/speech-therapy';
+export const SPEECH_THERAPY_IMPORT_PATH = '/speech-therapy-import';

@@ -13,6 +13,8 @@ import { getAllReferrals } from '@/api/referrals';
 import { getAllResearchNotes } from '@/api/research-notes';
 import { getAllSpecialties } from '@/api/specialties';
 import { getAllSymptomLogs } from '@/api/symptom-logs';
+import { getAllTherapyExerciseLogs } from '@/api/therapy-exercise-logs';
+import { getAllTherapyExercises } from '@/api/therapy-exercises';
 import {
   AllergiesActions,
   AppointmentsActions,
@@ -29,6 +31,8 @@ import {
   ResearchNotesActions,
   SpecialtiesActions,
   SymptomLogsActions,
+  TherapyExerciseLogsActions,
+  TherapyExercisesActions,
 } from '@/store/dumps';
 import type { AppThunk } from '@/store/types';
 
@@ -54,6 +58,8 @@ export const loadBootstrapDataThunk =
       referrals,
       insuranceCoverages,
       healthImports,
+      therapyExercises,
+      therapyExerciseLogs,
     ] = await Promise.all([
       getAllHospitals(),
       getAllSpecialties(),
@@ -70,6 +76,8 @@ export const loadBootstrapDataThunk =
       getAllReferrals(),
       getAllInsuranceCoverages(),
       getAllHealthImports(),
+      getAllTherapyExercises(),
+      getAllTherapyExerciseLogs(),
     ]);
 
     let status: 200 | 400 | 500 = 200;
@@ -218,6 +226,26 @@ export const loadBootstrapDataThunk =
       dispatch(
         HealthImportsActions.setHealthImports(
           Object.fromEntries(healthImports.data.map((row) => [row.id, row])),
+        ),
+      );
+    } else {
+      status = 400;
+    }
+
+    if (therapyExercises.ok) {
+      dispatch(
+        TherapyExercisesActions.setTherapyExercises(
+          Object.fromEntries(therapyExercises.data.map((row) => [row.id, row])),
+        ),
+      );
+    } else {
+      status = 400;
+    }
+
+    if (therapyExerciseLogs.ok) {
+      dispatch(
+        TherapyExerciseLogsActions.setTherapyExerciseLogs(
+          Object.fromEntries(therapyExerciseLogs.data.map((row) => [row.id, row])),
         ),
       );
     } else {

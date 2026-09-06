@@ -17,3 +17,7 @@ export {
   CurrentHealthImportDraftActions,
   currentHealthImportDraftReducer,
 } from './current-health-import-draft';
+export {
+  CurrentTherapyExerciseActions,
+  currentTherapyExerciseReducer,
+} from './current-therapy-exercise';

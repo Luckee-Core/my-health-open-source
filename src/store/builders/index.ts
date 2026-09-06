@@ -20,3 +20,11 @@ export {
   HealthImportBuilderActions,
   healthImportBuilderReducer,
 } from './health-import-builder';
+export {
+  TherapyExerciseImportBuilderActions,
+  therapyExerciseImportBuilderReducer,
+} from './therapy-exercise-import-builder';
+export {
+  TherapyExercisesBuilderActions,
+  therapyExercisesBuilderReducer,
+} from './therapy-exercises-builder';
