@@ -1,13 +1,19 @@
 import { getApiClient } from '@/api/client';
 import { fromCaughtError, fromExpressBody } from '@/api/_shared/express-response';
 import type { ApiResponse } from '@/api/types';
-import type { TherapyExercise, TherapyExerciseImportDraftExercise } from '@/model';
+import type {
+  TherapyExercise,
+  TherapyExerciseImportAiExchange,
+  TherapyExerciseImportDraftExercise,
+} from '@/model';
 
 type PreviewBody = {
   success: boolean;
   data?: {
     previewId: string;
     exercises: TherapyExerciseImportDraftExercise[];
+    exchangeId: string;
+    exchange: TherapyExerciseImportAiExchange;
   };
   error?: string;
 };
@@ -21,6 +27,8 @@ type CommitBody = {
 export type PreviewTherapyExerciseImportData = {
   previewId: string;
   exercises: TherapyExerciseImportDraftExercise[];
+  exchangeId: string;
+  exchange: TherapyExerciseImportAiExchange;
 };
 
 export type CommitTherapyExerciseImportData = {

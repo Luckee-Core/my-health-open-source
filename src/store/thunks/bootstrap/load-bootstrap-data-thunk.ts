@@ -3,36 +3,48 @@ import { getAllAppointments } from '@/api/appointments';
 import { getAllConditions } from '@/api/conditions';
 import { getAllDailyEntries } from '@/api/daily-entries';
 import { getAllDoctors } from '@/api/doctors';
+import { getAllFeedFormulas } from '@/api/feed-formulas';
+import { getAllFeedLogs } from '@/api/feed-logs';
 import { getAllFocusAreas } from '@/api/focus-areas';
 import { getAllHealthImports } from '@/api/health-import';
 import { getAllHospitals } from '@/api/hospitals';
 import { getAllInsuranceCoverages } from '@/api/insurance-coverages';
+import { getAllLlmModels } from '@/api/llm-models';
 import { getAllMedicalHistoryEvents } from '@/api/medical-history-events';
 import { getAllMedications } from '@/api/medications';
 import { getAllReferrals } from '@/api/referrals';
 import { getAllResearchNotes } from '@/api/research-notes';
 import { getAllSpecialties } from '@/api/specialties';
+import { getAllSymptomDefinitions } from '@/api/symptom-definitions';
 import { getAllSymptomLogs } from '@/api/symptom-logs';
+import { getAllTherapyExerciseImportAiExchanges } from '@/api/therapy-exercise-import-ai-exchanges';
 import { getAllTherapyExerciseLogs } from '@/api/therapy-exercise-logs';
 import { getAllTherapyExercises } from '@/api/therapy-exercises';
+import { getAllSpeechTherapyConsumption } from '@/api/speech-therapy-consumption';
 import {
   AllergiesActions,
   AppointmentsActions,
   ConditionsActions,
   DailyEntriesActions,
   DoctorsActions,
+  FeedFormulasActions,
+  FeedLogsActions,
   FocusAreasActions,
   HealthImportsActions,
   HospitalsActions,
   InsuranceCoveragesActions,
+  LlmModelsActions,
   MedicalHistoryEventsActions,
   MedicationsActions,
   ReferralsActions,
   ResearchNotesActions,
   SpecialtiesActions,
+  SymptomDefinitionsActions,
   SymptomLogsActions,
+  TherapyExerciseImportAiExchangesActions,
   TherapyExerciseLogsActions,
   TherapyExercisesActions,
+  SpeechTherapyConsumptionActions,
 } from '@/store/dumps';
 import type { AppThunk } from '@/store/types';
 
@@ -51,6 +63,7 @@ export const loadBootstrapDataThunk =
       dailyEntries,
       medicalHistoryEvents,
       symptomLogs,
+      symptomDefinitions,
       researchNotes,
       allergies,
       medications,
@@ -60,6 +73,11 @@ export const loadBootstrapDataThunk =
       healthImports,
       therapyExercises,
       therapyExerciseLogs,
+      speechTherapyConsumption,
+      feedFormulas,
+      feedLogs,
+      llmModels,
+      therapyExerciseImportAiExchanges,
     ] = await Promise.all([
       getAllHospitals(),
       getAllSpecialties(),
@@ -69,6 +87,7 @@ export const loadBootstrapDataThunk =
       getAllDailyEntries(),
       getAllMedicalHistoryEvents(),
       getAllSymptomLogs(),
+      getAllSymptomDefinitions(),
       getAllResearchNotes(),
       getAllAllergies(),
       getAllMedications(),
@@ -78,6 +97,11 @@ export const loadBootstrapDataThunk =
       getAllHealthImports(),
       getAllTherapyExercises(),
       getAllTherapyExerciseLogs(),
+      getAllSpeechTherapyConsumption(),
+      getAllFeedFormulas(),
+      getAllFeedLogs(),
+      getAllLlmModels(),
+      getAllTherapyExerciseImportAiExchanges(),
     ]);
 
     let status: 200 | 400 | 500 = 200;
@@ -156,6 +180,16 @@ export const loadBootstrapDataThunk =
       dispatch(
         SymptomLogsActions.setSymptomLogs(
           Object.fromEntries(symptomLogs.data.map((row) => [row.id, row])),
+        ),
+      );
+    } else {
+      status = 400;
+    }
+
+    if (symptomDefinitions.ok) {
+      dispatch(
+        SymptomDefinitionsActions.setSymptomDefinitions(
+          Object.fromEntries(symptomDefinitions.data.map((row) => [row.id, row])),
         ),
       );
     } else {
@@ -246,6 +280,54 @@ export const loadBootstrapDataThunk =
       dispatch(
         TherapyExerciseLogsActions.setTherapyExerciseLogs(
           Object.fromEntries(therapyExerciseLogs.data.map((row) => [row.id, row])),
+        ),
+      );
+    } else {
+      status = 400;
+    }
+
+    if (speechTherapyConsumption.ok) {
+      dispatch(
+        SpeechTherapyConsumptionActions.setSpeechTherapyConsumption(
+          Object.fromEntries(speechTherapyConsumption.data.map((row) => [row.id, row])),
+        ),
+      );
+    } else {
+      status = 400;
+    }
+
+    if (feedFormulas.ok) {
+      dispatch(
+        FeedFormulasActions.setFeedFormulas(
+          Object.fromEntries(feedFormulas.data.map((row) => [row.id, row])),
+        ),
+      );
+    } else {
+      status = 400;
+    }
+
+    if (feedLogs.ok) {
+      dispatch(
+        FeedLogsActions.setFeedLogs(
+          Object.fromEntries(feedLogs.data.map((row) => [row.id, row])),
+        ),
+      );
+    } else {
+      status = 400;
+    }
+
+    if (llmModels.ok) {
+      dispatch(LlmModelsActions.setLlmModels(llmModels.data));
+    } else {
+      status = 400;
+    }
+
+    if (therapyExerciseImportAiExchanges.ok) {
+      dispatch(
+        TherapyExerciseImportAiExchangesActions.setTherapyExerciseImportAiExchanges(
+          Object.fromEntries(
+            therapyExerciseImportAiExchanges.data.map((row) => [row.id, row]),
+          ),
         ),
       );
     } else {

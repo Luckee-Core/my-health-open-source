@@ -8,6 +8,10 @@ export const currentMedicationSlice = createSlice({
   initialState,
   reducers: {
     setCurrentMedication: (_state, action: PayloadAction<Medication>) => action.payload,
+    patchCurrentMedication: (state, action: PayloadAction<Partial<Medication>>) => ({
+      ...state,
+      ...action.payload,
+    }),
     resetCurrentMedication: () => EMPTY_MEDICATION,
   },
 });

@@ -2,22 +2,16 @@
 
 import { FocusAreasBuilderActions } from '@/store/builders';
 import { CurrentFocusAreaActions } from '@/store/current';
-import { useAppDispatch, useAppSelector } from '@/store';
+import { useAppDispatch } from '@/store';
 import { FocusAreaFormModal } from './form-modal';
 import { FocusAreasTable } from './table';
 
 export const FocusAreasPage = () => {
   const dispatch = useAppDispatch();
-  const focusAreasBuilder = useAppSelector((state) => state.focusAreasBuilder);
-  const currentFocusArea = useAppSelector((state) => state.currentFocusArea);
 
-  const isEditing = currentFocusArea.id !== '';
-  const isOpen = focusAreasBuilder.isCreateOpen || isEditing;
-  const editingFocusArea = isEditing ? currentFocusArea : null;
-
-  const closeModal = () => {
-    dispatch(FocusAreasBuilderActions.closeModal());
+  const openCreate = () => {
     dispatch(CurrentFocusAreaActions.resetCurrentFocusArea());
+    dispatch(FocusAreasBuilderActions.setIsCreateOpen(true));
   };
 
   return (
@@ -32,18 +26,14 @@ export const FocusAreasPage = () => {
         </div>
         <button
           type="button"
-          onClick={() => dispatch(FocusAreasBuilderActions.setIsCreateOpen(true))}
+          onClick={openCreate}
           className={styles.primaryButton}
         >
           Add focus area
         </button>
       </div>
       <FocusAreasTable />
-      <FocusAreaFormModal
-        isOpen={isOpen}
-        focusArea={editingFocusArea}
-        onClose={closeModal}
-      />
+      <FocusAreaFormModal />
     </div>
   );
 };

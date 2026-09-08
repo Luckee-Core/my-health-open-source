@@ -9,6 +9,7 @@ type TherapyExerciseImportBuilderState = {
   previewId: string;
   localImageUrl: string;
   exercises: TherapyExerciseImportDraftExercise[];
+  selectedIndexes: number[];
   errorMessage: string;
   previewStatus: TherapyExerciseImportAsyncStatus;
   commitStatus: TherapyExerciseImportAsyncStatus;
@@ -19,6 +20,7 @@ const initialState: TherapyExerciseImportBuilderState = {
   previewId: '',
   localImageUrl: '',
   exercises: [],
+  selectedIndexes: [],
   errorMessage: '',
   previewStatus: 'idle',
   commitStatus: 'idle',
@@ -39,6 +41,15 @@ export const therapyExerciseImportBuilderSlice = createSlice({
     },
     setExercises: (state, action: PayloadAction<TherapyExerciseImportDraftExercise[]>) => {
       state.exercises = action.payload;
+      state.selectedIndexes = [];
+    },
+    toggleExerciseSelected: (state, action: PayloadAction<number>) => {
+      const index = action.payload;
+      if (state.selectedIndexes.includes(index)) {
+        state.selectedIndexes = state.selectedIndexes.filter((i) => i !== index);
+      } else {
+        state.selectedIndexes.push(index);
+      }
     },
     updateExerciseAt: (
       state,

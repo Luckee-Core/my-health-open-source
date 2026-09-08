@@ -2,22 +2,20 @@
 
 import { SymptomLogsBuilderActions } from '@/store/builders';
 import { CurrentSymptomLogActions } from '@/store/current';
-import { useAppDispatch, useAppSelector } from '@/store';
+import { useAppDispatch } from '@/store';
 import { SymptomLogFormModal } from './form-modal';
 import { SymptomLogsTable } from './table';
 
 export const SymptomLogsPage = () => {
   const dispatch = useAppDispatch();
-  const builder = useAppSelector((state) => state.symptomLogsBuilder);
-  const current = useAppSelector((state) => state.currentSymptomLog);
 
-  const isEditing = current.id !== '';
-  const isOpen = builder.isCreateOpen || isEditing;
-  const editingLog = isEditing ? current : null;
-
-  const closeModal = () => {
-    dispatch(SymptomLogsBuilderActions.closeModal());
+  const openCreate = () => {
     dispatch(CurrentSymptomLogActions.resetCurrentSymptomLog());
+    dispatch(
+      CurrentSymptomLogActions.patchCurrentSymptomLog({ recorded_at: new Date().toISOString() }),
+    );
+    dispatch(SymptomLogsBuilderActions.setHasSeverity(false));
+    dispatch(SymptomLogsBuilderActions.setIsCreateOpen(true));
   };
 
   return (
@@ -30,16 +28,12 @@ export const SymptomLogsPage = () => {
             journal.
           </p>
         </div>
-        <button
-          type="button"
-          onClick={() => dispatch(SymptomLogsBuilderActions.setIsCreateOpen(true))}
-          className={styles.primaryButton}
-        >
+        <button type="button" onClick={openCreate} className={styles.primaryButton}>
           Log symptom
         </button>
       </div>
       <SymptomLogsTable />
-      <SymptomLogFormModal isOpen={isOpen} symptomLog={editingLog} onClose={closeModal} />
+      <SymptomLogFormModal />
     </div>
   );
 };

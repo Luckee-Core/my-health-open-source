@@ -2,22 +2,16 @@
 
 import { MedicalHistoryEventsBuilderActions } from '@/store/builders';
 import { CurrentMedicalHistoryEventActions } from '@/store/current';
-import { useAppDispatch, useAppSelector } from '@/store';
+import { useAppDispatch } from '@/store';
 import { MedicalHistoryEventFormModal } from './form-modal';
 import { MedicalHistoryEventsTable } from './table';
 
 export const MedicalHistoryEventsPage = () => {
   const dispatch = useAppDispatch();
-  const builder = useAppSelector((state) => state.medicalHistoryEventsBuilder);
-  const current = useAppSelector((state) => state.currentMedicalHistoryEvent);
 
-  const isEditing = current.id !== '';
-  const isOpen = builder.isCreateOpen || isEditing;
-  const editingEvent = isEditing ? current : null;
-
-  const closeModal = () => {
-    dispatch(MedicalHistoryEventsBuilderActions.closeModal());
+  const openCreate = () => {
     dispatch(CurrentMedicalHistoryEventActions.resetCurrentMedicalHistoryEvent());
+    dispatch(MedicalHistoryEventsBuilderActions.setIsCreateOpen(true));
   };
 
   return (
@@ -32,18 +26,14 @@ export const MedicalHistoryEventsPage = () => {
         </div>
         <button
           type="button"
-          onClick={() => dispatch(MedicalHistoryEventsBuilderActions.setIsCreateOpen(true))}
+          onClick={openCreate}
           className={styles.primaryButton}
         >
           Add event
         </button>
       </div>
       <MedicalHistoryEventsTable />
-      <MedicalHistoryEventFormModal
-        isOpen={isOpen}
-        medicalHistoryEvent={editingEvent}
-        onClose={closeModal}
-      />
+      <MedicalHistoryEventFormModal />
     </div>
   );
 };

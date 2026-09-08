@@ -58,15 +58,17 @@ Suggested structure:
 ```text
 src/packages/orders/
   index.tsx                # main package component (required)
-  ui/
-    orders-view.tsx
-    orders-toolbar.tsx
-  types.ts
-  store/
-    thunks/
-      load-orders-thunk.ts
+  form-modal/
+    index.tsx              # zero props; open/close from builder + current
+    inputs/
+      name/index.tsx       # reads/writes currentOrder
+  table/
+    index.tsx              # thead, map, empty state
+    row/index.tsx          # one <tr>
   # entity-specific formatters colocated here — NOT in src/utils/orders/
 ```
+
+Forms bind fields to `current*` via `{form}/inputs/{field}/index.tsx`. Modals take **no props**. List tables use `{collection}/index.tsx` + `row/index.tsx` (entity packages: `table/row/`). See [012 – Package form inputs](./012-package-form-inputs.md). Do not keep field values in `useState`.
 
 Do **not** add `selectors.ts` under packages or store. Read slices with identity `useAppSelector` only; see [001 – Redux patterns](./001-redux-patterns.md).
 

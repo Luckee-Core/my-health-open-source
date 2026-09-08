@@ -8,6 +8,10 @@ export const currentDailyEntrySlice = createSlice({
   initialState,
   reducers: {
     setCurrentDailyEntry: (_state, action: PayloadAction<DailyEntry>) => action.payload,
+    patchCurrentDailyEntry: (state, action: PayloadAction<Partial<DailyEntry>>) => ({
+      ...state,
+      ...action.payload,
+    }),
     resetCurrentDailyEntry: () => EMPTY_DAILY_ENTRY,
   },
 });

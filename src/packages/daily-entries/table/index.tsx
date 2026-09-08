@@ -6,13 +6,8 @@ import type { DailyEntry } from '@/model';
 import { FOCUS_AREAS_PATH } from '@/config/routes';
 import { formatEntryDate } from '../format-entry-date';
 import { deleteDailyEntryThunk } from '@/store/thunks';
-import { CurrentDailyEntryActions } from '@/store/current';
 import { useAppDispatch, useAppSelector } from '@/store';
-
-const truncate = (value: string | null, max = 60): string => {
-  if (!value) return '—';
-  return value.length > max ? `${value.slice(0, max)}…` : value;
-};
+import { DailyEntryRow } from './row';
 
 export const DailyEntriesTable = () => {
   const dispatch = useAppDispatch();
@@ -72,31 +67,13 @@ export const DailyEntriesTable = () => {
         </thead>
         <tbody>
           {sorted.map((row) => (
-            <tr key={row.id} className={styles.row}>
-              <td className={styles.td}>{formatEntryDate(row.entry_date)}</td>
-              <td className={styles.td}>{focusAreasDump[row.focus_area_id]?.name ?? 'Unknown'}</td>
-              <td className={styles.tdMuted}>{truncate(row.notes)}</td>
-              <td className={styles.tdActions}>
-                <div className={styles.actions}>
-                  <button
-                    type="button"
-                    className={styles.linkButton}
-                    onClick={() => dispatch(CurrentDailyEntryActions.setCurrentDailyEntry(row))}
-                    disabled={busyId === row.id}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    type="button"
-                    className={styles.dangerButton}
-                    onClick={() => void handleDelete(row)}
-                    disabled={busyId === row.id}
-                  >
-                    Delete
-                  </button>
-                </div>
-              </td>
-            </tr>
+            <DailyEntryRow
+              key={row.id}
+              row={row}
+              busy={busyId === row.id}
+              focusAreaName={focusAreasDump[row.focus_area_id]?.name ?? 'Unknown'}
+              onDelete={(entry) => void handleDelete(entry)}
+            />
           ))}
           {sorted.length === 0 && (
             <tr>
@@ -120,12 +97,5 @@ const styles = {
   thead: `bg-gray-50 text-left text-gray-600`,
   th: `px-4 py-2 font-medium`,
   thActions: `px-4 py-2 font-medium text-right`,
-  row: `border-t border-gray-100`,
-  td: `px-4 py-2 align-top`,
-  tdMuted: `px-4 py-2 align-top text-gray-600`,
-  tdActions: `px-4 py-2 text-right align-top`,
-  actions: `flex justify-end gap-2`,
-  linkButton: `text-sm text-gray-700 hover:text-gray-900 disabled:opacity-50`,
-  dangerButton: `text-sm text-red-600 hover:text-red-800 disabled:opacity-50`,
   empty: `px-4 py-8 text-center text-gray-500`,
 } as const;

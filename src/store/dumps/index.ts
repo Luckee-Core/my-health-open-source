@@ -10,6 +10,10 @@ export {
 export { ResearchNotesActions, researchNotesReducer } from './research-notes';
 export { SpecialtiesActions, specialtiesReducer } from './specialties';
 export { SymptomLogsActions, symptomLogsReducer } from './symptom-logs';
+export {
+  SymptomDefinitionsActions,
+  symptomDefinitionsReducer,
+} from './symptom-definitions';
 export { AllergiesActions, allergiesReducer } from './allergies';
 export { MedicationsActions, medicationsReducer } from './medications';
 export { ConditionsActions, conditionsReducer } from './conditions';
@@ -24,3 +28,14 @@ export {
 export { HealthImportsActions, healthImportsReducer } from './health-imports';
 export { TherapyExercisesActions, therapyExercisesReducer } from './therapy-exercises';
 export { TherapyExerciseLogsActions, therapyExerciseLogsReducer } from './therapy-exercise-logs';
+export { FeedFormulasActions, feedFormulasReducer } from './feed-formulas';
+export { FeedLogsActions, feedLogsReducer } from './feed-logs';
+export { LlmModelsActions, llmModelsReducer } from './llm-models';
+export {
+  SpeechTherapyConsumptionActions,
+  speechTherapyConsumptionReducer,
+} from './speech-therapy-consumption';
+export {
+  TherapyExerciseImportAiExchangesActions,
+  therapyExerciseImportAiExchangesReducer,
+} from './therapy-exercise-import-ai-exchanges';

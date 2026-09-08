@@ -1,70 +1,33 @@
 'use client';
 
-import { useState } from 'react';
-import type { Hospital } from '@/model';
-import { createHospitalThunk, updateHospitalThunk } from '@/store/thunks';
-import { useAppDispatch } from '@/store';
+import { HospitalsBuilderActions } from '@/store/builders';
+import { CurrentHospitalActions } from '@/store/current';
+import { saveHospitalThunk } from '@/store/thunks';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { AddressInput } from './inputs/address';
+import { EmailInput } from './inputs/email';
+import { NameInput } from './inputs/name';
+import { NotesInput } from './inputs/notes';
+import { PhoneInput } from './inputs/phone';
 
-type Props = {
-  isOpen: boolean;
-  onClose: () => void;
-  hospital?: Hospital | null;
-};
+export const HospitalFormModal = () => {
+  const dispatch = useAppDispatch();
+  const current = useAppSelector((state) => state.currentHospital);
+  const builder = useAppSelector((state) => state.hospitalsBuilder);
+  const isEdit = current.id !== '';
+  const isOpen = builder.isCreateOpen || isEdit;
+  const isSaving = builder.saveStatus === 'saving';
 
-export const HospitalFormModal = ({ isOpen, onClose, hospital }: Props) => {
   if (!isOpen) return null;
 
-  return (
-    <HospitalFormModalBody
-      key={hospital?.id ?? 'new'}
-      onClose={onClose}
-      hospital={hospital}
-    />
-  );
-};
-
-type BodyProps = {
-  onClose: () => void;
-  hospital?: Hospital | null;
-};
-
-const HospitalFormModalBody = ({ onClose, hospital }: BodyProps) => {
-  const dispatch = useAppDispatch();
-  const isEdit = hospital != null;
-  const [name, setName] = useState(hospital?.name ?? '');
-  const [address, setAddress] = useState(hospital?.address ?? '');
-  const [email, setEmail] = useState(hospital?.email ?? '');
-  const [phone, setPhone] = useState(hospital?.phone ?? '');
-  const [notes, setNotes] = useState(hospital?.notes ?? '');
-  const [error, setError] = useState('');
-  const [isSaving, setIsSaving] = useState(false);
+  const closeModal = () => {
+    dispatch(HospitalsBuilderActions.closeModal());
+    dispatch(CurrentHospitalActions.resetCurrentHospital());
+  };
 
   const handleSubmit = async () => {
-    setError('');
-    const trimmedName = name.trim();
-    if (!trimmedName) {
-      setError('Name is required');
-      return;
-    }
-
-    setIsSaving(true);
-    const payload = {
-      name: trimmedName,
-      address: address.trim() || null,
-      email: email.trim() || null,
-      phone: phone.trim() || null,
-      notes: notes.trim() || null,
-    };
-    const httpStatus = isEdit
-      ? await dispatch(updateHospitalThunk(hospital.id, payload))
-      : await dispatch(createHospitalThunk(payload));
-    setIsSaving(false);
-
-    if (httpStatus !== 200) {
-      setError('Failed to save');
-      return;
-    }
-    onClose();
+    const status = await dispatch(saveHospitalThunk());
+    if (status === 200) closeModal();
   };
 
   return (
@@ -72,49 +35,20 @@ const HospitalFormModalBody = ({ onClose, hospital }: BodyProps) => {
       <div className={styles.panel}>
         <h2 className={styles.heading}>{isEdit ? 'Edit facility' : 'New facility'}</h2>
         <div className={styles.fields}>
-          <input
-            type="text"
-            placeholder="Facility name"
-            className={styles.input}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Address"
-            className={styles.input}
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-          />
-          <input
-            type="email"
-            placeholder="Email"
-            className={styles.input}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="tel"
-            placeholder="Phone"
-            className={styles.input}
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-          />
-          <textarea
-            placeholder="Notes"
-            className={styles.textarea}
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-          />
-          {error && <p className={styles.error}>{error}</p>}
+          <NameInput />
+          <AddressInput />
+          <EmailInput />
+          <PhoneInput />
+          <NotesInput />
+          {builder.saveError && <p className={styles.error}>{builder.saveError}</p>}
         </div>
         <div className={styles.actions}>
-          <button type="button" onClick={onClose} className={styles.cancelButton}>
+          <button type="button" onClick={closeModal} className={styles.cancelButton}>
             Cancel
           </button>
           <button
             type="button"
-            disabled={isSaving || !name.trim()}
+            disabled={isSaving}
             onClick={() => void handleSubmit()}
             className={styles.saveButton}
           >
@@ -131,8 +65,6 @@ const styles = {
   panel: `w-full max-w-md rounded-lg bg-white p-5 shadow-lg`,
   heading: `text-lg font-semibold text-gray-900`,
   fields: `mt-4 space-y-3`,
-  input: `w-full rounded-md border border-gray-300 px-3 py-2 text-sm`,
-  textarea: `w-full rounded-md border border-gray-300 px-3 py-2 text-sm min-h-[80px]`,
   error: `text-sm text-red-600`,
   actions: `mt-5 flex justify-end gap-2`,
   cancelButton: `rounded-md px-3 py-1.5 text-sm text-gray-700`,

@@ -2,27 +2,18 @@
 
 import { DailyEntriesBuilderActions } from '@/store/builders';
 import { CurrentDailyEntryActions } from '@/store/current';
-import { useAppDispatch, useAppSelector } from '@/store';
+import { useAppDispatch } from '@/store';
 import { getTodayEntryDate } from './format-entry-date';
 import { DailyEntryFormModal } from './form-modal';
 import { DailyEntriesTable } from './table';
 
 export const DailyEntriesPage = () => {
   const dispatch = useAppDispatch();
-  const dailyEntriesBuilder = useAppSelector((state) => state.dailyEntriesBuilder);
-  const currentDailyEntry = useAppSelector((state) => state.currentDailyEntry);
 
-  const isEditing = currentDailyEntry.id !== '';
-  const isOpen = dailyEntriesBuilder.isCreateOpen || isEditing;
-  const editingEntry = isEditing ? currentDailyEntry : null;
-  const defaultEntryDate =
-    dailyEntriesBuilder.defaultEntryDate !== ''
-      ? dailyEntriesBuilder.defaultEntryDate
-      : undefined;
-
-  const closeModal = () => {
-    dispatch(DailyEntriesBuilderActions.closeModal());
+  const openCreate = (entryDate: string) => {
     dispatch(CurrentDailyEntryActions.resetCurrentDailyEntry());
+    dispatch(CurrentDailyEntryActions.patchCurrentDailyEntry({ entry_date: entryDate }));
+    dispatch(DailyEntriesBuilderActions.openCreate());
   };
 
   return (
@@ -37,14 +28,14 @@ export const DailyEntriesPage = () => {
         <div className={styles.headerActions}>
           <button
             type="button"
-            onClick={() => dispatch(DailyEntriesBuilderActions.openCreate(getTodayEntryDate()))}
+            onClick={() => openCreate(getTodayEntryDate())}
             className={styles.secondaryButton}
           >
             Log today
           </button>
           <button
             type="button"
-            onClick={() => dispatch(DailyEntriesBuilderActions.openCreate(undefined))}
+            onClick={() => openCreate(getTodayEntryDate())}
             className={styles.primaryButton}
           >
             Add entry
@@ -52,12 +43,7 @@ export const DailyEntriesPage = () => {
         </div>
       </div>
       <DailyEntriesTable />
-      <DailyEntryFormModal
-        isOpen={isOpen}
-        dailyEntry={editingEntry}
-        defaultEntryDate={defaultEntryDate}
-        onClose={closeModal}
-      />
+      <DailyEntryFormModal />
     </div>
   );
 };

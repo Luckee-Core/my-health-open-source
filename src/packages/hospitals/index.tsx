@@ -2,22 +2,16 @@
 
 import { HospitalsBuilderActions } from '@/store/builders';
 import { CurrentHospitalActions } from '@/store/current';
-import { useAppDispatch, useAppSelector } from '@/store';
+import { useAppDispatch } from '@/store';
 import { HospitalFormModal } from './form-modal';
 import { HospitalsTable } from './table';
 
 export const HospitalsPage = () => {
   const dispatch = useAppDispatch();
-  const hospitalsBuilder = useAppSelector((state) => state.hospitalsBuilder);
-  const currentHospital = useAppSelector((state) => state.currentHospital);
 
-  const isEditing = currentHospital.id !== '';
-  const isOpen = hospitalsBuilder.isCreateOpen || isEditing;
-  const editingHospital = isEditing ? currentHospital : null;
-
-  const closeModal = () => {
-    dispatch(HospitalsBuilderActions.closeModal());
+  const openCreate = () => {
     dispatch(CurrentHospitalActions.resetCurrentHospital());
+    dispatch(HospitalsBuilderActions.setIsCreateOpen(true));
   };
 
   return (
@@ -31,18 +25,14 @@ export const HospitalsPage = () => {
         </div>
         <button
           type="button"
-          onClick={() => dispatch(HospitalsBuilderActions.setIsCreateOpen(true))}
+          onClick={openCreate}
           className={styles.primaryButton}
         >
           Add facility
         </button>
       </div>
       <HospitalsTable />
-      <HospitalFormModal
-        isOpen={isOpen}
-        hospital={editingHospital}
-        onClose={closeModal}
-      />
+      <HospitalFormModal />
     </div>
   );
 };

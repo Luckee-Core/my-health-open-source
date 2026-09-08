@@ -20,6 +20,7 @@ src/
   store/        # Redux store, slices, thunks (no selector modules)
   config/       # route path constants (e.g. ORDER_DETAIL_PAGE_PATH)
   api/          # API clients/services and API contracts
+  model/        # persisted entity types (one file per table entity)
 ```
 
 ✅ **Do**
@@ -89,7 +90,7 @@ interface Job {
 ---
 
 ### 4) Barrel exports are required (`index.ts` in every folder)
-Every folder in `packages/`, `components/`, `utils/`, `store/`, and `api/` must include an `index.ts` that re-exports the folder's public API.
+Every folder in `packages/`, `components/`, `utils/`, `store/`, `api/`, and `model/` must include an `index.ts` that re-exports the folder's public API.
 
 ✅ **Do**
 ```text

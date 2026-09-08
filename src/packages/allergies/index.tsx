@@ -2,22 +2,16 @@
 
 import { AllergiesBuilderActions } from '@/store/builders';
 import { CurrentAllergyActions } from '@/store/current';
-import { useAppDispatch, useAppSelector } from '@/store';
+import { useAppDispatch } from '@/store';
 import { AllergyFormModal } from './form-modal';
 import { AllergiesTable } from './table';
 
 export const AllergiesPage = () => {
   const dispatch = useAppDispatch();
-  const allergiesBuilder = useAppSelector((state) => state.allergiesBuilder);
-  const currentAllergy = useAppSelector((state) => state.currentAllergy);
 
-  const isEditing = currentAllergy.id !== '';
-  const isOpen = allergiesBuilder.isCreateOpen || isEditing;
-  const editingAllergy = isEditing ? currentAllergy : null;
-
-  const closeModal = () => {
-    dispatch(AllergiesBuilderActions.closeModal());
+  const openCreate = () => {
     dispatch(CurrentAllergyActions.resetCurrentAllergy());
+    dispatch(AllergiesBuilderActions.setIsCreateOpen(true));
   };
 
   return (
@@ -29,14 +23,14 @@ export const AllergiesPage = () => {
         </div>
         <button
           type="button"
-          onClick={() => dispatch(AllergiesBuilderActions.setIsCreateOpen(true))}
+          onClick={openCreate}
           className={styles.primaryButton}
         >
           Add allergy
         </button>
       </div>
       <AllergiesTable />
-      <AllergyFormModal isOpen={isOpen} allergy={editingAllergy} onClose={closeModal} />
+      <AllergyFormModal />
     </div>
   );
 };

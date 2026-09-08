@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react';
 import { useAppSelector } from '@/store';
+import { InsuranceCoverageRow } from './row';
 
 export const InsuranceCoveragesTable = () => {
   const dump = useAppSelector((state) => state.insuranceCoverages);
@@ -25,12 +26,7 @@ export const InsuranceCoveragesTable = () => {
         </thead>
         <tbody>
           {sorted.map((row) => (
-            <tr key={row.id} className={styles.row}>
-              <td className={styles.td}>{row.payer_name}</td>
-              <td className={styles.td}>{row.plan_name ?? '—'}</td>
-              <td className={styles.td}>{row.member_id ?? '—'}</td>
-              <td className={styles.td}>{row.status ?? '—'}</td>
-            </tr>
+            <InsuranceCoverageRow key={row.id} row={row} />
           ))}
           {sorted.length === 0 && (
             <tr>
@@ -50,8 +46,5 @@ const styles = {
   table: `min-w-full overflow-x-auto rounded-lg border border-gray-200 bg-white text-sm`,
   thead: `bg-gray-50 text-left text-gray-600`,
   th: `px-4 py-2 font-medium`,
-  row: `border-t border-gray-100`,
-  td: `px-4 py-2 align-top`,
   empty: `px-4 py-8 text-center text-gray-500`,
-  muted: `text-gray-500`,
 } as const;

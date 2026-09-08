@@ -1,150 +1,59 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import type { DailyEntry } from '@/model';
-import { getTodayEntryDate } from '../format-entry-date';
-import { createDailyEntryThunk, updateDailyEntryThunk } from '@/store/thunks';
+import { useMemo } from 'react';
+import { DailyEntriesBuilderActions } from '@/store/builders';
+import { CurrentDailyEntryActions } from '@/store/current';
+import { saveDailyEntryThunk } from '@/store/thunks';
 import { useAppDispatch, useAppSelector } from '@/store';
+import { EntryDateInput } from './inputs/entry-date';
+import { FocusAreaInput } from './inputs/focus-area';
+import { NotesInput } from './inputs/notes';
 
-type Props = {
-  isOpen: boolean;
-  onClose: () => void;
-  dailyEntry?: DailyEntry | null;
-  defaultEntryDate?: string;
-};
+export const DailyEntryFormModal = () => {
+  const dispatch = useAppDispatch();
+  const current = useAppSelector((state) => state.currentDailyEntry);
+  const builder = useAppSelector((state) => state.dailyEntriesBuilder);
+  const focusAreasDump = useAppSelector((state) => state.focusAreas);
+  const focusAreas = useMemo(() => Object.values(focusAreasDump), [focusAreasDump]);
+  const isEdit = current.id !== '';
+  const isOpen = builder.isCreateOpen || isEdit;
+  const isSaving = builder.saveStatus === 'saving';
 
-export const DailyEntryFormModal = ({
-  isOpen,
-  onClose,
-  dailyEntry,
-  defaultEntryDate,
-}: Props) => {
   if (!isOpen) return null;
 
-  const formKey = dailyEntry?.id ?? `${defaultEntryDate ?? 'new'}`;
-
-  return (
-    <DailyEntryFormModalBody
-      key={formKey}
-      onClose={onClose}
-      dailyEntry={dailyEntry}
-      defaultEntryDate={defaultEntryDate}
-    />
-  );
-};
-
-type BodyProps = {
-  onClose: () => void;
-  dailyEntry?: DailyEntry | null;
-  defaultEntryDate?: string;
-};
-
-const DailyEntryFormModalBody = ({
-  onClose,
-  dailyEntry,
-  defaultEntryDate,
-}: BodyProps) => {
-  const dispatch = useAppDispatch();
-  const focusAreasDump = useAppSelector((state) => state.focusAreas);
-
-  const focusAreas = useMemo(() => Object.values(focusAreasDump), [focusAreasDump]);
-  const focusAreaOptions = useMemo(() => {
-    return [...focusAreas].sort((a, b) => a.name.localeCompare(b.name));
-  }, [focusAreas]);
-
-  const isEdit = dailyEntry != null;
-  const [entryDate, setEntryDate] = useState(
-    dailyEntry?.entry_date ?? defaultEntryDate ?? getTodayEntryDate(),
-  );
-  const [focusAreaId, setFocusAreaId] = useState(
-    dailyEntry?.focus_area_id ?? focusAreaOptions[0]?.id ?? '',
-  );
-  const [notes, setNotes] = useState(dailyEntry?.notes ?? '');
-  const [error, setError] = useState('');
-  const [isSaving, setIsSaving] = useState(false);
+  const closeModal = () => {
+    dispatch(DailyEntriesBuilderActions.closeModal());
+    dispatch(CurrentDailyEntryActions.resetCurrentDailyEntry());
+  };
 
   const handleSubmit = async () => {
-    setError('');
-    if (!entryDate.trim()) {
-      setError('Date is required');
-      return;
-    }
-    if (!focusAreaId) {
-      setError('Focus area is required');
-      return;
-    }
-
-    setIsSaving(true);
-    const payload = {
-      entry_date: entryDate,
-      focus_area_id: focusAreaId,
-      notes: notes.trim() || null,
-    };
-    const httpStatus = isEdit
-      ? await dispatch(updateDailyEntryThunk(dailyEntry.id, payload))
-      : await dispatch(createDailyEntryThunk(payload));
-    setIsSaving(false);
-
-    if (httpStatus !== 200) {
-      setError('Failed to save');
-      return;
-    }
-    onClose();
+    const status = await dispatch(saveDailyEntryThunk());
+    if (status === 200) closeModal();
   };
 
   return (
     <div className={styles.overlay}>
       <div className={styles.panel}>
         <h2 className={styles.heading}>{isEdit ? 'Edit daily log' : 'New daily log'}</h2>
-        {focusAreaOptions.length === 0 ? (
+        {focusAreas.length === 0 ? (
           <p className={styles.hint}>
             Define at least one focus area before logging. Go to Focus areas in the sidebar.
           </p>
         ) : (
           <div className={styles.fields}>
-            <label className={styles.label}>
-              Date
-              <input
-                type="date"
-                className={styles.input}
-                value={entryDate}
-                onChange={(e) => setEntryDate(e.target.value)}
-              />
-            </label>
-            <label className={styles.label}>
-              Focus area
-              <select
-                className={styles.input}
-                value={focusAreaId}
-                onChange={(e) => setFocusAreaId(e.target.value)}
-              >
-                {focusAreaOptions.map((area) => (
-                  <option key={area.id} value={area.id}>
-                    {area.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className={styles.label}>
-              Notes
-              <textarea
-                placeholder="What happened today for this area?"
-                className={styles.textarea}
-                rows={5}
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-              />
-            </label>
-            {error && <p className={styles.error}>{error}</p>}
+            <EntryDateInput />
+            <FocusAreaInput />
+            <NotesInput />
+            {builder.saveError && <p className={styles.error}>{builder.saveError}</p>}
           </div>
         )}
         <div className={styles.actions}>
-          <button type="button" onClick={onClose} className={styles.cancelButton}>
+          <button type="button" onClick={closeModal} className={styles.cancelButton}>
             Cancel
           </button>
           <button
             type="button"
-            disabled={isSaving || focusAreaOptions.length === 0 || !focusAreaId}
+            disabled={isSaving || focusAreas.length === 0}
             onClick={() => void handleSubmit()}
             className={styles.saveButton}
           >
@@ -162,9 +71,6 @@ const styles = {
   heading: `text-lg font-semibold text-gray-900`,
   hint: `mt-4 text-sm text-gray-600`,
   fields: `mt-4 space-y-3`,
-  label: `block text-sm font-medium text-gray-700 space-y-1`,
-  input: `w-full rounded-md border border-gray-300 px-3 py-2 text-sm`,
-  textarea: `w-full rounded-md border border-gray-300 px-3 py-2 text-sm`,
   error: `text-sm text-red-600`,
   actions: `mt-5 flex justify-end gap-2`,
   cancelButton: `rounded-md px-3 py-1.5 text-sm text-gray-700`,

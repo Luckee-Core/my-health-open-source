@@ -1,102 +1,37 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import type { Doctor } from '@/model';
-import { resolveDoctorRelationsForSave } from '../resolve-doctor-relations-for-save';
-import { createDoctorThunk, updateDoctorThunk } from '@/store/thunks';
+import { DoctorsBuilderActions } from '@/store/builders';
+import { CurrentDoctorActions } from '@/store/current';
+import { saveDoctorThunk } from '@/store/thunks';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { store } from '@/store/store';
+import { FaxInput } from './inputs/fax';
+import { HospitalInput } from './inputs/hospital';
+import { NameInput } from './inputs/name';
+import { NewHospitalNameInput } from './inputs/new-hospital-name';
+import { NewSpecialtyNameInput } from './inputs/new-specialty-name';
+import { NotesInput } from './inputs/notes';
+import { NpiInput } from './inputs/npi';
+import { PhoneInput } from './inputs/phone';
+import { SpecialtyInput } from './inputs/specialty';
 
-type Props = {
-  isOpen: boolean;
-  onClose: () => void;
-  doctor?: Doctor | null;
-};
+export const DoctorFormModal = () => {
+  const dispatch = useAppDispatch();
+  const current = useAppSelector((state) => state.currentDoctor);
+  const builder = useAppSelector((state) => state.doctorsBuilder);
+  const isEdit = current.id !== '';
+  const isOpen = builder.isCreateOpen || isEdit;
+  const isSaving = builder.saveStatus === 'saving';
 
-export const DoctorFormModal = ({ isOpen, onClose, doctor }: Props) => {
   if (!isOpen) return null;
 
-  return (
-    <DoctorFormModalBody key={doctor?.id ?? 'new'} onClose={onClose} doctor={doctor} />
-  );
-};
-
-type BodyProps = {
-  onClose: () => void;
-  doctor?: Doctor | null;
-};
-
-const DoctorFormModalBody = ({ onClose, doctor }: BodyProps) => {
-  const dispatch = useAppDispatch();
-  const hospitalsDump = useAppSelector((state) => state.hospitals);
-  const specialtiesDump = useAppSelector((state) => state.specialties);
-
-  const hospitals = useMemo(() => Object.values(hospitalsDump), [hospitalsDump]);
-  const specialties = useMemo(() => Object.values(specialtiesDump), [specialtiesDump]);
-  const isEdit = doctor != null;
-  const [name, setName] = useState(doctor?.name ?? '');
-  const [hospitalId, setHospitalId] = useState(doctor?.hospital_id ?? '');
-  const [newHospitalName, setNewHospitalName] = useState('');
-  const [specialtyId, setSpecialtyId] = useState(doctor?.specialty_id ?? '');
-  const [newSpecialtyName, setNewSpecialtyName] = useState('');
-  const [notes, setNotes] = useState(doctor?.notes ?? '');
-  const [npi, setNpi] = useState(doctor?.npi ?? '');
-  const [phone, setPhone] = useState(doctor?.phone ?? '');
-  const [fax, setFax] = useState(doctor?.fax ?? '');
-  const [error, setError] = useState('');
-  const [isSaving, setIsSaving] = useState(false);
-
-  const sortedHospitals = useMemo(
-    () => [...hospitals].sort((a, b) => a.name.localeCompare(b.name)),
-    [hospitals],
-  );
-  const sortedSpecialties = useMemo(
-    () => [...specialties].sort((a, b) => a.name.localeCompare(b.name)),
-    [specialties],
-  );
+  const closeModal = () => {
+    dispatch(DoctorsBuilderActions.closeModal());
+    dispatch(CurrentDoctorActions.resetCurrentDoctor());
+  };
 
   const handleSubmit = async () => {
-    setError('');
-    const trimmedName = name.trim();
-    if (!trimmedName) {
-      setError('Name is required');
-      return;
-    }
-
-    setIsSaving(true);
-    const resolved = await resolveDoctorRelationsForSave(
-      dispatch,
-      () => store.getState(),
-      hospitalId,
-      newHospitalName,
-      specialtyId,
-      newSpecialtyName,
-    );
-    if (!resolved.ok) {
-      setIsSaving(false);
-      setError(resolved.message);
-      return;
-    }
-
-    const payload = {
-      name: trimmedName,
-      hospital_id: resolved.hospitalId,
-      specialty_id: resolved.specialtyId,
-      notes: notes.trim() || null,
-      npi: npi.trim() || null,
-      phone: phone.trim() || null,
-      fax: fax.trim() || null,
-    };
-    const httpStatus = isEdit
-      ? await dispatch(updateDoctorThunk(doctor.id, payload))
-      : await dispatch(createDoctorThunk(payload));
-    setIsSaving(false);
-
-    if (httpStatus !== 200) {
-      setError('Failed to save');
-      return;
-    }
-    onClose();
+    const status = await dispatch(saveDoctorThunk());
+    if (status === 200) closeModal();
   };
 
   return (
@@ -104,95 +39,24 @@ const DoctorFormModalBody = ({ onClose, doctor }: BodyProps) => {
       <div className={styles.panel}>
         <h2 className={styles.heading}>{isEdit ? 'Edit doctor' : 'New doctor'}</h2>
         <div className={styles.fields}>
-          <input
-            type="text"
-            placeholder="Doctor name"
-            className={styles.input}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <label className={styles.label}>
-            Facility
-            <select
-              className={styles.input}
-              value={hospitalId}
-              onChange={(e) => setHospitalId(e.target.value)}
-              disabled={Boolean(newHospitalName.trim())}
-            >
-              <option value="">Select facility…</option>
-              {sortedHospitals.map((h) => (
-                <option key={h.id} value={h.id}>
-                  {h.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <input
-            type="text"
-            placeholder="Or new facility name"
-            className={styles.input}
-            value={newHospitalName}
-            onChange={(e) => setNewHospitalName(e.target.value)}
-          />
-          <label className={styles.label}>
-            Specialty
-            <select
-              className={styles.input}
-              value={specialtyId}
-              onChange={(e) => setSpecialtyId(e.target.value)}
-              disabled={Boolean(newSpecialtyName.trim())}
-            >
-              <option value="">Select specialty…</option>
-              {sortedSpecialties.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <input
-            type="text"
-            placeholder="Or new specialty name"
-            className={styles.input}
-            value={newSpecialtyName}
-            onChange={(e) => setNewSpecialtyName(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="NPI"
-            className={styles.input}
-            value={npi}
-            onChange={(e) => setNpi(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Phone"
-            className={styles.input}
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Fax"
-            className={styles.input}
-            value={fax}
-            onChange={(e) => setFax(e.target.value)}
-          />
-          <textarea
-            placeholder="Notes"
-            className={styles.textarea}
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-          />
-          {error && <p className={styles.error}>{error}</p>}
+          <NameInput />
+          <HospitalInput />
+          <NewHospitalNameInput />
+          <SpecialtyInput />
+          <NewSpecialtyNameInput />
+          <NpiInput />
+          <PhoneInput />
+          <FaxInput />
+          <NotesInput />
+          {builder.saveError && <p className={styles.error}>{builder.saveError}</p>}
         </div>
         <div className={styles.actions}>
-          <button type="button" onClick={onClose} className={styles.cancelButton}>
+          <button type="button" onClick={closeModal} className={styles.cancelButton}>
             Cancel
           </button>
           <button
             type="button"
-            disabled={isSaving || !name.trim()}
+            disabled={isSaving}
             onClick={() => void handleSubmit()}
             className={styles.saveButton}
           >
@@ -209,9 +73,6 @@ const styles = {
   panel: `w-full max-w-md rounded-lg bg-white p-5 shadow-lg max-h-[90vh] overflow-y-auto`,
   heading: `text-lg font-semibold text-gray-900`,
   fields: `mt-4 space-y-3`,
-  label: `block text-sm text-gray-700 space-y-1`,
-  input: `w-full rounded-md border border-gray-300 px-3 py-2 text-sm`,
-  textarea: `w-full rounded-md border border-gray-300 px-3 py-2 text-sm min-h-[80px]`,
   error: `text-sm text-red-600`,
   actions: `mt-5 flex justify-end gap-2`,
   cancelButton: `rounded-md px-3 py-1.5 text-sm text-gray-700`,

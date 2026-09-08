@@ -4,7 +4,7 @@ import { TherapyExercisesActions } from '@/store/dumps';
 import type { AppThunk } from '@/store/types';
 
 /**
- * Commits reviewed therapy exercises from the import builder.
+ * Commits checked therapy exercises from the import builder. Unchecked rows are skipped.
  */
 export const commitTherapyExerciseImportThunk =
   (): AppThunk<Promise<200 | 400 | 500>> =>
@@ -14,8 +14,11 @@ export const commitTherapyExerciseImportThunk =
       dispatch(TherapyExerciseImportBuilderActions.setErrorMessage('Missing preview id'));
       return 400;
     }
-    if (builder.exercises.length === 0) {
-      dispatch(TherapyExerciseImportBuilderActions.setErrorMessage('No exercises to import'));
+    const selected = builder.exercises.filter((_, index) =>
+      builder.selectedIndexes.includes(index),
+    );
+    if (selected.length === 0) {
+      dispatch(TherapyExerciseImportBuilderActions.setErrorMessage('Select at least one exercise'));
       return 400;
     }
 
@@ -23,7 +26,7 @@ export const commitTherapyExerciseImportThunk =
     dispatch(TherapyExerciseImportBuilderActions.setStep('committing'));
     dispatch(TherapyExerciseImportBuilderActions.setErrorMessage(''));
 
-    const result = await commitTherapyExerciseImport(builder.previewId, builder.exercises);
+    const result = await commitTherapyExerciseImport(builder.previewId, selected);
     if (!result.ok) {
       dispatch(TherapyExerciseImportBuilderActions.setCommitStatus('error'));
       dispatch(

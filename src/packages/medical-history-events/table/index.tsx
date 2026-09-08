@@ -2,15 +2,9 @@
 
 import { useMemo, useState } from 'react';
 import type { MedicalHistoryEvent } from '@/model';
-import { MEDICAL_HISTORY_CATEGORY_LABELS } from '@/model';
 import { deleteMedicalHistoryEventThunk } from '@/store/thunks';
-import { CurrentMedicalHistoryEventActions } from '@/store/current';
 import { useAppDispatch, useAppSelector } from '@/store';
-
-const truncate = (value: string | null, max = 80): string => {
-  if (!value) return '—';
-  return value.length > max ? `${value.slice(0, max)}…` : value;
-};
+import { MedicalHistoryEventRow } from './row';
 
 export const MedicalHistoryEventsTable = () => {
   const dispatch = useAppDispatch();
@@ -68,41 +62,13 @@ export const MedicalHistoryEventsTable = () => {
         </thead>
         <tbody>
           {sorted.map((row) => (
-            <tr key={row.id} className={styles.row}>
-              <td className={styles.td}>{row.event_date}</td>
-              <td className={styles.td}>{row.title}</td>
-              <td className={styles.td}>
-                <span className={styles.badge}>
-                  {MEDICAL_HISTORY_CATEGORY_LABELS[row.category]}
-                </span>
-              </td>
-              <td className={styles.tdMuted}>{truncate(row.description)}</td>
-              <td className={styles.tdMuted}>
-                {row.doctor_id ? doctorNameById[row.doctor_id] ?? '—' : '—'}
-              </td>
-              <td className={styles.tdActions}>
-                <div className={styles.actions}>
-                  <button
-                    type="button"
-                    className={styles.linkButton}
-                    onClick={() =>
-                      dispatch(CurrentMedicalHistoryEventActions.setCurrentMedicalHistoryEvent(row))
-                    }
-                    disabled={busyId === row.id}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    type="button"
-                    className={styles.dangerButton}
-                    onClick={() => void handleDelete(row)}
-                    disabled={busyId === row.id}
-                  >
-                    Delete
-                  </button>
-                </div>
-              </td>
-            </tr>
+            <MedicalHistoryEventRow
+              key={row.id}
+              row={row}
+              busy={busyId === row.id}
+              doctorName={row.doctor_id ? doctorNameById[row.doctor_id] ?? '—' : '—'}
+              onDelete={(event) => void handleDelete(event)}
+            />
           ))}
           {sorted.length === 0 && (
             <tr>
@@ -124,13 +90,5 @@ const styles = {
   thead: `bg-gray-50 text-left text-gray-600`,
   th: `px-4 py-2 font-medium`,
   thActions: `px-4 py-2 font-medium text-right`,
-  row: `border-t border-gray-100`,
-  td: `px-4 py-2 align-top`,
-  tdMuted: `px-4 py-2 align-top text-gray-600`,
-  tdActions: `px-4 py-2 text-right align-top`,
-  badge: `inline-block rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-700`,
-  actions: `flex justify-end gap-2`,
-  linkButton: `text-sm text-gray-700 hover:text-gray-900 disabled:opacity-50`,
-  dangerButton: `text-sm text-red-600 hover:text-red-800 disabled:opacity-50`,
   empty: `px-4 py-8 text-center text-gray-500`,
 } as const;

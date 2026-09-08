@@ -1,4 +1,5 @@
 import { deleteTherapyExercise } from '@/api/therapy-exercises';
+import { CurrentTherapyExerciseActions } from '@/store/current';
 import { TherapyExercisesActions } from '@/store/dumps';
 import type { AppThunk } from '@/store/types';
 
@@ -7,11 +8,14 @@ import type { AppThunk } from '@/store/types';
  */
 export const deleteTherapyExerciseThunk =
   (id: string): AppThunk<Promise<200 | 400 | 500>> =>
-  async (dispatch) => {
+  async (dispatch, getState) => {
     const result = await deleteTherapyExercise(id);
     if (!result.ok) {
       return result.status >= 500 ? 500 : 400;
     }
     dispatch(TherapyExercisesActions.removeTherapyExercise(id));
+    if (getState().currentTherapyExercise.id === id) {
+      dispatch(CurrentTherapyExerciseActions.resetCurrentTherapyExercise());
+    }
     return 200;
   };

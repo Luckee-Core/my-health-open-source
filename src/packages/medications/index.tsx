@@ -3,24 +3,18 @@
 import { useState } from 'react';
 import { MedicationsBuilderActions } from '@/store/builders';
 import { CurrentMedicationActions } from '@/store/current';
-import { useAppDispatch, useAppSelector } from '@/store';
+import { useAppDispatch } from '@/store';
 import { MedicationFormModal } from './form-modal';
 import { MedicationsPasteImportModal } from './paste-import-modal';
 import { MedicationsTable } from './table';
 
 export const MedicationsPage = () => {
   const dispatch = useAppDispatch();
-  const medicationsBuilder = useAppSelector((state) => state.medicationsBuilder);
-  const currentMedication = useAppSelector((state) => state.currentMedication);
   const [isPasteOpen, setIsPasteOpen] = useState(false);
 
-  const isEditing = currentMedication.id !== '';
-  const isOpen = medicationsBuilder.isCreateOpen || isEditing;
-  const editingMedication = isEditing ? currentMedication : null;
-
-  const closeModal = () => {
-    dispatch(MedicationsBuilderActions.closeModal());
+  const openCreate = () => {
     dispatch(CurrentMedicationActions.resetCurrentMedication());
+    dispatch(MedicationsBuilderActions.setIsCreateOpen(true));
   };
 
   return (
@@ -40,7 +34,7 @@ export const MedicationsPage = () => {
           </button>
           <button
             type="button"
-            onClick={() => dispatch(MedicationsBuilderActions.setIsCreateOpen(true))}
+            onClick={openCreate}
             className={styles.primaryButton}
           >
             Add medication
@@ -48,7 +42,7 @@ export const MedicationsPage = () => {
         </div>
       </div>
       <MedicationsTable />
-      <MedicationFormModal isOpen={isOpen} medication={editingMedication} onClose={closeModal} />
+      <MedicationFormModal />
       <MedicationsPasteImportModal
         isOpen={isPasteOpen}
         onClose={() => setIsPasteOpen(false)}

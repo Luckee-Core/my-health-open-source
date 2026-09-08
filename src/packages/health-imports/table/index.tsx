@@ -3,6 +3,7 @@
 import { useEffect, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { loadHealthImportsThunk } from '@/store/thunks';
+import { HealthImportRow } from './row';
 
 export const HealthImportsTable = () => {
   const dump = useAppSelector((state) => state.healthImports);
@@ -32,12 +33,7 @@ export const HealthImportsTable = () => {
         </thead>
         <tbody>
           {sorted.map((row) => (
-            <tr key={row.id} className={styles.row}>
-              <td className={styles.td}>{row.filename}</td>
-              <td className={styles.td}>{row.status}</td>
-              <td className={styles.td}>{String(row.document_count)}</td>
-              <td className={styles.td}>{new Date(row.created_at).toLocaleString()}</td>
-            </tr>
+            <HealthImportRow key={row.id} row={row} />
           ))}
           {sorted.length === 0 && (
             <tr>
@@ -57,8 +53,5 @@ const styles = {
   table: `min-w-full overflow-x-auto rounded-lg border border-gray-200 bg-white text-sm`,
   thead: `bg-gray-50 text-left text-gray-600`,
   th: `px-4 py-2 font-medium`,
-  row: `border-t border-gray-100`,
-  td: `px-4 py-2 align-top`,
   empty: `px-4 py-8 text-center text-gray-500`,
-  muted: `text-gray-500`,
 } as const;

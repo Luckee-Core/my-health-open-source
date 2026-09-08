@@ -2,9 +2,10 @@
 
 import { useMemo } from 'react';
 import { useAppSelector } from '@/store';
-import { getLocalDateKey } from '@/utils/date/get-local-date-key';
+import { getLocalDateKey } from '@/utils/date';
 import { buildTodayTherapyRows } from '../build-today-therapy-rows';
-import { TherapyTrackerRow } from './tracker-row';
+import { compareTodayTherapyRows } from '../compare-today-therapy-rows';
+import { TherapyTrackerRow } from './row';
 
 type Props = {
   variant?: 'full' | 'compact';
@@ -24,10 +25,7 @@ export const TodayTracker = ({
   const rows = useMemo(() => {
     const built = buildTodayTherapyRows(exercisesDump, logsDump, todayKey);
     if (!incompleteFirst) return built;
-    return [...built].sort((a, b) => {
-      if (a.isComplete === b.isComplete) return 0;
-      return a.isComplete ? 1 : -1;
-    });
+    return [...built].sort(compareTodayTherapyRows);
   }, [exercisesDump, logsDump, todayKey, incompleteFirst]);
 
   if (rows.length === 0) {
@@ -39,8 +37,7 @@ export const TodayTracker = ({
       {rows.map((row) => (
         <TherapyTrackerRow
           key={row.exercise.id}
-          exercise={row.exercise}
-          completedCount={row.completedCount}
+          row={row}
           variant={variant}
           showTimer={showTimer}
         />

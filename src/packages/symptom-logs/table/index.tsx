@@ -3,17 +3,8 @@
 import { useMemo, useState } from 'react';
 import type { SymptomLog } from '@/model';
 import { deleteSymptomLogThunk } from '@/store/thunks';
-import { CurrentSymptomLogActions } from '@/store/current';
 import { useAppDispatch, useAppSelector } from '@/store';
-
-const truncate = (value: string | null, max = 60): string => {
-  if (!value) return '—';
-  return value.length > max ? `${value.slice(0, max)}…` : value;
-};
-
-const formatRecordedAt = (iso: string): string => {
-  return new Date(iso).toLocaleString();
-};
+import { SymptomLogRow } from './row';
 
 export const SymptomLogsTable = () => {
   const dispatch = useAppDispatch();
@@ -81,36 +72,13 @@ export const SymptomLogsTable = () => {
         </thead>
         <tbody>
           {sorted.map((row) => (
-            <tr key={row.id} className={styles.row}>
-              <td className={styles.tdMuted}>{formatRecordedAt(row.recorded_at)}</td>
-              <td className={styles.td}>{row.name}</td>
-              <td className={styles.tdRight}>{row.severity ?? '—'}</td>
-              <td className={styles.tdMuted}>{truncate(row.triggers, 40)}</td>
-              <td className={styles.tdMuted}>{truncate(row.notes)}</td>
-              <td className={styles.tdMuted}>
-                {row.focus_area_id ? focusAreaNameById[row.focus_area_id] ?? '—' : '—'}
-              </td>
-              <td className={styles.tdActions}>
-                <div className={styles.actions}>
-                  <button
-                    type="button"
-                    className={styles.linkButton}
-                    onClick={() => dispatch(CurrentSymptomLogActions.setCurrentSymptomLog(row))}
-                    disabled={busyId === row.id}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    type="button"
-                    className={styles.dangerButton}
-                    onClick={() => void handleDelete(row)}
-                    disabled={busyId === row.id}
-                  >
-                    Delete
-                  </button>
-                </div>
-              </td>
-            </tr>
+            <SymptomLogRow
+              key={row.id}
+              row={row}
+              busy={busyId === row.id}
+              focusAreaName={row.focus_area_id ? focusAreaNameById[row.focus_area_id] ?? '—' : '—'}
+              onDelete={(log) => void handleDelete(log)}
+            />
           ))}
           {sorted.length === 0 && (
             <tr>
@@ -135,13 +103,5 @@ const styles = {
   th: `px-4 py-2 font-medium`,
   thRight: `px-4 py-2 font-medium text-right`,
   thActions: `px-4 py-2 font-medium text-right`,
-  row: `border-t border-gray-100`,
-  td: `px-4 py-2 align-top`,
-  tdMuted: `px-4 py-2 align-top text-gray-600`,
-  tdRight: `px-4 py-2 text-right align-top`,
-  tdActions: `px-4 py-2 text-right align-top`,
-  actions: `flex justify-end gap-2`,
-  linkButton: `text-sm text-gray-700 hover:text-gray-900 disabled:opacity-50`,
-  dangerButton: `text-sm text-red-600 hover:text-red-800 disabled:opacity-50`,
   empty: `px-4 py-8 text-center text-gray-500`,
 } as const;

@@ -3,13 +3,8 @@
 import { useMemo, useState } from 'react';
 import type { FocusArea } from '@/model';
 import { deleteFocusAreaThunk } from '@/store/thunks';
-import { CurrentFocusAreaActions } from '@/store/current';
 import { useAppDispatch, useAppSelector } from '@/store';
-
-const truncate = (value: string | null, max = 80): string => {
-  if (!value) return '—';
-  return value.length > max ? `${value.slice(0, max)}…` : value;
-};
+import { FocusAreaRow } from './row';
 
 export const FocusAreasTable = () => {
   const dispatch = useAppDispatch();
@@ -65,31 +60,13 @@ export const FocusAreasTable = () => {
         </thead>
         <tbody>
           {sorted.map((row) => (
-            <tr key={row.id} className={styles.row}>
-              <td className={styles.td}>{row.name}</td>
-              <td className={styles.tdMuted}>{truncate(row.description)}</td>
-              <td className={styles.tdRight}>{entryCountByFocusAreaId[row.id] ?? 0}</td>
-              <td className={styles.tdActions}>
-                <div className={styles.actions}>
-                  <button
-                    type="button"
-                    className={styles.linkButton}
-                    onClick={() => dispatch(CurrentFocusAreaActions.setCurrentFocusArea(row))}
-                    disabled={busyId === row.id}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    type="button"
-                    className={styles.dangerButton}
-                    onClick={() => void handleDelete(row)}
-                    disabled={busyId === row.id}
-                  >
-                    Delete
-                  </button>
-                </div>
-              </td>
-            </tr>
+            <FocusAreaRow
+              key={row.id}
+              row={row}
+              busy={busyId === row.id}
+              entryCount={entryCountByFocusAreaId[row.id] ?? 0}
+              onDelete={(focusArea) => void handleDelete(focusArea)}
+            />
           ))}
           {sorted.length === 0 && (
             <tr>
@@ -112,13 +89,5 @@ const styles = {
   th: `px-4 py-2 font-medium`,
   thRight: `px-4 py-2 font-medium text-right`,
   thActions: `px-4 py-2 font-medium text-right`,
-  row: `border-t border-gray-100`,
-  td: `px-4 py-2 align-top`,
-  tdMuted: `px-4 py-2 align-top text-gray-600`,
-  tdRight: `px-4 py-2 text-right align-top`,
-  tdActions: `px-4 py-2 text-right align-top`,
-  actions: `flex justify-end gap-2`,
-  linkButton: `text-sm text-gray-700 hover:text-gray-900 disabled:opacity-50`,
-  dangerButton: `text-sm text-red-600 hover:text-red-800 disabled:opacity-50`,
   empty: `px-4 py-8 text-center text-gray-500`,
 } as const;

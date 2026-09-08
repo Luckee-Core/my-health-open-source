@@ -8,6 +8,10 @@ export const currentSymptomLogSlice = createSlice({
   initialState,
   reducers: {
     setCurrentSymptomLog: (_state, action: PayloadAction<SymptomLog>) => action.payload,
+    patchCurrentSymptomLog: (state, action: PayloadAction<Partial<SymptomLog>>) => ({
+      ...state,
+      ...action.payload,
+    }),
     resetCurrentSymptomLog: () => EMPTY_SYMPTOM_LOG,
   },
 });

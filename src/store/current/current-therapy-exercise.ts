@@ -8,6 +8,10 @@ export const currentTherapyExerciseSlice = createSlice({
   initialState,
   reducers: {
     setCurrentTherapyExercise: (_state, action: PayloadAction<TherapyExercise>) => action.payload,
+    patchCurrentTherapyExercise: (state, action: PayloadAction<Partial<TherapyExercise>>) => ({
+      ...state,
+      ...action.payload,
+    }),
     resetCurrentTherapyExercise: () => EMPTY_THERAPY_EXERCISE,
   },
 });

@@ -6,7 +6,11 @@ import {
   fromExpressVoidBody,
 } from '@/api/_shared/express-response';
 import type { ApiResponse } from '@/api/types';
-import type { TherapyExercise, TherapyExerciseTrackingKind } from '@/model';
+import type {
+  TherapyExercise,
+  TherapyExerciseFrequency,
+  TherapyExerciseTrackingKind,
+} from '@/model';
 
 type ListBody = { success: boolean; data?: TherapyExercise[]; error?: string };
 type EntityBody = { success: boolean; data?: TherapyExercise; error?: string };
@@ -18,6 +22,7 @@ export type CreateTherapyExercisePayload = {
   tracking_kind: TherapyExerciseTrackingKind;
   target_count: number;
   unit_size?: number;
+  frequency?: TherapyExerciseFrequency;
   is_active?: boolean;
   sort_order?: number;
 };

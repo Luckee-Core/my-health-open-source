@@ -1,24 +1,10 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import type { Appointment, AppointmentStatus } from '@/model';
-import { STATUS_LABELS } from '../format-datetime-local';
+import type { Appointment } from '@/model';
 import { deleteAppointmentThunk } from '@/store/thunks';
-import { CurrentAppointmentActions } from '@/store/current';
 import { useAppDispatch, useAppSelector } from '@/store';
-
-const formatScheduledAt = (iso: string): string => {
-  return new Date(iso).toLocaleString(undefined, {
-    dateStyle: 'medium',
-    timeStyle: 'short',
-  });
-};
-
-const statusBadgeClass = (status: AppointmentStatus): string => {
-  if (status === 'completed') return styles.badgeCompleted;
-  if (status === 'cancelled') return styles.badgeCancelled;
-  return styles.badgeScheduled;
-};
+import { AppointmentRow } from './row';
 
 export const AppointmentsTable = () => {
   const dispatch = useAppDispatch();
@@ -72,37 +58,15 @@ export const AppointmentsTable = () => {
             const doctor = doctors[row.doctor_id];
             const hospital = doctor ? hospitals[doctor.hospital_id] : undefined;
             return (
-              <tr key={row.id} className={styles.row}>
-                <td className={styles.td}>{formatScheduledAt(row.scheduled_at)}</td>
-                <td className={styles.td}>{doctor?.name ?? '—'}</td>
-                <td className={styles.td}>{hospital?.name ?? '—'}</td>
-                <td className={styles.td}>{hospital?.address ?? '—'}</td>
-                <td className={styles.td}>
-                  <span className={statusBadgeClass(row.status)}>{STATUS_LABELS[row.status]}</span>
-                </td>
-                <td className={styles.td}>{row.appointment_type ?? '—'}</td>
-                <td className={styles.td}>{row.reason ?? '—'}</td>
-                <td className={styles.tdActions}>
-                  <div className={styles.actions}>
-                    <button
-                      type="button"
-                      className={styles.linkButton}
-                      onClick={() => dispatch(CurrentAppointmentActions.setCurrentAppointment(row))}
-                      disabled={busyId === row.id}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      type="button"
-                      className={styles.dangerButton}
-                      onClick={() => void handleDelete(row)}
-                      disabled={busyId === row.id}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </td>
-              </tr>
+              <AppointmentRow
+                key={row.id}
+                row={row}
+                busy={busyId === row.id}
+                doctorName={doctor?.name ?? '—'}
+                hospitalName={hospital?.name ?? '—'}
+                hospitalAddress={hospital?.address ?? '—'}
+                onDelete={(appointment) => void handleDelete(appointment)}
+              />
             );
           })}
           {sorted.length === 0 && (
@@ -125,14 +89,5 @@ const styles = {
   thead: `bg-gray-50 text-left text-gray-600`,
   th: `px-4 py-2 font-medium`,
   thActions: `px-4 py-2 font-medium text-right`,
-  row: `border-t border-gray-100`,
-  td: `px-4 py-2 align-top`,
-  tdActions: `px-4 py-2 text-right align-top`,
-  actions: `flex justify-end gap-2`,
-  linkButton: `text-sm text-gray-700 hover:text-gray-900 disabled:opacity-50`,
-  dangerButton: `text-sm text-red-600 hover:text-red-800 disabled:opacity-50`,
   empty: `px-4 py-8 text-center text-gray-500`,
-  badgeScheduled: `inline-flex rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700`,
-  badgeCompleted: `inline-flex rounded-full bg-green-50 px-2 py-0.5 text-xs font-medium text-green-700`,
-  badgeCancelled: `inline-flex rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600`,
 } as const;

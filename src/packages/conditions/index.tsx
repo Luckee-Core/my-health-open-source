@@ -3,24 +3,18 @@
 import { useState } from 'react';
 import { ConditionsBuilderActions } from '@/store/builders';
 import { CurrentConditionActions } from '@/store/current';
-import { useAppDispatch, useAppSelector } from '@/store';
+import { useAppDispatch } from '@/store';
 import { ConditionFormModal } from './form-modal';
 import { ConditionsPasteImportModal } from './paste-import-modal';
 import { ConditionsTable } from './table';
 
 export const ConditionsPage = () => {
   const dispatch = useAppDispatch();
-  const conditionsBuilder = useAppSelector((state) => state.conditionsBuilder);
-  const currentCondition = useAppSelector((state) => state.currentCondition);
   const [isPasteOpen, setIsPasteOpen] = useState(false);
 
-  const isEditing = currentCondition.id !== '';
-  const isOpen = conditionsBuilder.isCreateOpen || isEditing;
-  const editingCondition = isEditing ? currentCondition : null;
-
-  const closeModal = () => {
-    dispatch(ConditionsBuilderActions.closeModal());
+  const openCreate = () => {
     dispatch(CurrentConditionActions.resetCurrentCondition());
+    dispatch(ConditionsBuilderActions.setIsCreateOpen(true));
   };
 
   return (
@@ -40,7 +34,7 @@ export const ConditionsPage = () => {
           </button>
           <button
             type="button"
-            onClick={() => dispatch(ConditionsBuilderActions.setIsCreateOpen(true))}
+            onClick={openCreate}
             className={styles.primaryButton}
           >
             Add condition
@@ -48,7 +42,7 @@ export const ConditionsPage = () => {
         </div>
       </div>
       <ConditionsTable />
-      <ConditionFormModal isOpen={isOpen} condition={editingCondition} onClose={closeModal} />
+      <ConditionFormModal />
       <ConditionsPasteImportModal isOpen={isPasteOpen} onClose={() => setIsPasteOpen(false)} />
     </div>
   );

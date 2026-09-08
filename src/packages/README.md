@@ -30,6 +30,9 @@
 | `/clinical-notes` | `clinical-notes/` |
 | `/referrals` | `referrals/` |
 | `/insurance-coverages` | `insurance-coverages/` |
+| `/speech-therapy` | `speech-therapy/` |
+| `/speech-therapy-consumption` | `speech-therapy-consumption/` |
+| `/tube-feed` | `tube-feed/` |
 
 Path constants: `src/config/routes.ts`.
 

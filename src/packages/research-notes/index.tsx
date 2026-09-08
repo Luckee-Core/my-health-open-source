@@ -2,22 +2,16 @@
 
 import { ResearchNotesBuilderActions } from '@/store/builders';
 import { CurrentResearchNoteActions } from '@/store/current';
-import { useAppDispatch, useAppSelector } from '@/store';
+import { useAppDispatch } from '@/store';
 import { ResearchNoteFormModal } from './form-modal';
 import { ResearchNotesTable } from './table';
 
 export const ResearchNotesPage = () => {
   const dispatch = useAppDispatch();
-  const builder = useAppSelector((state) => state.researchNotesBuilder);
-  const current = useAppSelector((state) => state.currentResearchNote);
 
-  const isEditing = current.id !== '';
-  const isOpen = builder.isCreateOpen || isEditing;
-  const editingNote = isEditing ? current : null;
-
-  const closeModal = () => {
-    dispatch(ResearchNotesBuilderActions.closeModal());
+  const openCreate = () => {
     dispatch(CurrentResearchNoteActions.resetCurrentResearchNote());
+    dispatch(ResearchNotesBuilderActions.setIsCreateOpen(true));
   };
 
   return (
@@ -32,14 +26,14 @@ export const ResearchNotesPage = () => {
         </div>
         <button
           type="button"
-          onClick={() => dispatch(ResearchNotesBuilderActions.setIsCreateOpen(true))}
+          onClick={openCreate}
           className={styles.primaryButton}
         >
           Add note
         </button>
       </div>
       <ResearchNotesTable />
-      <ResearchNoteFormModal isOpen={isOpen} researchNote={editingNote} onClose={closeModal} />
+      <ResearchNoteFormModal />
     </div>
   );
 };

@@ -9,6 +9,13 @@ export const currentMedicalHistoryEventSlice = createSlice({
   reducers: {
     setCurrentMedicalHistoryEvent: (_state, action: PayloadAction<MedicalHistoryEvent>) =>
       action.payload,
+    patchCurrentMedicalHistoryEvent: (
+      state,
+      action: PayloadAction<Partial<MedicalHistoryEvent>>,
+    ) => ({
+      ...state,
+      ...action.payload,
+    }),
     resetCurrentMedicalHistoryEvent: () => EMPTY_MEDICAL_HISTORY_EVENT,
   },
 });

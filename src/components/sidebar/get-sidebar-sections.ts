@@ -1,4 +1,5 @@
 import {
+  AI_COSTS_PATH,
   ALLERGIES_PATH,
   APPOINTMENTS_PATH,
   CLINICAL_NOTES_PATH,
@@ -18,8 +19,10 @@ import {
   REFERRALS_PATH,
   RESEARCH_NOTES_PATH,
   SPECIALTIES_PATH,
+  SPEECH_THERAPY_CONSUMPTION_PATH,
   SPEECH_THERAPY_PATH,
   SYMPTOM_LOGS_PATH,
+  TUBE_FEED_PATH,
   VITAL_SIGNS_PATH,
 } from '@/config/routes';
 
@@ -63,8 +66,15 @@ export const getSidebarSections = (): SidebarSection[] => [
     ],
   },
   {
+    title: 'Nutrition',
+    links: [{ name: 'Tube feed', href: TUBE_FEED_PATH }],
+  },
+  {
     title: 'Therapy',
-    links: [{ name: 'Speech therapy', href: SPEECH_THERAPY_PATH }],
+    links: [
+      { name: 'Speech therapy', href: SPEECH_THERAPY_PATH },
+      { name: 'Consumption', href: SPEECH_THERAPY_CONSUMPTION_PATH },
+    ],
   },
   {
     title: 'Visits',
@@ -81,6 +91,7 @@ export const getSidebarSections = (): SidebarSection[] => [
   {
     title: 'Data',
     links: [
+      { name: 'AI Costs', href: AI_COSTS_PATH },
       { name: 'Import health summary', href: HEALTH_IMPORT_PATH },
       { name: 'Import history', href: HEALTH_IMPORTS_PATH },
     ],

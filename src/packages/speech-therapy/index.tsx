@@ -1,26 +1,40 @@
 'use client';
 
-import Link from 'next/link';
-import { SPEECH_THERAPY_IMPORT_PATH } from '@/config/routes';
-import { TherapyExercisesBuilderActions } from '@/store/builders';
+import { useRef, useState } from 'react';
+import { TherapyExerciseImportBuilderActions, TherapyExercisesBuilderActions } from '@/store/builders';
 import { CurrentTherapyExerciseActions } from '@/store/current';
-import { useAppDispatch, useAppSelector } from '@/store';
+import { previewTherapyExerciseImportThunk, resetTherapyExerciseImportThunk } from '@/store/thunks';
+import { useAppDispatch } from '@/store';
 import { TherapyExerciseFormModal } from './form-modal';
+import { PhotoImportModal } from './photo-import-modal';
 import { TherapyExercisesTable } from './table';
-import { TodayTracker } from './today-tracker';
 
 export const SpeechTherapyPage = () => {
   const dispatch = useAppDispatch();
-  const builder = useAppSelector((state) => state.therapyExercisesBuilder);
-  const currentExercise = useAppSelector((state) => state.currentTherapyExercise);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isImportOpen, setIsImportOpen] = useState(false);
+  const [selectedFileName, setSelectedFileName] = useState('');
 
-  const isEditing = currentExercise.id !== '';
-  const isOpen = builder.isCreateOpen || isEditing;
-  const editingExercise = isEditing ? currentExercise : null;
+  const closeImport = () => {
+    setIsImportOpen(false);
+    setSelectedFileName('');
+  };
 
-  const closeModal = () => {
-    dispatch(TherapyExercisesBuilderActions.closeModal());
-    dispatch(CurrentTherapyExerciseActions.resetCurrentTherapyExercise());
+  const handleFileChange = (file: File | null) => {
+    if (!file) return;
+    setSelectedFileName(file.name);
+    if (file.type !== 'image/png') {
+      setIsImportOpen(true);
+      void dispatch(resetTherapyExerciseImportThunk());
+      dispatch(TherapyExerciseImportBuilderActions.setPreviewStatus('error'));
+      dispatch(
+        TherapyExerciseImportBuilderActions.setErrorMessage('Choose a PNG image of your homework.'),
+      );
+      return;
+    }
+    const localImageUrl = URL.createObjectURL(file);
+    setIsImportOpen(true);
+    void dispatch(previewTherapyExerciseImportThunk(file, localImageUrl));
   };
 
   return (
@@ -29,16 +43,34 @@ export const SpeechTherapyPage = () => {
         <div>
           <h1 className={styles.title}>Speech therapy</h1>
           <p className={styles.subtitle}>
-            Track daily homework — timed attempts and sets/reps. Log progress as you go.
+            Track daily homework. Session-only exercises stay off that list until a therapy visit.
           </p>
         </div>
         <div className={styles.headerActions}>
-          <Link href={SPEECH_THERAPY_IMPORT_PATH} className={styles.secondaryButton}>
-            Import from photo
-          </Link>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/png"
+            className={styles.fileInput}
+            onChange={(e) => {
+              const file = e.target.files?.[0] ?? null;
+              e.target.value = '';
+              handleFileChange(file);
+            }}
+          />
           <button
             type="button"
-            onClick={() => dispatch(TherapyExercisesBuilderActions.setIsCreateOpen(true))}
+            onClick={() => fileInputRef.current?.click()}
+            className={styles.secondaryButton}
+          >
+            Import from photo
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              dispatch(CurrentTherapyExerciseActions.resetCurrentTherapyExercise());
+              dispatch(TherapyExercisesBuilderActions.setIsCreateOpen(true));
+            }}
             className={styles.primaryButton}
           >
             Add exercise
@@ -46,31 +78,25 @@ export const SpeechTherapyPage = () => {
         </div>
       </div>
 
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>Today</h2>
-        <TodayTracker variant="full" showTimer />
-      </section>
+      <TherapyExercisesTable />
 
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>Program</h2>
-        <TherapyExercisesTable />
-      </section>
-
-      <TherapyExerciseFormModal
-        isOpen={isOpen}
-        onClose={closeModal}
-        exercise={editingExercise}
+      <TherapyExerciseFormModal />
+      <PhotoImportModal
+        isOpen={isImportOpen}
+        selectedFileName={selectedFileName}
+        onClose={closeImport}
       />
     </div>
   );
 };
 
 const styles = {
-  page: `space-y-8`,
+  page: `space-y-6`,
   header: `flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between`,
   title: `text-2xl font-semibold text-gray-900`,
   subtitle: `text-sm text-gray-600 max-w-2xl`,
   headerActions: `flex flex-wrap gap-2`,
+  fileInput: `hidden`,
   primaryButton: `
     rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800
   `,
@@ -78,6 +104,4 @@ const styles = {
     inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2
     text-sm font-medium text-gray-800 hover:bg-gray-50
   `,
-  section: `space-y-3`,
-  sectionTitle: `text-lg font-semibold text-gray-900`,
 } as const;

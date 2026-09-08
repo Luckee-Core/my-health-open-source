@@ -8,6 +8,10 @@ export const currentHospitalSlice = createSlice({
   initialState,
   reducers: {
     setCurrentHospital: (_state, action: PayloadAction<Hospital>) => action.payload,
+    patchCurrentHospital: (state, action: PayloadAction<Partial<Hospital>>) => ({
+      ...state,
+      ...action.payload,
+    }),
     resetCurrentHospital: () => EMPTY_HOSPITAL,
   },
 });

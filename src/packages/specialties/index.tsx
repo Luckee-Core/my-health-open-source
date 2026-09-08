@@ -2,22 +2,16 @@
 
 import { SpecialtiesBuilderActions } from '@/store/builders';
 import { CurrentSpecialtyActions } from '@/store/current';
-import { useAppDispatch, useAppSelector } from '@/store';
+import { useAppDispatch } from '@/store';
 import { SpecialtyFormModal } from './form-modal';
 import { SpecialtiesTable } from './table';
 
 export const SpecialtiesPage = () => {
   const dispatch = useAppDispatch();
-  const specialtiesBuilder = useAppSelector((state) => state.specialtiesBuilder);
-  const currentSpecialty = useAppSelector((state) => state.currentSpecialty);
 
-  const isEditing = currentSpecialty.id !== '';
-  const isOpen = specialtiesBuilder.isCreateOpen || isEditing;
-  const editingSpecialty = isEditing ? currentSpecialty : null;
-
-  const closeModal = () => {
-    dispatch(SpecialtiesBuilderActions.closeModal());
+  const openCreate = () => {
     dispatch(CurrentSpecialtyActions.resetCurrentSpecialty());
+    dispatch(SpecialtiesBuilderActions.setIsCreateOpen(true));
   };
 
   return (
@@ -29,18 +23,14 @@ export const SpecialtiesPage = () => {
         </div>
         <button
           type="button"
-          onClick={() => dispatch(SpecialtiesBuilderActions.setIsCreateOpen(true))}
+          onClick={openCreate}
           className={styles.primaryButton}
         >
           Add specialty
         </button>
       </div>
       <SpecialtiesTable />
-      <SpecialtyFormModal
-        isOpen={isOpen}
-        specialty={editingSpecialty}
-        onClose={closeModal}
-      />
+      <SpecialtyFormModal />
     </div>
   );
 };

@@ -2,22 +2,16 @@
 
 import { DoctorsBuilderActions } from '@/store/builders';
 import { CurrentDoctorActions } from '@/store/current';
-import { useAppDispatch, useAppSelector } from '@/store';
+import { useAppDispatch } from '@/store';
 import { DoctorFormModal } from './form-modal';
 import { DoctorsTable } from './table';
 
 export const DoctorsPage = () => {
   const dispatch = useAppDispatch();
-  const doctorsBuilder = useAppSelector((state) => state.doctorsBuilder);
-  const currentDoctor = useAppSelector((state) => state.currentDoctor);
 
-  const isEditing = currentDoctor.id !== '';
-  const isOpen = doctorsBuilder.isCreateOpen || isEditing;
-  const editingDoctor = isEditing ? currentDoctor : null;
-
-  const closeModal = () => {
-    dispatch(DoctorsBuilderActions.closeModal());
+  const openCreate = () => {
     dispatch(CurrentDoctorActions.resetCurrentDoctor());
+    dispatch(DoctorsBuilderActions.setIsCreateOpen(true));
   };
 
   return (
@@ -27,20 +21,12 @@ export const DoctorsPage = () => {
           <h1 className={styles.title}>Doctors</h1>
           <p className={styles.subtitle}>Your care team linked to facilities and specialties.</p>
         </div>
-        <button
-          type="button"
-          onClick={() => dispatch(DoctorsBuilderActions.setIsCreateOpen(true))}
-          className={styles.primaryButton}
-        >
+        <button type="button" onClick={openCreate} className={styles.primaryButton}>
           Add doctor
         </button>
       </div>
       <DoctorsTable />
-      <DoctorFormModal
-        isOpen={isOpen}
-        doctor={editingDoctor}
-        onClose={closeModal}
-      />
+      <DoctorFormModal />
     </div>
   );
 };

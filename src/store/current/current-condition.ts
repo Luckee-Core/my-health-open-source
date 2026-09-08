@@ -8,6 +8,10 @@ export const currentConditionSlice = createSlice({
   initialState,
   reducers: {
     setCurrentCondition: (_state, action: PayloadAction<Condition>) => action.payload,
+    patchCurrentCondition: (state, action: PayloadAction<Partial<Condition>>) => ({
+      ...state,
+      ...action.payload,
+    }),
     resetCurrentCondition: () => EMPTY_CONDITION,
   },
 });

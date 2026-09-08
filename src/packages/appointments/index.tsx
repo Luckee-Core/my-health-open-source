@@ -2,22 +2,16 @@
 
 import { AppointmentsBuilderActions } from '@/store/builders';
 import { CurrentAppointmentActions } from '@/store/current';
-import { useAppDispatch, useAppSelector } from '@/store';
+import { useAppDispatch } from '@/store';
 import { AppointmentFormModal } from './form-modal';
 import { AppointmentsTable } from './table';
 
 export const AppointmentsPage = () => {
   const dispatch = useAppDispatch();
-  const appointmentsBuilder = useAppSelector((state) => state.appointmentsBuilder);
-  const currentAppointment = useAppSelector((state) => state.currentAppointment);
 
-  const isEditing = currentAppointment.id !== '';
-  const isOpen = appointmentsBuilder.isCreateOpen || isEditing;
-  const editingAppointment = isEditing ? currentAppointment : null;
-
-  const closeModal = () => {
-    dispatch(AppointmentsBuilderActions.closeModal());
+  const openCreate = () => {
     dispatch(CurrentAppointmentActions.resetCurrentAppointment());
+    dispatch(AppointmentsBuilderActions.setIsCreateOpen(true));
   };
 
   return (
@@ -31,18 +25,14 @@ export const AppointmentsPage = () => {
         </div>
         <button
           type="button"
-          onClick={() => dispatch(AppointmentsBuilderActions.setIsCreateOpen(true))}
+          onClick={openCreate}
           className={styles.primaryButton}
         >
           Add appointment
         </button>
       </div>
       <AppointmentsTable />
-      <AppointmentFormModal
-        isOpen={isOpen}
-        appointment={editingAppointment}
-        onClose={closeModal}
-      />
+      <AppointmentFormModal />
     </div>
   );
 };

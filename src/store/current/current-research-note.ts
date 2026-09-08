@@ -8,6 +8,10 @@ export const currentResearchNoteSlice = createSlice({
   initialState,
   reducers: {
     setCurrentResearchNote: (_state, action: PayloadAction<ResearchNote>) => action.payload,
+    patchCurrentResearchNote: (state, action: PayloadAction<Partial<ResearchNote>>) => ({
+      ...state,
+      ...action.payload,
+    }),
     resetCurrentResearchNote: () => EMPTY_RESEARCH_NOTE,
   },
 });

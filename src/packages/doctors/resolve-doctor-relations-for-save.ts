@@ -1,5 +1,6 @@
 import type { Hospital, Specialty } from '@/model';
-import { createHospitalThunk, createSpecialtyThunk } from '@/store/thunks';
+import { createHospitalThunk } from '@/store/thunks/hospitals';
+import { createSpecialtyThunk } from '@/store/thunks/specialties';
 import type { AppThunk } from '@/store/types';
 import type { RootState } from '@/store/store';
 
@@ -18,10 +19,9 @@ const findByName = <T extends { id: string; name: string }>(
 const resolveHospitalId = async (
   dispatch: Dispatch,
   getState: () => RootState,
-  selectedId: string,
-  newName: string,
 ): Promise<{ ok: true; id: string } | { ok: false; message: string }> => {
-  const trimmedNew = newName.trim();
+  const trimmedNew = getState().doctorsBuilder.newHospitalName.trim();
+  const selectedId = getState().currentDoctor.hospital_id;
   if (trimmedNew) {
     const existing = findByName<Hospital>(getState().hospitals, trimmedNew);
     if (existing) return { ok: true, id: existing.id };
@@ -40,10 +40,9 @@ const resolveHospitalId = async (
 const resolveSpecialtyId = async (
   dispatch: Dispatch,
   getState: () => RootState,
-  selectedId: string,
-  newName: string,
 ): Promise<{ ok: true; id: string } | { ok: false; message: string }> => {
-  const trimmedNew = newName.trim();
+  const trimmedNew = getState().doctorsBuilder.newSpecialtyName.trim();
+  const selectedId = getState().currentDoctor.specialty_id;
   if (trimmedNew) {
     const existing = findByName<Specialty>(getState().specialties, trimmedNew);
     if (existing) return { ok: true, id: existing.id };
@@ -60,20 +59,16 @@ const resolveSpecialtyId = async (
 };
 
 /**
- * Resolves hospital and specialty ids, creating catalog rows when inline names are provided.
+ * Resolves hospital and specialty ids from currentDoctor plus builder name strings.
  */
 export const resolveDoctorRelationsForSave = async (
   dispatch: Dispatch,
   getState: () => RootState,
-  hospitalId: string,
-  newHospitalName: string,
-  specialtyId: string,
-  newSpecialtyName: string,
 ): Promise<ResolveResult> => {
-  const hospital = await resolveHospitalId(dispatch, getState, hospitalId, newHospitalName);
+  const hospital = await resolveHospitalId(dispatch, getState);
   if (!hospital.ok) return { ok: false, message: hospital.message };
 
-  const specialty = await resolveSpecialtyId(dispatch, getState, specialtyId, newSpecialtyName);
+  const specialty = await resolveSpecialtyId(dispatch, getState);
   if (!specialty.ok) return { ok: false, message: specialty.message };
 
   return { ok: true, hospitalId: hospital.id, specialtyId: specialty.id };

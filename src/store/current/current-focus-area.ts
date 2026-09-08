@@ -8,6 +8,10 @@ export const currentFocusAreaSlice = createSlice({
   initialState,
   reducers: {
     setCurrentFocusArea: (_state, action: PayloadAction<FocusArea>) => action.payload,
+    patchCurrentFocusArea: (state, action: PayloadAction<Partial<FocusArea>>) => ({
+      ...state,
+      ...action.payload,
+    }),
     resetCurrentFocusArea: () => EMPTY_FOCUS_AREA,
   },
 });

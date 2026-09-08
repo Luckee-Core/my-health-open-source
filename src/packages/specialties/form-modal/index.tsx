@@ -1,60 +1,29 @@
 'use client';
 
-import { useState } from 'react';
-import type { Specialty } from '@/model';
-import { createSpecialtyThunk, updateSpecialtyThunk } from '@/store/thunks';
-import { useAppDispatch } from '@/store';
+import { SpecialtiesBuilderActions } from '@/store/builders';
+import { CurrentSpecialtyActions } from '@/store/current';
+import { saveSpecialtyThunk } from '@/store/thunks';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { NameInput } from './inputs/name';
 
-type Props = {
-  isOpen: boolean;
-  onClose: () => void;
-  specialty?: Specialty | null;
-};
+export const SpecialtyFormModal = () => {
+  const dispatch = useAppDispatch();
+  const current = useAppSelector((state) => state.currentSpecialty);
+  const builder = useAppSelector((state) => state.specialtiesBuilder);
+  const isEdit = current.id !== '';
+  const isOpen = builder.isCreateOpen || isEdit;
+  const isSaving = builder.saveStatus === 'saving';
 
-export const SpecialtyFormModal = ({ isOpen, onClose, specialty }: Props) => {
   if (!isOpen) return null;
 
-  return (
-    <SpecialtyFormModalBody
-      key={specialty?.id ?? 'new'}
-      onClose={onClose}
-      specialty={specialty}
-    />
-  );
-};
-
-type BodyProps = {
-  onClose: () => void;
-  specialty?: Specialty | null;
-};
-
-const SpecialtyFormModalBody = ({ onClose, specialty }: BodyProps) => {
-  const dispatch = useAppDispatch();
-  const isEdit = specialty != null;
-  const [name, setName] = useState(specialty?.name ?? '');
-  const [error, setError] = useState('');
-  const [isSaving, setIsSaving] = useState(false);
+  const closeModal = () => {
+    dispatch(SpecialtiesBuilderActions.closeModal());
+    dispatch(CurrentSpecialtyActions.resetCurrentSpecialty());
+  };
 
   const handleSubmit = async () => {
-    setError('');
-    const trimmed = name.trim();
-    if (!trimmed) {
-      setError('Name is required');
-      return;
-    }
-
-    setIsSaving(true);
-    const payload = { name: trimmed };
-    const httpStatus = isEdit
-      ? await dispatch(updateSpecialtyThunk(specialty.id, payload))
-      : await dispatch(createSpecialtyThunk(payload));
-    setIsSaving(false);
-
-    if (httpStatus !== 200) {
-      setError('Failed to save');
-      return;
-    }
-    onClose();
+    const status = await dispatch(saveSpecialtyThunk());
+    if (status === 200) closeModal();
   };
 
   return (
@@ -62,22 +31,16 @@ const SpecialtyFormModalBody = ({ onClose, specialty }: BodyProps) => {
       <div className={styles.panel}>
         <h2 className={styles.heading}>{isEdit ? 'Edit specialty' : 'New specialty'}</h2>
         <div className={styles.fields}>
-          <input
-            type="text"
-            placeholder="Specialty name (e.g. Cardiology)"
-            className={styles.input}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          {error && <p className={styles.error}>{error}</p>}
+          <NameInput />
+          {builder.saveError && <p className={styles.error}>{builder.saveError}</p>}
         </div>
         <div className={styles.actions}>
-          <button type="button" onClick={onClose} className={styles.cancelButton}>
+          <button type="button" onClick={closeModal} className={styles.cancelButton}>
             Cancel
           </button>
           <button
             type="button"
-            disabled={isSaving || !name.trim()}
+            disabled={isSaving}
             onClick={() => void handleSubmit()}
             className={styles.saveButton}
           >
@@ -94,7 +57,6 @@ const styles = {
   panel: `w-full max-w-md rounded-lg bg-white p-5 shadow-lg`,
   heading: `text-lg font-semibold text-gray-900`,
   fields: `mt-4 space-y-3`,
-  input: `w-full rounded-md border border-gray-300 px-3 py-2 text-sm`,
   error: `text-sm text-red-600`,
   actions: `mt-5 flex justify-end gap-2`,
   cancelButton: `rounded-md px-3 py-1.5 text-sm text-gray-700`,

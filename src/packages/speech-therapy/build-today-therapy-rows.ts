@@ -1,12 +1,14 @@
 import type { TherapyExercise, TherapyExerciseLog } from '@/model';
+import { isTherapyExerciseComplete } from './format-therapy-exercise-progress';
+import { isDailyHomeworkExercise } from './is-daily-homework-exercise';
+import { normalizeLogDateKey } from './normalize-log-date-key';
 
 export type TodayTherapyRow = {
   exercise: TherapyExercise;
   completedCount: number;
   isComplete: boolean;
+  isSkipped: boolean;
 };
-
-const normalizeLogDateKey = (value: string): string => value.slice(0, 10);
 
 /**
  * Builds today's active therapy exercise rows with progress from logs dump.
@@ -16,26 +18,32 @@ export const buildTodayTherapyRows = (
   logsDump: Record<string, TherapyExerciseLog>,
   todayKey: string,
 ): TodayTherapyRow[] => {
-  const logsByExerciseId = new Map<string, number>();
+  const logsByExerciseId = new Map<string, { completedCount: number; skipped: boolean }>();
   for (const log of Object.values(logsDump)) {
     if (normalizeLogDateKey(log.log_date) === todayKey) {
-      logsByExerciseId.set(log.exercise_id, log.completed_count);
+      logsByExerciseId.set(log.exercise_id, {
+        completedCount: log.completed_count,
+        skipped: Boolean(log.skipped),
+      });
     }
   }
 
   return Object.values(exercisesDump)
-    .filter((exercise) => exercise.is_active && exercise.frequency === 'daily')
+    .filter(isDailyHomeworkExercise)
     .sort((a, b) => {
       const byOrder = a.sort_order - b.sort_order;
       if (byOrder !== 0) return byOrder;
       return a.name.localeCompare(b.name);
     })
     .map((exercise) => {
-      const completedCount = logsByExerciseId.get(exercise.id) ?? 0;
+      const log = logsByExerciseId.get(exercise.id);
+      const completedCount = log?.completedCount ?? 0;
+      const isSkipped = log?.skipped ?? false;
       return {
         exercise,
         completedCount,
-        isComplete: completedCount >= exercise.target_count,
+        isComplete: !isSkipped && isTherapyExerciseComplete(exercise, completedCount),
+        isSkipped,
       };
     });
 };

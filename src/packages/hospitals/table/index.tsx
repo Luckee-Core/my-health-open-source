@@ -3,8 +3,8 @@
 import { useMemo, useState } from 'react';
 import type { Hospital } from '@/model';
 import { deleteHospitalThunk } from '@/store/thunks';
-import { CurrentHospitalActions } from '@/store/current';
 import { useAppDispatch, useAppSelector } from '@/store';
+import { HospitalRow } from './row';
 
 export const HospitalsTable = () => {
   const dispatch = useAppDispatch();
@@ -62,33 +62,13 @@ export const HospitalsTable = () => {
         </thead>
         <tbody>
           {sorted.map((row) => (
-            <tr key={row.id} className={styles.row}>
-              <td className={styles.td}>{row.name}</td>
-              <td className={styles.td}>{row.address ?? '—'}</td>
-              <td className={styles.td}>{row.phone ?? '—'}</td>
-              <td className={styles.td}>{row.email ?? '—'}</td>
-              <td className={styles.tdRight}>{doctorCountByHospitalId[row.id] ?? 0}</td>
-              <td className={styles.tdActions}>
-                <div className={styles.actions}>
-                  <button
-                    type="button"
-                    className={styles.linkButton}
-                    onClick={() => dispatch(CurrentHospitalActions.setCurrentHospital(row))}
-                    disabled={busyId === row.id}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    type="button"
-                    className={styles.dangerButton}
-                    onClick={() => void handleDelete(row)}
-                    disabled={busyId === row.id}
-                  >
-                    Delete
-                  </button>
-                </div>
-              </td>
-            </tr>
+            <HospitalRow
+              key={row.id}
+              row={row}
+              busy={busyId === row.id}
+              doctorCount={doctorCountByHospitalId[row.id] ?? 0}
+              onDelete={(hospital) => void handleDelete(hospital)}
+            />
           ))}
           {sorted.length === 0 && (
             <tr>
@@ -111,12 +91,5 @@ const styles = {
   th: `px-4 py-2 font-medium`,
   thRight: `px-4 py-2 font-medium text-right`,
   thActions: `px-4 py-2 font-medium text-right`,
-  row: `border-t border-gray-100`,
-  td: `px-4 py-2 align-top`,
-  tdRight: `px-4 py-2 text-right align-top`,
-  tdActions: `px-4 py-2 text-right align-top`,
-  actions: `flex justify-end gap-2`,
-  linkButton: `text-sm text-gray-700 hover:text-gray-900 disabled:opacity-50`,
-  dangerButton: `text-sm text-red-600 hover:text-red-800 disabled:opacity-50`,
   empty: `px-4 py-8 text-center text-gray-500`,
 } as const;

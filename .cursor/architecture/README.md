@@ -24,6 +24,8 @@ ADRs keep implementation consistent by documenting:
 8. [008 – Detail page routing](./008-detail-page-routing.md) — `{entity}-detail-page`, no `[id]` routes.
 9. [009 – Documentation site (`/docs`)](./009-api-docs-page.md) — Docs shell, live API catalog from Express.
 10. [010 – Public content reads from Express](./010-public-blog-express-fetch.md) — Server Component reads + Redux list hydration.
+11. [011 – Domain models (`src/model`)](./011-domain-models.md) — persisted entity types; one file per table entity.
+12. [012 – Package form inputs](./012-package-form-inputs.md) — `{form}/inputs/{field}`, zero-prop modals, `{collection}/row/`.
 
 ## How to use
 

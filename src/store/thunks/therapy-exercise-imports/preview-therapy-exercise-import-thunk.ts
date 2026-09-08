@@ -1,5 +1,6 @@
 import { previewTherapyExerciseImport } from '@/api/therapy-exercise-imports';
 import { TherapyExerciseImportBuilderActions } from '@/store/builders';
+import { TherapyExerciseImportAiExchangesActions } from '@/store/dumps';
 import type { AppThunk } from '@/store/types';
 
 /**
@@ -25,6 +26,11 @@ export const previewTherapyExerciseImportThunk =
 
     dispatch(TherapyExerciseImportBuilderActions.setPreviewId(result.data.previewId));
     dispatch(TherapyExerciseImportBuilderActions.setExercises(result.data.exercises));
+    dispatch(
+      TherapyExerciseImportAiExchangesActions.upsertTherapyExerciseImportAiExchange(
+        result.data.exchange,
+      ),
+    );
     dispatch(TherapyExerciseImportBuilderActions.setPreviewStatus('success'));
     dispatch(TherapyExerciseImportBuilderActions.setStep('preview'));
     return 200;

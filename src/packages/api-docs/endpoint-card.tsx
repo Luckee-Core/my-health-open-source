@@ -8,6 +8,7 @@ type Props = {
 const methodStyleKey = (method: ApiDocsHttpMethod): keyof typeof styles => {
   if (method === "GET") return "methodGet";
   if (method === "POST") return "methodPost";
+  if (method === "PUT") return "methodPut";
   if (method === "PATCH") return "methodPatch";
   return "methodDelete";
 };
@@ -84,6 +85,9 @@ const styles = {
   `,
   methodPost: `
     bg-blue-100 text-blue-800
+  `,
+  methodPut: `
+    bg-indigo-100 text-indigo-800
   `,
   methodPatch: `
     bg-amber-100 text-amber-800

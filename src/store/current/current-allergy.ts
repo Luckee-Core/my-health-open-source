@@ -8,6 +8,10 @@ export const currentAllergySlice = createSlice({
   initialState,
   reducers: {
     setCurrentAllergy: (_state, action: PayloadAction<Allergy>) => action.payload,
+    patchCurrentAllergy: (state, action: PayloadAction<Partial<Allergy>>) => ({
+      ...state,
+      ...action.payload,
+    }),
     resetCurrentAllergy: () => EMPTY_ALLERGY,
   },
 });

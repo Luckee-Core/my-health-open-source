@@ -3,6 +3,7 @@
 import { useEffect, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { loadClinicalNotesThunk } from '@/store/thunks';
+import { ClinicalNoteRow } from './row';
 
 export const ClinicalNotesTable = () => {
   const dump = useAppSelector((state) => state.clinicalNotes);
@@ -31,11 +32,7 @@ export const ClinicalNotesTable = () => {
         </thead>
         <tbody>
           {sorted.map((row) => (
-            <tr key={row.id} className={styles.row}>
-              <td className={styles.td}>{new Date(row.note_at).toLocaleString()}</td>
-              <td className={styles.td}>{row.title}</td>
-              <td className={styles.td}>{row.author_name ?? '—'}</td>
-            </tr>
+            <ClinicalNoteRow key={row.id} row={row} />
           ))}
           {sorted.length === 0 && (
             <tr>
@@ -55,8 +52,5 @@ const styles = {
   table: `min-w-full overflow-x-auto rounded-lg border border-gray-200 bg-white text-sm`,
   thead: `bg-gray-50 text-left text-gray-600`,
   th: `px-4 py-2 font-medium`,
-  row: `border-t border-gray-100`,
-  td: `px-4 py-2 align-top`,
   empty: `px-4 py-8 text-center text-gray-500`,
-  muted: `text-gray-500`,
 } as const;

@@ -6,6 +6,7 @@ import { MedicationRemindersOverview } from './medication-reminders';
 import { MorningCheckInOverview } from './morning-check-in-overview';
 import { RecentJournal } from './recent-journal';
 import { SpeechTherapyOverview } from './speech-therapy-overview';
+import { TubeFeedOverview } from './tube-feed-overview';
 import { UpcomingVisits } from './upcoming-visits';
 
 export const DashboardPage = () => {
@@ -19,9 +20,12 @@ export const DashboardPage = () => {
           </p>
         </div>
       </div>
-      <div className={styles.grid}>
-        <MedicationRemindersOverview />
+      <div className={styles.priorityStack}>
+        <TubeFeedOverview />
         <SpeechTherapyOverview />
+        <MedicationRemindersOverview />
+      </div>
+      <div className={styles.grid}>
         <UpcomingVisits />
         <MorningCheckInOverview />
         <RecentJournal />
@@ -37,6 +41,7 @@ const styles = {
   header: `flex items-center justify-between gap-4`,
   title: `text-2xl font-semibold text-gray-900`,
   subtitle: `text-sm text-gray-600 max-w-2xl`,
+  priorityStack: `grid gap-4`,
   grid: `
     grid gap-4
     lg:grid-cols-2

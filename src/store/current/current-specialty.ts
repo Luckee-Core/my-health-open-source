@@ -8,6 +8,10 @@ export const currentSpecialtySlice = createSlice({
   initialState,
   reducers: {
     setCurrentSpecialty: (_state, action: PayloadAction<Specialty>) => action.payload,
+    patchCurrentSpecialty: (state, action: PayloadAction<Partial<Specialty>>) => ({
+      ...state,
+      ...action.payload,
+    }),
     resetCurrentSpecialty: () => EMPTY_SPECIALTY,
   },
 });

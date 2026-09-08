@@ -8,6 +8,10 @@ export const currentAppointmentSlice = createSlice({
   initialState,
   reducers: {
     setCurrentAppointment: (_state, action: PayloadAction<Appointment>) => action.payload,
+    patchCurrentAppointment: (state, action: PayloadAction<Partial<Appointment>>) => ({
+      ...state,
+      ...action.payload,
+    }),
     resetCurrentAppointment: () => EMPTY_APPOINTMENT,
   },
 });

@@ -3,8 +3,8 @@
 import { useMemo, useState } from 'react';
 import type { Medication } from '@/model';
 import { deleteMedicationThunk } from '@/store/thunks';
-import { CurrentMedicationActions } from '@/store/current';
 import { useAppDispatch, useAppSelector } from '@/store';
+import { MedicationRow } from './row';
 
 export const MedicationsTable = () => {
   const dispatch = useAppDispatch();
@@ -45,32 +45,12 @@ export const MedicationsTable = () => {
         </thead>
         <tbody>
           {sorted.map((row) => (
-            <tr key={row.id} className={styles.row}>
-              <td className={styles.td}>{row.name}</td>
-              <td className={styles.td}>{row.instructions ?? '—'}</td>
-              <td className={styles.td}>{row.started_on ?? '—'}</td>
-              <td className={styles.td}>{row.status}</td>
-              <td className={styles.tdActions}>
-                <div className={styles.actions}>
-                  <button
-                    type="button"
-                    className={styles.linkButton}
-                    onClick={() => dispatch(CurrentMedicationActions.setCurrentMedication(row))}
-                    disabled={busyId === row.id}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    type="button"
-                    className={styles.dangerButton}
-                    onClick={() => void handleDelete(row)}
-                    disabled={busyId === row.id}
-                  >
-                    Delete
-                  </button>
-                </div>
-              </td>
-            </tr>
+            <MedicationRow
+              key={row.id}
+              row={row}
+              busy={busyId === row.id}
+              onDelete={(medication) => void handleDelete(medication)}
+            />
           ))}
           {sorted.length === 0 && (
             <tr>
@@ -92,11 +72,5 @@ const styles = {
   thead: `bg-gray-50 text-left text-gray-600`,
   th: `px-4 py-2 font-medium`,
   thActions: `px-4 py-2 font-medium text-right`,
-  row: `border-t border-gray-100`,
-  td: `px-4 py-2 align-top`,
-  tdActions: `px-4 py-2 text-right align-top`,
-  actions: `flex justify-end gap-2`,
-  linkButton: `text-sm text-gray-700 hover:text-gray-900 disabled:opacity-50`,
-  dangerButton: `text-sm text-red-600 hover:text-red-800 disabled:opacity-50`,
   empty: `px-4 py-8 text-center text-gray-500`,
 } as const;

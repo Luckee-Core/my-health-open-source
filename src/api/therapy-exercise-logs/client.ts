@@ -12,6 +12,12 @@ export type IncrementTherapyExerciseLogPayload = {
   delta: number;
 };
 
+export type SkipTherapyExerciseLogPayload = {
+  exercise_id: string;
+  log_date: string;
+  skipped: boolean;
+};
+
 /**
  * Loads therapy exercise logs, optionally filtered by log_date.
  */
@@ -43,5 +49,22 @@ export const incrementTherapyExerciseLog = async (
     return fromExpressBody(data, 'Failed to update therapy exercise log');
   } catch (error: unknown) {
     return fromCaughtError(error, 'Failed to update therapy exercise log');
+  }
+};
+
+/**
+ * Marks or unmarks a therapy exercise as skipped for a given date.
+ */
+export const skipTherapyExerciseLog = async (
+  payload: SkipTherapyExerciseLogPayload,
+): Promise<ApiResponse<TherapyExerciseLog>> => {
+  try {
+    const { data } = await getApiClient().post<EntityBody>(
+      '/api/data/therapy-exercise-logs/skip',
+      payload,
+    );
+    return fromExpressBody(data, 'Failed to skip therapy exercise');
+  } catch (error: unknown) {
+    return fromCaughtError(error, 'Failed to skip therapy exercise');
   }
 };

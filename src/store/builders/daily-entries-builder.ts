@@ -1,27 +1,35 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import type { FormSaveStatus } from './form-save-status';
 
 type DailyEntriesBuilderState = {
   isCreateOpen: boolean;
-  /** Optional prefill date when opening create modal; empty string when unset. */
-  defaultEntryDate: string;
+  saveError: string;
+  saveStatus: FormSaveStatus;
 };
 
 const initialState: DailyEntriesBuilderState = {
   isCreateOpen: false,
-  defaultEntryDate: '',
+  saveError: '',
+  saveStatus: 'idle',
 };
 
 export const dailyEntriesBuilderSlice = createSlice({
   name: 'dailyEntriesBuilder',
   initialState,
   reducers: {
-    openCreate: (state, action: PayloadAction<string | undefined>) => {
+    openCreate: (state) => {
       state.isCreateOpen = true;
-      state.defaultEntryDate = action.payload ?? '';
     },
     closeModal: (state) => {
       state.isCreateOpen = false;
-      state.defaultEntryDate = '';
+      state.saveError = '';
+      state.saveStatus = 'idle';
+    },
+    setSaveError: (state, action: PayloadAction<string>) => {
+      state.saveError = action.payload;
+    },
+    setSaveStatus: (state, action: PayloadAction<FormSaveStatus>) => {
+      state.saveStatus = action.payload;
     },
   },
 });
