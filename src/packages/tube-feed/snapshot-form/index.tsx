@@ -76,7 +76,7 @@ export const FeedSnapshotForm = ({ variant = 'full' }: Props) => {
       <p className={styles.muted}>
         {isStarting
           ? 'Record the pump total as it stands right now. This is a one-time starting point — calories begin with the next morning log.'
-          : 'Log this morning’s pump numbers. Calories come from the change in total fed since the last snapshot.'}
+          : 'Enter this morning’s pump total (not the starting point). Calories use the selected formula’s kcal per 1000 mL on milliliters since the last snapshot.'}
       </p>
       <div className={styles.grid}>
         <FormulaInput />

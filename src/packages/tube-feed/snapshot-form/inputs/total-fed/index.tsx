@@ -2,10 +2,13 @@
 
 import { CurrentFeedLogActions } from '@/store/current';
 import { useAppDispatch, useAppSelector } from '@/store';
+import { findFeedStartLog } from '@/packages/tube-feed/utils';
 
 export const TotalFedInput = () => {
   const dispatch = useAppDispatch();
   const current = useAppSelector((state) => state.currentFeedLog);
+  const logsDump = useAppSelector((state) => state.feedLogs);
+  const hasStarted = findFeedStartLog(logsDump) != null;
 
   return (
     <label className={styles.label}>
@@ -24,6 +27,9 @@ export const TotalFedInput = () => {
           )
         }
       />
+      {hasStarted && (
+        <span className={styles.hint}>Current pump total — milliliters since last time are calculated.</span>
+      )}
     </label>
   );
 };
@@ -31,4 +37,5 @@ export const TotalFedInput = () => {
 const styles = {
   label: `block text-sm text-gray-700 space-y-1`,
   input: `w-full rounded-md border border-gray-300 px-3 py-2 text-sm`,
+  hint: `block text-xs text-gray-500`,
 } as const;

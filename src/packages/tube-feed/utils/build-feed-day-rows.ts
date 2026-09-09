@@ -2,6 +2,7 @@ import type { FeedFormula, FeedLog } from '@/model';
 import { compareFeedLogsChronological } from './compare-feed-logs-chronological';
 import { computeFeedCalories } from './compute-feed-calories';
 import { computeVolumeSincePrior } from './compute-volume-since-prior';
+import { resolveFeedCaloriesPer1000Ml } from './resolve-feed-calories-per-1000-ml';
 
 export type FeedDayRow = {
   log: FeedLog;
@@ -28,12 +29,16 @@ export const buildFeedDayRows = (
     const formulaLabel = formula
       ? `${formula.brand} ${formula.name}`.trim()
       : 'Unknown formula';
+    const milliliters = volume.volumeMl ?? log.total_fed_ml;
 
     return {
       log,
       formulaLabel,
       volumeMl: volume.volumeMl,
-      calories: computeFeedCalories(volume.volumeMl, log.calories_per_1000_ml),
+      calories: computeFeedCalories(
+        milliliters,
+        resolveFeedCaloriesPer1000Ml(log, formula),
+      ),
       isBaseline: volume.isBaseline,
       isImplicitReset: volume.isImplicitReset,
     };

@@ -12,3 +12,4 @@ export { formatBagHoursRemaining } from './format-bag-hours-remaining';
 export { formatFeedCalories } from './format-feed-calories';
 export { formatFeedVolume } from './format-feed-volume';
 export { normalizeFeedLogDateKey } from './normalize-feed-log-date-key';
+export { resolveFeedCaloriesPer1000Ml } from './resolve-feed-calories-per-1000-ml';
