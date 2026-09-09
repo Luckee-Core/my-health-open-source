@@ -1,10 +1,13 @@
+export { buildEmptyMorningFeedLog } from './build-empty-morning-feed-log';
 export { buildFeedDayRows } from './build-feed-day-rows';
 export type { FeedDayRow } from './build-feed-day-rows';
+export { compareFeedLogsChronological } from './compare-feed-logs-chronological';
 export { computeFeedCalories } from './compute-feed-calories';
 export { computeVolumeSincePrior } from './compute-volume-since-prior';
 export type { VolumeSincePrior } from './compute-volume-since-prior';
 export { findFeedLogForDate } from './find-feed-log-for-date';
 export { findFeedStartLog } from './find-feed-start-log';
+export { findLatestFeedLog } from './find-latest-feed-log';
 export { formatBagHoursRemaining } from './format-bag-hours-remaining';
 export { formatFeedCalories } from './format-feed-calories';
 export { formatFeedVolume } from './format-feed-volume';

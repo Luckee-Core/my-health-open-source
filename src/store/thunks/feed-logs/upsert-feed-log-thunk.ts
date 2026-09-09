@@ -4,6 +4,7 @@ import { CurrentFeedLogActions } from '@/store/current';
 import { FeedLogsActions } from '@/store/dumps';
 import type { AppThunk } from '@/store/types';
 import { findFeedStartLog } from '@/packages/tube-feed/utils';
+import { hydrateCurrentFeedLogThunk } from './hydrate-current-feed-log-thunk';
 
 /**
  * Saves the editing feed log from currentFeedLog.
@@ -57,7 +58,12 @@ export const upsertFeedLogThunk =
     }
 
     dispatch(FeedLogsActions.upsertFeedLog(result.data));
-    dispatch(CurrentFeedLogActions.setCurrentFeedLog(result.data));
+    if (isStarting) {
+      dispatch(CurrentFeedLogActions.resetCurrentFeedLog());
+      await dispatch(hydrateCurrentFeedLogThunk());
+    } else {
+      dispatch(CurrentFeedLogActions.setCurrentFeedLog(result.data));
+    }
     dispatch(FeedLogsBuilderActions.setSaveStatus('success'));
     return 200;
   };

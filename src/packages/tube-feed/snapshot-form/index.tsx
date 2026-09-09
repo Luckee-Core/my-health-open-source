@@ -67,11 +67,9 @@ export const FeedSnapshotForm = ({ variant = 'full' }: Props) => {
     ? 'Saving…'
     : isStarting
       ? 'Start tracking'
-      : todayLog?.is_start
-        ? 'Update starting point'
-        : todayLog
-          ? 'Update this morning'
-          : 'Save this morning';
+      : todayLog
+        ? 'Update this morning'
+        : 'Save this morning';
 
   return (
     <div className={styles.form}>
@@ -91,9 +89,9 @@ export const FeedSnapshotForm = ({ variant = 'full' }: Props) => {
       {builder.saveError && <p className={styles.error}>{builder.saveError}</p>}
       {builder.saveStatus === 'success' && (
         <p className={styles.success}>
-          {isStarting || todayLog?.is_start
-            ? 'Starting point saved. Morning logs will count from this total.'
-            : `Snapshot saved for ${current.log_date}.`}
+          {todayLog
+            ? `Snapshot saved for ${current.log_date}.`
+            : 'Starting point saved. Enter this morning’s pump numbers next.'}
         </p>
       )}
       <button

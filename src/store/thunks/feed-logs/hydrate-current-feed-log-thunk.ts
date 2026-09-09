@@ -1,11 +1,10 @@
-import { EMPTY_FEED_LOG } from '@/model';
 import { CurrentFeedLogActions } from '@/store/current';
 import type { AppThunk } from '@/store/types';
 import { getLocalDateKey } from '@/utils/date';
-import { findFeedLogForDate } from '@/packages/tube-feed/utils';
+import { buildEmptyMorningFeedLog, findFeedLogForDate } from '@/packages/tube-feed/utils';
 
 /**
- * Copies today's dump row (or empty defaults) into currentFeedLog.
+ * Copies today's morning dump row (or empty morning defaults) into currentFeedLog.
  */
 export const hydrateCurrentFeedLogThunk =
   (): AppThunk<Promise<200 | 400 | 500>> =>
@@ -26,36 +25,16 @@ export const hydrateCurrentFeedLogThunk =
 
     if (currentFeedLog.log_date === todayKey && currentFeedLog.id === '') {
       if (!currentFeedLog.formula_id) {
-        const formulas = Object.values(feedFormulas);
-        const active = formulas.filter((row) => row.is_active);
-        const pool = active.length > 0 ? active : formulas;
-        const sorted = [...pool].sort((a, b) => {
-          const brand = a.brand.localeCompare(b.brand);
-          if (brand !== 0) return brand;
-          return a.name.localeCompare(b.name);
-        });
-        if (sorted[0]) {
-          dispatch(CurrentFeedLogActions.patchCurrentFeedLog({ formula_id: sorted[0].id }));
-        }
+        const empty = buildEmptyMorningFeedLog(feedLogs, feedFormulas, todayKey);
+        dispatch(CurrentFeedLogActions.patchCurrentFeedLog({ formula_id: empty.formula_id }));
       }
       return 200;
     }
 
-    const formulas = Object.values(feedFormulas);
-    const active = formulas.filter((row) => row.is_active);
-    const pool = active.length > 0 ? active : formulas;
-    const sorted = [...pool].sort((a, b) => {
-      const brand = a.brand.localeCompare(b.brand);
-      if (brand !== 0) return brand;
-      return a.name.localeCompare(b.name);
-    });
-
     dispatch(
-      CurrentFeedLogActions.setCurrentFeedLog({
-        ...EMPTY_FEED_LOG,
-        log_date: todayKey,
-        formula_id: sorted[0]?.id ?? '',
-      }),
+      CurrentFeedLogActions.setCurrentFeedLog(
+        buildEmptyMorningFeedLog(feedLogs, feedFormulas, todayKey),
+      ),
     );
     return 200;
   };

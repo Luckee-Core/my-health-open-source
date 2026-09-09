@@ -9,6 +9,7 @@ import {
   buildFeedDayRows,
   findFeedLogForDate,
   findFeedStartLog,
+  findLatestFeedLog,
   formatBagHoursRemaining,
   formatFeedCalories,
   formatFeedVolume,
@@ -23,10 +24,12 @@ export const TubeFeedOverview = () => {
     [logsDump, todayKey],
   );
   const startLog = useMemo(() => findFeedStartLog(logsDump), [logsDump]);
+  const latestLog = useMemo(() => findLatestFeedLog(logsDump), [logsDump]);
   const todayRow = useMemo(() => {
     const rows = buildFeedDayRows(logsDump, formulasDump);
     return rows.find((row) => row.log.id === todayLog?.id) ?? null;
   }, [logsDump, formulasDump, todayLog]);
+  const displayLog = todayLog ?? latestLog;
 
   return (
     <section className={styles.section}>
@@ -36,24 +39,22 @@ export const TubeFeedOverview = () => {
           Open
         </Link>
       </div>
-      {!startLog ? (
+      {!startLog || !displayLog ? (
         <p className={styles.body}>Start tracking with the current pump total — a one-time starting point.</p>
-      ) : !todayLog || !todayRow ? (
-        <p className={styles.body}>Log this morning’s pump numbers to track calories.</p>
       ) : (
         <div className={styles.stats}>
+          {todayRow && !todayRow.isBaseline && (
+            <p className={styles.body}>
+              {`${formatFeedCalories(todayRow.calories)} since the prior snapshot (${formatFeedVolume(todayRow.volumeMl)}).`}
+            </p>
+          )}
           <p className={styles.body}>
-            {todayLog.is_start || todayRow.isBaseline
-              ? 'Starting point saved. Calories begin with the next morning log.'
-              : `${formatFeedCalories(todayRow.calories)} since the prior snapshot (${formatFeedVolume(todayRow.volumeMl)}).`}
-          </p>
-          <p className={styles.body}>
-            Feed left {formatFeedVolume(todayLog.feed_left_ml)} ·{' '}
+            Feed left {formatFeedVolume(displayLog.feed_left_ml)} ·{' '}
             {formatBagHoursRemaining(
-              todayLog.feed_left_ml,
-              todayLog.intermittent_rate_ml_per_hr,
+              displayLog.feed_left_ml,
+              displayLog.intermittent_rate_ml_per_hr,
             )}{' '}
-            remaining at {todayLog.intermittent_rate_ml_per_hr} mL/hr
+            remaining at {displayLog.intermittent_rate_ml_per_hr} mL/hr
           </p>
         </div>
       )}

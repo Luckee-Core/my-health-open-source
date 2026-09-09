@@ -1,7 +1,7 @@
 import type { FeedFormula, FeedLog } from '@/model';
+import { compareFeedLogsChronological } from './compare-feed-logs-chronological';
 import { computeFeedCalories } from './compute-feed-calories';
 import { computeVolumeSincePrior } from './compute-volume-since-prior';
-import { normalizeFeedLogDateKey } from './normalize-feed-log-date-key';
 
 export type FeedDayRow = {
   log: FeedLog;
@@ -19,9 +19,7 @@ export const buildFeedDayRows = (
   logsDump: Record<string, FeedLog>,
   formulasDump: Record<string, FeedFormula>,
 ): FeedDayRow[] => {
-  const chronological = Object.values(logsDump).sort((a, b) =>
-    normalizeFeedLogDateKey(a.log_date).localeCompare(normalizeFeedLogDateKey(b.log_date)),
-  );
+  const chronological = Object.values(logsDump).sort(compareFeedLogsChronological);
 
   const rows = chronological.map((log, index) => {
     const previous = index === 0 ? null : chronological[index - 1];
