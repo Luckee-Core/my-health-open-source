@@ -29,7 +29,7 @@ export const TodayTracker = ({
   }, [exercisesDump, logsDump, todayKey, incompleteFirst]);
 
   if (rows.length === 0) {
-    return <p className={styles.empty}>No active daily exercises yet.</p>;
+    return <p className={styles.empty}>No exercises for today yet.</p>;
   }
 
   return (

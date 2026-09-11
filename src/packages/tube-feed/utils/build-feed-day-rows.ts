@@ -2,14 +2,12 @@ import type { FeedFormula, FeedLog } from '@/model';
 import { compareFeedLogsChronological } from './compare-feed-logs-chronological';
 import { computeFeedCalories } from './compute-feed-calories';
 import { computeVolumeSincePrior } from './compute-volume-since-prior';
-import { resolveFeedCaloriesPer1000Ml } from './resolve-feed-calories-per-1000-ml';
 
 export type FeedDayRow = {
   log: FeedLog;
   formulaLabel: string;
-  volumeMl: number | null;
+  volumeMl: number;
   calories: number | null;
-  isBaseline: boolean;
   isImplicitReset: boolean;
 };
 
@@ -29,17 +27,13 @@ export const buildFeedDayRows = (
     const formulaLabel = formula
       ? `${formula.brand} ${formula.name}`.trim()
       : 'Unknown formula';
-    const milliliters = volume.volumeMl ?? log.total_fed_ml;
+    const caloriesPer1000Ml = formula?.calories_per_1000_ml ?? log.calories_per_1000_ml;
 
     return {
       log,
       formulaLabel,
       volumeMl: volume.volumeMl,
-      calories: computeFeedCalories(
-        milliliters,
-        resolveFeedCaloriesPer1000Ml(log, formula),
-      ),
-      isBaseline: volume.isBaseline,
+      calories: computeFeedCalories(volume.volumeMl, caloriesPer1000Ml),
       isImplicitReset: volume.isImplicitReset,
     };
   });

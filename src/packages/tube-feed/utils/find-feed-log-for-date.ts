@@ -2,7 +2,7 @@ import type { FeedLog } from '@/model';
 import { normalizeFeedLogDateKey } from './normalize-feed-log-date-key';
 
 /**
- * Finds the morning snapshot for a local calendar date (excludes the start row).
+ * Finds the pump snapshot for a local calendar date.
  */
 export const findFeedLogForDate = (
   logsDump: Record<string, FeedLog>,
@@ -10,8 +10,7 @@ export const findFeedLogForDate = (
 ): FeedLog | null => {
   return (
     Object.values(logsDump).find(
-      (log) => !log.is_start && normalizeFeedLogDateKey(log.log_date) === dateKey,
+      (log) => normalizeFeedLogDateKey(log.log_date) === dateKey,
     ) ?? null
   );
 };
-

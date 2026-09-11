@@ -51,8 +51,7 @@ export const ExerciseScheduleField = () => {
           ))}
         </select>
         <p className={styles.hint}>
-          Session-only stays off the daily list. Log it here on therapy days instead of skipping it
-          every morning.
+          Session-only stays off the daily list until you mark it active for today.
         </p>
         {builder.saveError && <p className={styles.error}>{builder.saveError}</p>}
       </dd>

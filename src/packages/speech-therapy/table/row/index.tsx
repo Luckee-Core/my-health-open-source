@@ -9,9 +9,18 @@ type Props = {
   busy: boolean;
   onOpenDetail: (exercise: TherapyExercise) => void;
   onDelta: (exerciseId: string, completedCount: number, delta: number) => void;
+  onSetDue: (exerciseId: string, due: boolean) => void;
 };
 
-export const TherapyExerciseRow = ({ row, busy, onOpenDetail, onDelta }: Props) => {
+export const TherapyExerciseRow = ({
+  row,
+  busy,
+  onOpenDetail,
+  onDelta,
+  onSetDue,
+}: Props) => {
+  const showSessionActivate = row.isSessionOnly && !row.isSessionDue;
+
   return (
     <tr
       className={
@@ -31,7 +40,7 @@ export const TherapyExerciseRow = ({ row, busy, onOpenDetail, onDelta }: Props) 
       <td className={styles.tdProgress}>
         {row.isInactive
           ? 'Paused'
-          : row.isSessionOnly && row.completedCount === 0 && !row.isSkipped
+          : showSessionActivate
             ? 'Session only'
             : row.isSkipped
               ? 'Skipped today'
@@ -39,28 +48,57 @@ export const TherapyExerciseRow = ({ row, busy, onOpenDetail, onDelta }: Props) 
       </td>
       <td className={styles.tdActions}>
         <div className={styles.actions}>
-          <button
-            type="button"
-            className={styles.secondaryButton}
-            onClick={(event) => {
-              event.stopPropagation();
-              onDelta(row.exercise.id, row.completedCount, -1);
-            }}
-            disabled={busy || row.isInactive || row.completedCount <= 0 || row.isSkipped}
-          >
-            −1
-          </button>
-          <button
-            type="button"
-            className={styles.primaryButton}
-            onClick={(event) => {
-              event.stopPropagation();
-              onDelta(row.exercise.id, row.completedCount, 1);
-            }}
-            disabled={busy || row.isInactive || row.isSkipped}
-          >
-            +1
-          </button>
+          {showSessionActivate ? (
+            <button
+              type="button"
+              className={styles.primaryButton}
+              onClick={(event) => {
+                event.stopPropagation();
+                onSetDue(row.exercise.id, true);
+              }}
+              disabled={busy || row.isInactive}
+            >
+              Active today
+            </button>
+          ) : (
+            <>
+              {row.isSessionDue && (
+                <button
+                  type="button"
+                  className={styles.secondaryButton}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    onSetDue(row.exercise.id, false);
+                  }}
+                  disabled={busy || row.isInactive}
+                >
+                  Not today
+                </button>
+              )}
+              <button
+                type="button"
+                className={styles.secondaryButton}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onDelta(row.exercise.id, row.completedCount, -1);
+                }}
+                disabled={busy || row.isInactive || row.completedCount <= 0 || row.isSkipped}
+              >
+                −1
+              </button>
+              <button
+                type="button"
+                className={styles.primaryButton}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onDelta(row.exercise.id, row.completedCount, 1);
+                }}
+                disabled={busy || row.isInactive || row.isSkipped}
+              >
+                +1
+              </button>
+            </>
+          )}
         </div>
       </td>
     </tr>

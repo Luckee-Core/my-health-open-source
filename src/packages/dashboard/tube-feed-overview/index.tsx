@@ -8,7 +8,6 @@ import { getLocalDateKey } from '@/utils/date';
 import {
   buildFeedDayRows,
   findFeedLogForDate,
-  findFeedStartLog,
   findLatestFeedLog,
   formatBagHoursRemaining,
   formatFeedCalories,
@@ -23,7 +22,6 @@ export const TubeFeedOverview = () => {
     () => findFeedLogForDate(logsDump, todayKey),
     [logsDump, todayKey],
   );
-  const startLog = useMemo(() => findFeedStartLog(logsDump), [logsDump]);
   const latestLog = useMemo(() => findLatestFeedLog(logsDump), [logsDump]);
   const todayRow = useMemo(() => {
     const rows = buildFeedDayRows(logsDump, formulasDump);
@@ -39,11 +37,11 @@ export const TubeFeedOverview = () => {
           Open
         </Link>
       </div>
-      {!startLog || !displayLog ? (
-        <p className={styles.body}>Start tracking with the current pump total — a one-time starting point.</p>
+      {!displayLog ? (
+        <p className={styles.body}>Log this morning’s pump numbers to track calories.</p>
       ) : (
         <div className={styles.stats}>
-          {todayRow && !todayRow.isBaseline && (
+          {todayRow && (
             <p className={styles.body}>
               {`${formatFeedCalories(todayRow.calories)} since the prior snapshot (${formatFeedVolume(todayRow.volumeMl)}).`}
             </p>

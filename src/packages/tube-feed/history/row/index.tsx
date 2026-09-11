@@ -20,11 +20,7 @@ export const FeedHistoryRow = ({ row, busy, onDelete }: Props) => {
       <td className={styles.td}>{formatFeedVolume(row.log.feed_left_ml)}</td>
       <td className={styles.td}>{formatFeedVolume(row.log.total_fed_ml)}</td>
       <td className={styles.td}>
-        {row.log.is_start
-          ? 'Starting point'
-          : row.isBaseline
-            ? 'Baseline'
-            : formatFeedVolume(row.volumeMl)}
+        {formatFeedVolume(row.volumeMl)}
         {row.log.pump_reset ? ' (reset)' : ''}
         {row.isImplicitReset ? ' (reset inferred)' : ''}
       </td>

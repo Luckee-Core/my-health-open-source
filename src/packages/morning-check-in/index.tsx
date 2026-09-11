@@ -5,16 +5,13 @@ import { batchCheckInThunk, hydrateMorningCheckInThunk } from '@/store/thunks';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { TodayTracker } from '@/packages/speech-therapy/today-tracker';
 import { FeedSnapshotForm } from '@/packages/tube-feed/snapshot-form';
-import { findFeedStartLog } from '@/packages/tube-feed/utils';
 import { MorningCheckInSymptoms } from './symptoms';
 
 export const MorningCheckInPage = () => {
   const dispatch = useAppDispatch();
   const definitionsDump = useAppSelector((state) => state.symptomDefinitions);
-  const logsDump = useAppSelector((state) => state.feedLogs);
   const builder = useAppSelector((state) => state.morningCheckInBuilder);
   const isSaving = builder.saveStatus === 'saving';
-  const hasStarted = useMemo(() => findFeedStartLog(logsDump) != null, [logsDump]);
 
   useEffect(() => {
     void dispatch(hydrateMorningCheckInThunk());
@@ -61,9 +58,7 @@ export const MorningCheckInPage = () => {
       <section className={styles.therapySection}>
         <h2 className={styles.sectionTitle}>Tube feed</h2>
         <p className={styles.sectionSubtitle}>
-          {hasStarted
-            ? 'Log this morning’s pump numbers.'
-            : 'Record the current pump total once, then log this morning’s numbers.'}
+          Log this morning’s pump numbers.
         </p>
         <FeedSnapshotForm variant="compact" />
       </section>

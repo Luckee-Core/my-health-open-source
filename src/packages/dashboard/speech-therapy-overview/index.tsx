@@ -33,7 +33,7 @@ export const SpeechTherapyOverview = () => {
             Open
           </Link>
         </div>
-        <p className={styles.body}>No daily exercises yet.</p>
+        <p className={styles.body}>No daily or session-today exercises yet.</p>
       </section>
     );
   }

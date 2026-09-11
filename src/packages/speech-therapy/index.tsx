@@ -43,7 +43,7 @@ export const SpeechTherapyPage = () => {
         <div>
           <h1 className={styles.title}>Speech therapy</h1>
           <p className={styles.subtitle}>
-            Track daily homework. Session-only exercises stay off that list until a therapy visit.
+            Track daily homework. Session-only exercises stay off that list until you mark them active for today.
           </p>
         </div>
         <div className={styles.headerActions}>

@@ -1,12 +1,14 @@
 /**
- * Converts milliliters fed and formula kcal-per-1000-mL into calories.
- * 500 mL at 2000 kcal / 1000 mL is 1000 kcal.
+ * Converts milliliters and formula density into calories.
  */
 export const computeFeedCalories = (
-  volumeMl: number | null,
+  volumeMl: number,
   caloriesPer1000Ml: number,
 ): number | null => {
-  if (volumeMl === null) return null;
-  if (!(caloriesPer1000Ml > 0)) return null;
-  return volumeMl * (caloriesPer1000Ml / 1000);
+  const volume = Number(volumeMl);
+  const density = Number(caloriesPer1000Ml);
+  if (!Number.isFinite(volume) || !Number.isFinite(density) || density <= 0) {
+    return null;
+  }
+  return volume * (density / 1000);
 };

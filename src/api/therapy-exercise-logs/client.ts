@@ -18,6 +18,12 @@ export type SkipTherapyExerciseLogPayload = {
   skipped: boolean;
 };
 
+export type SetTherapyExerciseLogDuePayload = {
+  exercise_id: string;
+  log_date: string;
+  due: boolean;
+};
+
 /**
  * Loads therapy exercise logs, optionally filtered by log_date.
  */
@@ -66,5 +72,22 @@ export const skipTherapyExerciseLog = async (
     return fromExpressBody(data, 'Failed to skip therapy exercise');
   } catch (error: unknown) {
     return fromCaughtError(error, 'Failed to skip therapy exercise');
+  }
+};
+
+/**
+ * Marks or unmarks a session exercise as due for a given date.
+ */
+export const setTherapyExerciseLogDue = async (
+  payload: SetTherapyExerciseLogDuePayload,
+): Promise<ApiResponse<TherapyExerciseLog>> => {
+  try {
+    const { data } = await getApiClient().post<EntityBody>(
+      '/api/data/therapy-exercise-logs/due',
+      payload,
+    );
+    return fromExpressBody(data, 'Failed to update therapy exercise due status');
+  } catch (error: unknown) {
+    return fromCaughtError(error, 'Failed to update therapy exercise due status');
   }
 };

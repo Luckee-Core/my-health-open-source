@@ -24,12 +24,13 @@ export const buildSpeechTherapyTableRows = (
   }));
   const seenIds = new Set(todayRows.map((row) => row.exercise.id));
 
-  const logsByExerciseId = new Map<string, { completedCount: number; skipped: boolean }>();
+  const logsByExerciseId = new Map<string, { completedCount: number; skipped: boolean; due: boolean }>();
   for (const log of Object.values(logsDump)) {
     if (normalizeLogDateKey(log.log_date) === todayKey) {
       logsByExerciseId.set(log.exercise_id, {
         completedCount: log.completed_count,
         skipped: Boolean(log.skipped),
+        due: Boolean(log.due),
       });
     }
   }
@@ -54,6 +55,7 @@ export const buildSpeechTherapyTableRows = (
         isComplete:
           !isInactive && !isSkipped && isTherapyExerciseComplete(exercise, completedCount),
         isSkipped,
+        isSessionDue: false,
         isInactive,
         isSessionOnly,
       };

@@ -1,34 +1,34 @@
 import type { FeedLog } from '@/model';
 
 export type VolumeSincePrior = {
-  volumeMl: number | null;
-  isBaseline: boolean;
+  volumeMl: number;
   isImplicitReset: boolean;
 };
 
 /**
- * Derives milliliters since the previous morning snapshot.
+ * Derives milliliters fed since the previous snapshot.
  */
 export const computeVolumeSincePrior = (
   current: FeedLog,
   previous: FeedLog | null,
 ): VolumeSincePrior => {
-  if (current.is_start || !previous) {
-    return { volumeMl: null, isBaseline: true, isImplicitReset: false };
+  const currentTotal = Number(current.total_fed_ml);
+
+  if (!previous) {
+    return { volumeMl: currentTotal, isImplicitReset: false };
   }
 
-  const implicitReset = !current.pump_reset && current.total_fed_ml < previous.total_fed_ml;
+  const previousTotal = Number(previous.total_fed_ml);
+  const implicitReset = !current.pump_reset && currentTotal < previousTotal;
   if (current.pump_reset || implicitReset) {
     return {
-      volumeMl: current.total_fed_ml,
-      isBaseline: false,
+      volumeMl: currentTotal,
       isImplicitReset: implicitReset,
     };
   }
 
   return {
-    volumeMl: current.total_fed_ml - previous.total_fed_ml,
-    isBaseline: false,
+    volumeMl: currentTotal - previousTotal,
     isImplicitReset: false,
   };
 };

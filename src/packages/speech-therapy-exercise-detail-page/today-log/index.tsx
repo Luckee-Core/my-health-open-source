@@ -4,7 +4,11 @@ import { useMemo, useState } from 'react';
 import type { TherapyExercise } from '@/model';
 import { formatTherapyExerciseProgress } from '@/packages/speech-therapy/format-therapy-exercise-progress';
 import { getTherapyExerciseSchedule } from '@/packages/speech-therapy/get-therapy-exercise-schedule';
-import { incrementTherapyExerciseLogThunk, skipTherapyExerciseLogThunk } from '@/store/thunks';
+import {
+  incrementTherapyExerciseLogThunk,
+  setTherapyExerciseLogDueThunk,
+  skipTherapyExerciseLogThunk,
+} from '@/store/thunks';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { getLocalDateKey } from '@/utils/date';
 import { normalizeLogDateKey } from '@/packages/speech-therapy/normalize-log-date-key';
@@ -30,9 +34,12 @@ export const ExerciseTodayLog = ({ exercise }: Props) => {
 
   const completedCount = todayLog?.completed_count ?? 0;
   const isSkipped = Boolean(todayLog?.skipped);
+  const isDue = Boolean(todayLog?.due);
   const schedule = getTherapyExerciseSchedule(exercise);
   const isPaused = schedule === 'paused';
-  const canLog = !isPaused;
+  const isSession = schedule === 'session';
+  const isOnTodayList = !isPaused && (!isSession || isDue);
+  const canLog = isOnTodayList;
 
   const handleDelta = async (delta: number) => {
     if (delta < 0 && completedCount <= 0) return;
@@ -53,6 +60,15 @@ export const ExerciseTodayLog = ({ exercise }: Props) => {
     }
   };
 
+  const handleSetDue = async (due: boolean) => {
+    setIsBusy(true);
+    try {
+      await dispatch(setTherapyExerciseLogDueThunk(exercise.id, todayKey, due));
+    } finally {
+      setIsBusy(false);
+    }
+  };
+
   return (
     <section className={styles.section}>
       <div>
@@ -60,39 +76,59 @@ export const ExerciseTodayLog = ({ exercise }: Props) => {
         <p className={styles.progress}>
           {isPaused
             ? 'Paused — not on the daily list'
-            : isSkipped
-              ? 'Skipped today'
-              : formatTherapyExerciseProgress(exercise, completedCount)}
+            : isSession && !isDue
+              ? 'Session only — not on the daily list'
+              : isSkipped
+                ? 'Skipped today'
+                : formatTherapyExerciseProgress(exercise, completedCount)}
         </p>
-        {schedule === 'session' && (
-          <p className={styles.hint}>Not listed as daily homework. Log it on therapy days.</p>
+        {isSession && (
+          <p className={styles.hint}>
+            {isDue
+              ? 'On today\'s dashboard until you mark it not today.'
+              : 'Mark it active today to show it on the dashboard.'}
+          </p>
         )}
       </div>
       <div className={styles.actions}>
-        <button
-          type="button"
-          className={styles.secondaryButton}
-          onClick={() => void handleSkip(!isSkipped)}
-          disabled={isBusy || !canLog}
-        >
-          {isSkipped ? 'Undo skip' : 'Skip'}
-        </button>
-        <button
-          type="button"
-          className={styles.secondaryButton}
-          onClick={() => void handleDelta(-1)}
-          disabled={isBusy || !canLog || completedCount <= 0 || isSkipped}
-        >
-          −1
-        </button>
-        <button
-          type="button"
-          className={styles.primaryButton}
-          onClick={() => void handleDelta(1)}
-          disabled={isBusy || !canLog || isSkipped}
-        >
-          +1
-        </button>
+        {isSession && (
+          <button
+            type="button"
+            className={isDue ? styles.secondaryButton : styles.primaryButton}
+            onClick={() => void handleSetDue(!isDue)}
+            disabled={isBusy || isPaused}
+          >
+            {isDue ? 'Not today' : 'Active today'}
+          </button>
+        )}
+        {canLog && (
+          <>
+            <button
+              type="button"
+              className={styles.secondaryButton}
+              onClick={() => void handleSkip(!isSkipped)}
+              disabled={isBusy || !canLog}
+            >
+              {isSkipped ? 'Undo skip' : 'Skip'}
+            </button>
+            <button
+              type="button"
+              className={styles.secondaryButton}
+              onClick={() => void handleDelta(-1)}
+              disabled={isBusy || !canLog || completedCount <= 0 || isSkipped}
+            >
+              −1
+            </button>
+            <button
+              type="button"
+              className={styles.primaryButton}
+              onClick={() => void handleDelta(1)}
+              disabled={isBusy || !canLog || isSkipped}
+            >
+              +1
+            </button>
+          </>
+        )}
       </div>
     </section>
   );

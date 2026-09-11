@@ -3,8 +3,6 @@ import { FeedLogsBuilderActions } from '@/store/builders';
 import { CurrentFeedLogActions } from '@/store/current';
 import { FeedLogsActions } from '@/store/dumps';
 import type { AppThunk } from '@/store/types';
-import { findFeedStartLog } from '@/packages/tube-feed/utils';
-import { hydrateCurrentFeedLogThunk } from './hydrate-current-feed-log-thunk';
 
 /**
  * Saves the editing feed log from currentFeedLog.
@@ -13,8 +11,6 @@ export const upsertFeedLogThunk =
   (): AppThunk<Promise<200 | 400 | 500>> =>
   async (dispatch, getState) => {
     const current = getState().currentFeedLog;
-    const startLog = findFeedStartLog(getState().feedLogs);
-    const isStarting = startLog == null;
 
     dispatch(FeedLogsBuilderActions.setSaveError(''));
     dispatch(FeedLogsBuilderActions.setSaveStatus('saving'));
@@ -46,8 +42,7 @@ export const upsertFeedLogThunk =
       intermittent_rate_ml_per_hr: current.intermittent_rate_ml_per_hr,
       feed_left_ml: current.feed_left_ml,
       total_fed_ml: current.total_fed_ml,
-      pump_reset: isStarting ? false : current.pump_reset,
-      is_start: isStarting,
+      pump_reset: current.pump_reset,
       notes: current.notes?.trim() || null,
     });
 
@@ -58,12 +53,7 @@ export const upsertFeedLogThunk =
     }
 
     dispatch(FeedLogsActions.upsertFeedLog(result.data));
-    if (isStarting) {
-      dispatch(CurrentFeedLogActions.resetCurrentFeedLog());
-      await dispatch(hydrateCurrentFeedLogThunk());
-    } else {
-      dispatch(CurrentFeedLogActions.setCurrentFeedLog(result.data));
-    }
+    dispatch(CurrentFeedLogActions.setCurrentFeedLog(result.data));
     dispatch(FeedLogsBuilderActions.setSaveStatus('success'));
     return 200;
   };

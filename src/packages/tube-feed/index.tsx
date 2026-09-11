@@ -1,20 +1,16 @@
 'use client';
 
-import { useMemo } from 'react';
 import { FeedFormulasBuilderActions } from '@/store/builders';
 import { CurrentFeedFormulaActions } from '@/store/current';
-import { useAppDispatch, useAppSelector } from '@/store';
+import { useAppDispatch } from '@/store';
 import { FeedFormulaFormModal } from './formula-form-modal';
 import { FeedFormulasTable } from './formulas';
 import { FeedHistoryTable } from './history';
 import { FeedSnapshotForm } from './snapshot-form';
 import { FeedTodayStats } from './today-stats';
-import { findFeedStartLog } from './utils';
 
 export const TubeFeedPage = () => {
   const dispatch = useAppDispatch();
-  const logsDump = useAppSelector((state) => state.feedLogs);
-  const hasStarted = useMemo(() => findFeedStartLog(logsDump) != null, [logsDump]);
 
   const openCreate = () => {
     dispatch(CurrentFeedFormulaActions.resetCurrentFeedFormula());
@@ -27,9 +23,8 @@ export const TubeFeedPage = () => {
         <div>
           <h1 className={styles.title}>Tube feed</h1>
           <p className={styles.subtitle}>
-            {hasStarted
-              ? 'Log pump totals each morning. Calories come from the change in total fed, using the formula’s calories per 1000 mL.'
-              : 'Start once with the pump total as it stands now. Morning logs after that will count calories from this origin.'}
+            Log pump totals each morning. Calories come from milliliters fed times the formula’s
+            calories per 1000 mL.
           </p>
         </div>
         <button type="button" onClick={openCreate} className={styles.primaryButton}>
@@ -38,9 +33,9 @@ export const TubeFeedPage = () => {
       </div>
 
       <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>{hasStarted ? 'This morning' : 'Start tracking'}</h2>
+        <h2 className={styles.sectionTitle}>This morning</h2>
         <FeedSnapshotForm />
-        {hasStarted && <FeedTodayStats />}
+        <FeedTodayStats />
       </section>
 
       <section className={styles.section}>

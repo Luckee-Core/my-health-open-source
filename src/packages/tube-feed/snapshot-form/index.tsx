@@ -6,7 +6,7 @@ import { TUBE_FEED_PATH } from '@/config/routes';
 import { FeedFormulasBuilderActions } from '@/store/builders';
 import { hydrateCurrentFeedLogThunk, upsertFeedLogThunk } from '@/store/thunks';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { findFeedLogForDate, findFeedStartLog } from '../utils';
+import { findFeedLogForDate } from '../utils';
 import { FeedLeftInput } from './inputs/feed-left';
 import { FormulaInput } from './inputs/formula';
 import { IntermittentRateInput } from './inputs/intermittent-rate';
@@ -29,12 +29,10 @@ export const FeedSnapshotForm = ({ variant = 'full' }: Props) => {
     void dispatch(hydrateCurrentFeedLogThunk());
   }, [dispatch, logsDump]);
 
-  const startLog = useMemo(() => findFeedStartLog(logsDump), [logsDump]);
   const todayLog = useMemo(
     () => findFeedLogForDate(logsDump, current.log_date),
     [logsDump, current.log_date],
   );
-  const isStarting = startLog == null;
   const isSaving = builder.saveStatus === 'saving';
   const formulas = Object.values(formulasDump);
 
@@ -63,20 +61,12 @@ export const FeedSnapshotForm = ({ variant = 'full' }: Props) => {
     );
   }
 
-  const saveLabel = isSaving
-    ? 'Saving…'
-    : isStarting
-      ? 'Start tracking'
-      : todayLog
-        ? 'Update this morning'
-        : 'Save this morning';
+  const saveLabel = isSaving ? 'Saving…' : todayLog ? 'Update this morning' : 'Save this morning';
 
   return (
     <div className={styles.form}>
       <p className={styles.muted}>
-        {isStarting
-          ? 'Record the pump total as it stands right now. This is a one-time starting point — calories begin with the next morning log.'
-          : 'Enter this morning’s pump total (not the starting point). Calories use the selected formula’s kcal per 1000 mL on milliliters since the last snapshot.'}
+        Log this morning’s pump total. Calories use the selected formula’s kcal per 1000 mL.
       </p>
       <div className={styles.grid}>
         <FormulaInput />
@@ -84,15 +74,11 @@ export const FeedSnapshotForm = ({ variant = 'full' }: Props) => {
         <FeedLeftInput />
         <TotalFedInput />
       </div>
-      {!isStarting && <PumpResetInput />}
+      <PumpResetInput />
       {variant === 'full' && <NotesInput />}
       {builder.saveError && <p className={styles.error}>{builder.saveError}</p>}
       {builder.saveStatus === 'success' && (
-        <p className={styles.success}>
-          {todayLog
-            ? `Snapshot saved for ${current.log_date}.`
-            : 'Starting point saved. Enter this morning’s pump numbers next.'}
-        </p>
+        <p className={styles.success}>{`Snapshot saved for ${current.log_date}.`}</p>
       )}
       <button
         type="button"

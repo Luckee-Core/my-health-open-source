@@ -57,7 +57,7 @@ export const FeedHistoryTable = () => {
           {rows.length === 0 && (
             <tr>
               <td colSpan={8} className={styles.empty}>
-                No snapshots yet. Start tracking to record the current pump total.
+                No snapshots yet. Save this morning’s pump total to start history.
               </td>
             </tr>
           )}

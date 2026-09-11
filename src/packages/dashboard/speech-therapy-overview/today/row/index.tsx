@@ -26,9 +26,11 @@ export const SpeechTherapyTodayRow = ({ row, busy, onOpen, onDelta }: Props) => 
     >
       <td className={styles.tdName}>{row.exercise.name}</td>
       <td className={styles.tdProgress}>
-        {row.isSkipped
-          ? 'Skipped today'
-          : formatTherapyExerciseProgress(row.exercise, row.completedCount)}
+          {row.isSkipped
+            ? 'Skipped today'
+            : row.isSessionDue
+              ? `Session · ${formatTherapyExerciseProgress(row.exercise, row.completedCount)}`
+              : formatTherapyExerciseProgress(row.exercise, row.completedCount)}
       </td>
       <td className={styles.tdActions}>
         <div className={styles.actions}>

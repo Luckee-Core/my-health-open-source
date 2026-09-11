@@ -19,7 +19,6 @@ export type UpsertFeedLogPayload = {
   feed_left_ml: number;
   total_fed_ml: number;
   pump_reset?: boolean;
-  is_start?: boolean;
   notes?: string | null;
 };
 
@@ -36,7 +35,7 @@ export const getAllFeedLogs = async (): Promise<ApiResponse<FeedLog[]>> => {
 };
 
 /**
- * Upserts a morning pump snapshot by log_date.
+ * Upserts a pump snapshot by log_date.
  */
 export const upsertFeedLog = async (
   payload: UpsertFeedLogPayload,

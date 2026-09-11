@@ -37,15 +37,11 @@ export const FeedTodayStats = () => {
     <div className={styles.grid}>
       <div className={styles.stat}>
         <p className={styles.label}>Since prior snapshot</p>
-        <p className={styles.value}>
-          {todayRow && !todayRow.isBaseline ? formatFeedVolume(todayRow.volumeMl) : '—'}
-        </p>
+        <p className={styles.value}>{todayRow ? formatFeedVolume(todayRow.volumeMl) : '—'}</p>
       </div>
       <div className={styles.stat}>
         <p className={styles.label}>Calories</p>
-        <p className={styles.value}>
-          {todayRow && !todayRow.isBaseline ? formatFeedCalories(todayRow.calories) : '—'}
-        </p>
+        <p className={styles.value}>{todayRow ? formatFeedCalories(todayRow.calories) : '—'}</p>
       </div>
       <div className={styles.stat}>
         <p className={styles.label}>Bag remaining</p>

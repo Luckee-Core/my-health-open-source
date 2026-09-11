@@ -7,6 +7,7 @@ import type { TherapyExercise } from '@/model';
 import {
   incrementTherapyExerciseLogThunk,
   openTherapyExerciseDetailThunk,
+  setTherapyExerciseLogDueThunk,
 } from '@/store/thunks';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { getLocalDateKey } from '@/utils/date';
@@ -53,6 +54,15 @@ export const TherapyExercisesTable = () => {
     }
   };
 
+  const handleSetDue = async (exerciseId: string, due: boolean) => {
+    setBusyId(exerciseId);
+    try {
+      await dispatch(setTherapyExerciseLogDueThunk(exerciseId, todayKey, due));
+    } finally {
+      setBusyId(null);
+    }
+  };
+
   return (
     <div className={styles.wrapper}>
       <table className={styles.table}>
@@ -72,6 +82,9 @@ export const TherapyExercisesTable = () => {
               onOpenDetail={openDetail}
               onDelta={(exerciseId, completedCount, delta) => {
                 void handleDelta(exerciseId, completedCount, delta);
+              }}
+              onSetDue={(exerciseId, due) => {
+                void handleSetDue(exerciseId, due);
               }}
             />
           ))}
